@@ -180,3 +180,39 @@ jobs:
         with:
           name: Build-Linux
           path: build/StandaloneLinux64
+
+  # JOB 5: UPLOAD TO GOOGLE DRIVE
+  uploadToDrive:
+    needs: [buildWebGL, buildWindows, buildLinux]
+    name: Upload to Drive 🚀
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all_builds
+
+      - name: Setup Rclone
+        uses: AnimMouse/setup-rclone@v1
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG_GDRIVE }}
+
+      - name: Generate Folder Name
+        id: folder_name
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          DATE=$(date +'%Y-%m-%d')
+          FOLDER="Builds_${DATE}_${SHORT_SHA}"
+          echo "FOLDER_NAME=$FOLDER" >> $GITHUB_ENV
+
+      - name: Upload to Google Drive
+        run: |
+          # 'gdrive' here MUST match the name you gave the remote in 'rclone config'
+          MASTER_FOLDER="T3G-2026/Game_Builds"
+          
+          rclone copy all_builds/Build-WebGL gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/WebGL
+          rclone copy all_builds/Build-Windows gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Windows
+          rclone copy all_builds/Build-Linux gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Linux
