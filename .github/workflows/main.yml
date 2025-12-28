@@ -60,6 +60,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
+          allowDirtyBuild: true
       
       # Windows Build
       - name: Build project on Windows
@@ -70,6 +71,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: StandaloneWindow64
+          allowDirtyBuild: true
           
       # Linux Build
       - name: Build project on Linux
@@ -80,6 +82,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: StandaloneLinux64
+          allowDirtyBuild: true
 
       # Output
       - uses: actions/upload-artifact@v4
