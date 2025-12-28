@@ -1,6 +1,16 @@
 ﻿name: Actions 😎
 
-on: [push, pull_request]
+# 1. TRIGGER: Only run on Pull Requests to main (and manual button)
+on:
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+# 2. EFFICIENCY: Cancel the previous build if you push a new commit to the PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   checks: write
@@ -9,12 +19,10 @@ permissions:
 
 jobs:
   # JOB 1: TEST
-  # Runs first. If this fails, the builds won't start (saving you time).
   test:
     name: Run Tests 🧪
     runs-on: ubuntu-latest
     steps:
-      # 1. Clean up space (Gives you ~30GB free)
       - name: Free Disk Space
         uses: jlumbroso/free-disk-space@main
         with:
@@ -26,13 +34,11 @@ jobs:
           docker-images: true
           swap-storage: false
 
-      # 2. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: true
 
-      # 3. Cache Library (Speeds up next runs)
       - uses: actions/cache@v3
         with:
           path: Library
@@ -40,7 +46,6 @@ jobs:
           restore-keys: |
             Library-
 
-      # 4. Run Tests
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
         env:
@@ -51,7 +56,6 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
   # JOB 2: WEBGL
-  # Runs on a NEW separate runner
   buildWebGL:
     needs: test
     name: Build WebGL 🌐
@@ -86,7 +90,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
-          allowDirtyBuild: true # Fixes the "Branch is dirty" error
+          allowDirtyBuild: true
 
       - uses: actions/upload-artifact@v4
         with:
@@ -94,7 +98,6 @@ jobs:
           path: build/WebGL
 
   # JOB 3: WINDOWS
-  # Runs on a NEW separate runner
   buildWindows:
     needs: test
     name: Build Windows 🪟
@@ -137,7 +140,6 @@ jobs:
           path: build/StandaloneWindows64
 
   # JOB 4: LINUX
-  # Runs on a NEW separate runner
   buildLinux:
     needs: test
     name: Build Linux 🐧
