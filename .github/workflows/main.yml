@@ -8,32 +8,31 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    name: Build my project ✨
+  # JOB 1: TEST
+  # Runs first. If this fails, the builds won't start (saving you time).
+  test:
+    name: Run Tests 🧪
     runs-on: ubuntu-latest
     steps:
-      # Checkout (without LFS)
+      # 1. Clean up space (Gives you ~30GB free)
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: false
+
+      # 2. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # Git LFS
-      - name: Create LFS file list
-        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
-
-      - name: Restore LFS cache
-        uses: actions/cache@v3
-        id: lfs-cache
         with:
-          path: .git/lfs
-          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+          lfs: true
 
-      - name: Git LFS Pull
-        run: |
-          git lfs pull
-          git add .
-          git reset --hard
-
-      # Cache
+      # 3. Cache Library (Speeds up next runs)
       - uses: actions/cache@v3
         with:
           path: Library
@@ -41,7 +40,7 @@ jobs:
           restore-keys: |
             Library-
 
-      # Test
+      # 4. Run Tests
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
         env:
@@ -51,7 +50,34 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      # Web Build
+  # JOB 2: WEBGL
+  # Runs on a NEW separate runner
+  buildWebGL:
+    needs: test
+    name: Build WebGL 🌐
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: false
+
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-WebGL-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-
+
       - name: Build project on WebGL
         uses: game-ci/unity-builder@v4
         env:
@@ -60,9 +86,41 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
-          allowDirtyBuild: true
-      
-      # Windows Build
+          allowDirtyBuild: true # Fixes the "Branch is dirty" error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Build-WebGL
+          path: build/WebGL
+
+  # JOB 3: WINDOWS
+  # Runs on a NEW separate runner
+  buildWindows:
+    needs: test
+    name: Build Windows 🪟
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: false
+
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-Win-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-
+
       - name: Build project on Windows
         uses: game-ci/unity-builder@v4
         env:
@@ -72,8 +130,40 @@ jobs:
         with:
           targetPlatform: StandaloneWindow64
           allowDirtyBuild: true
-          
-      # Linux Build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Build-Windows
+          path: build/StandaloneWindow64
+
+  # JOB 4: LINUX
+  # Runs on a NEW separate runner
+  buildLinux:
+    needs: test
+    name: Build Linux 🐧
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: false
+
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-Linux-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-
+
       - name: Build project on Linux
         uses: game-ci/unity-builder@v4
         env:
@@ -84,8 +174,7 @@ jobs:
           targetPlatform: StandaloneLinux64
           allowDirtyBuild: true
 
-      # Output
       - uses: actions/upload-artifact@v4
         with:
-          name: Build
-          path: build
+          name: Build-Linux
+          path: build/StandaloneLinux64
