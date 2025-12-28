@@ -128,13 +128,13 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          targetPlatform: StandaloneWindow64
+          targetPlatform: StandaloneWindows64
           allowDirtyBuild: true
 
       - uses: actions/upload-artifact@v4
         with:
           name: Build-Windows
-          path: build/StandaloneWindow64
+          path: build/StandaloneWindows64
 
   # JOB 4: LINUX
   # Runs on a NEW separate runner
