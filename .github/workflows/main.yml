@@ -1,4 +1,4 @@
-﻿name: Actions 😎
+name: Actions 😎
 
 # 1. TRIGGER: Only run on Pull Requests to main (and manual button)
 on:
@@ -49,6 +49,7 @@ jobs:
           else
             echo "✅ Description found. Proceeding to build."
           fi
+
   # JOB 1: TEST
   test:
     needs: check-description
