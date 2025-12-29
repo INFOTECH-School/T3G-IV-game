@@ -34,8 +34,24 @@ permissions:
   contents: read
 
 jobs:
+  # JOB 0: GUARDRAIL (Prevents lazy PRs)
+  check-description:
+    name: Check Description 🛑
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if description is empty
+        run: |
+          DESCRIPTION="${{ github.event.pull_request.body }}"
+          if [[ -z "$DESCRIPTION" || ${#DESCRIPTION} -lt 10 ]]; then
+            echo "❌ ERROR: PR Description is empty or too short!"
+            echo "Please write test instructions for the QA team."
+            exit 1
+          else
+            echo "✅ Description found. Proceeding to build."
+          fi
   # JOB 1: TEST
   test:
+    needs: check-description
     name: Run Tests 🧪
     runs-on: ubuntu-latest
     steps:
@@ -243,3 +259,69 @@ jobs:
           rclone copy all_builds/Build-WebGL gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/WebGL
           rclone copy all_builds/Build-Windows gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Windows
           rclone copy all_builds/Build-Linux gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Linux
+          
+  createQaTicket:
+    needs: [uploadToDrive]
+    name: Create AI Jira Task 🧠
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      # 1. AI STEP: Send PR Description to Gemini
+      - name: Process with Gemini AI
+        id: gemini_step
+        env:
+          API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # We use a simple curl request to Gemini API to process the text
+          
+          # Escape quotes in the body to prevent JSON errors
+          SAFE_BODY=$(echo "$PR_BODY" | jq -R .)
+          
+          # The Prompt (This is where your "Gem" logic goes)
+          PROMPT="You are a Lead QA Engineer. I will give you a developer's feature description. \
+          Convert it into a structured 'QA Test Plan' for Jira. \
+          Format it with these headers: 'Summary', 'Pre-conditions', 'Step-by-Step Instructions', 'Expected Result'. \
+          Keep it professional and concise. Here is the developer text: $SAFE_BODY"
+          
+          # Call Gemini API
+          curl \
+            -H 'Content-Type: application/json' \
+            -d "{\"contents\":[{\"parts\":[{\"text\":\"$PROMPT\"}]}]}" \
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}" > response.json
+          
+          # Extract text from JSON response
+          AI_OUTPUT=$(cat response.json | jq -r '.candidates[0].content.parts[0].text')
+          
+          # Save to ENV for the next step (Handling multiline strings in GitHub Actions)
+          echo "AI_TEST_PLAN<<EOF" >> $GITHUB_ENV
+          echo "$AI_OUTPUT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      
+      # 2. Login to Jira
+      - name: Jira Login
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      
+      # 3. Create Jira Ticket using AI Content
+      - name: Create QA Ticket
+        uses: atlassian/gajira-create@v3
+        with:
+          project: PJT # ⚠️ YOUR PROJECT KEY
+          issuetype: Task
+          summary: "QA Verify: ${{ github.head_ref }}"
+          description: |
+            h3. 🤖 AI-Generated Test Plan
+            ${{ env.AI_TEST_PLAN }}
+            
+            ----
+            h3. 📂 Build Info
+            *Location:* Google Drive > Game_Builds > ${{ env.FOLDER_NAME }}
+            
+            h3. 🔗 Original PR
+            [${{ github.event.pull_request.title }}|${{ github.event.pull_request.html_url }}]
