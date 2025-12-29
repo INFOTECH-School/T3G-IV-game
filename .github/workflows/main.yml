@@ -5,6 +5,22 @@ on:
   pull_request:
     branches: [ "main" ]
     types: [opened, synchronize, reopened]
+    # 🛑 IGNORE these paths. If a PR contains ONLY these files, the build won't start.
+    paths-ignore:
+      - '**.md'                # Documentation
+      - '**.txt'
+      - 'Documentation/**'     # Specific docs folder
+      - 'Assets/Art/**'        # 🎨 Assumption: You put raw art here
+      - 'Assets/Audio/**'      # 🎵 Assumption: Music files
+      - '**.png'               # Specific extensions anywhere in project
+      - '**.jpg'
+      - '**.tga'
+      - '**.fbx'
+      - '**.blend'
+      - '**.mp3'
+      - '**.wav'
+  
+  # Keep manual trigger so you can force a build if needed
   workflow_dispatch:
 
 # 2. EFFICIENCY: Cancel the previous build if you push a new commit to the PR
@@ -203,10 +219,21 @@ jobs:
       - name: Generate Folder Name
         id: folder_name
         run: |
+          # Get the branch name (Works for PRs or Manual runs)
+          RAW_BRANCH="${{ github.head_ref || github.ref_name }}"
+          
+          # ⚠️ SANITIZE: Replace all '/' with '-' so we don't create sub-folders
+          # e.g., "feature/new-ui" becomes "feature-new-ui"
+          BRANCH_CLEAN=${RAW_BRANCH//\//-}
+          
           SHORT_SHA=$(git rev-parse --short HEAD)
           DATE=$(date +'%Y-%m-%d')
-          FOLDER="Builds_${DATE}_${SHORT_SHA}"
+          
+          # Construct final folder name
+          FOLDER="Build_${BRANCH_CLEAN}_${DATE}_${SHORT_SHA}"
+          
           echo "FOLDER_NAME=$FOLDER" >> $GITHUB_ENV
+          echo "Created folder name: $FOLDER"
 
       - name: Upload to Google Drive
         run: |
