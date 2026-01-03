@@ -261,6 +261,15 @@ jobs:
           rclone copy all_builds/Build-Windows gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Windows
           rclone copy all_builds/Build-Linux gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Linux
           
+      - name: Save Folder Name for Next Job
+        run: echo "${{ env.FOLDER_NAME }}" > folder_name.txt
+
+      - name: Upload Folder Name Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-info
+          path: folder_name.txt
+          
   createQaTicket:
     needs: [uploadToDrive]
     name: Create AI Jira Task 🧠
