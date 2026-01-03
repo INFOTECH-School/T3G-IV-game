@@ -276,8 +276,8 @@ jobs:
         run: |
           FOLDER=$(cat folder_name.txt)
           echo "FOLDER_NAME=$FOLDER" >> $GITHUB_ENV
-      
-      # 2. 🤖 AI STEP (Gemini 3 Flash Preview)
+
+      # 2. 🤖 AI STEP (Gemini 3 Flash Preview - Natural Jira Formatting)
       - name: Process with Gemini AI
         id: gemini_step
         env:
@@ -289,11 +289,14 @@ jobs:
           import json
           
           pr_body = os.environ.get('PR_BODY', '')
+          
+          # 👇 UPDATED PROMPT: Relaxed instructions.
           prompt = (
-              'You are a Lead QA Engineer. Convert this developer feature description '
-              'into a structured QA Test Plan for Jira. Format with headers: '
-              'Summary, Pre-conditions, Step-by-Step Instructions, Expected Result. '
-              'Keep it professional. Developer text: '
+              'You are a Lead QA Engineer creating a ticket for Jira. '
+              'Convert this feature description into a structured QA Test Plan. '
+              'Use standard Jira text formatting (Markdown style) appropriate for Jira Cloud. '
+              'Include sections: Summary, Pre-conditions, Step-by-Step Instructions, Expected Result. '
+              'Developer text: '
           )
           
           payload = {
@@ -323,7 +326,6 @@ jobs:
           echo "AI_TEST_PLAN<<EOF" >> $GITHUB_ENV
           echo "$AI_OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-      
       # 3. 🚀 JIRA STEP (LIVE!)
       - name: Jira Login
         uses: atlassian/gajira-login@v3
