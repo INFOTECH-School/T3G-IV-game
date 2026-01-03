@@ -290,14 +290,14 @@ jobs:
           echo "FOLDER_NAME=$FOLDER" >> $GITHUB_ENV
           echo "✅ Recovered correct folder: $FOLDER"
           
-      # 2. 🤖 AI STEP (Python Version - 100% Safe JSON)
+      # 2. 🤖 AI STEP (Using Gemini 3 Flash Preview)
       - name: Process with Gemini AI
         id: gemini_step
         env:
           API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          # Use Python to generate safe JSON (Avoids Bash quoting errors)
+          # 1. Prepare JSON Payload (Python handles special chars safely)
           python3 -c "
           import os
           import json
@@ -310,44 +310,33 @@ jobs:
               'Keep it professional. Developer text: '
           )
           
-          # Construct the JSON structure safely
           payload = {
               'contents': [{
                   'parts': [{'text': prompt + pr_body}]
               }]
           }
           
-          # Write to file
           with open('request.json', 'w') as f:
               json.dump(payload, f)
           "
-          
-          # DEBUG: Print the JSON to be sure it's valid
-          echo "--- SENDING THIS JSON ---"
-          cat request.json
-          echo "-------------------------"
-          
-          # Send to Google
+
+          # 2. Send to Google (Gemini 3 Flash Preview)
+          # Note: We use 'v1beta' API version which is required for Preview models
           curl -s \
             -H 'Content-Type: application/json' \
             -d @request.json \
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}" > response.json
-          
-          # DEBUG: Print Response
-          echo "--- GOOGLE RESPONSE ---"
-          cat response.json
-          echo "-----------------------"
-          
-          # Extract text using jq
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${API_KEY}" > response.json
+
+          # 3. Extract Output
           AI_OUTPUT=$(cat response.json | jq -r '.candidates[0].content.parts[0].text')
-          
-          # Handle Errors
+
+          # 4. Safety Check & Debug
           if [ "$AI_OUTPUT" == "null" ] || [ -z "$AI_OUTPUT" ]; then
-             echo "⚠️ AI Error. Using fallback."
-             AI_OUTPUT="AI generation failed. Check the 'GOOGLE RESPONSE' log above for the error message."
+             echo "⚠️ AI Error. Response from Google:"
+             cat response.json
+             AI_OUTPUT="AI generation failed. Check GitHub Action logs for details."
           fi
-          
-          # Save to ENV
+
           echo "AI_TEST_PLAN<<EOF" >> $GITHUB_ENV
           echo "$AI_OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
