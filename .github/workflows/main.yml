@@ -5,14 +5,13 @@ on:
   pull_request:
     branches: [ "main" ]
     types: [opened, synchronize, reopened]
-    # 🛑 IGNORE these paths. If a PR contains ONLY these files, the build won't start.
     paths-ignore:
-      - '**.md'                # Documentation
+      - '**.md'
       - '**.txt'
-      - 'Documentation/**'     # Specific docs folder
-      - 'Assets/Art/**'        # 🎨 Assumption: You put raw art here
-      - 'Assets/Audio/**'      # 🎵 Assumption: Music files
-      - '**.png'               # Specific extensions anywhere in project
+      - 'Documentation/**'
+      - 'Assets/Art/**'
+      - 'Assets/Audio/**'
+      - '**.png'
       - '**.jpg'
       - '**.tga'
       - '**.fbx'
@@ -20,10 +19,8 @@ on:
       - '**.mp3'
       - '**.wav'
   
-  # Keep manual trigger so you can force a build if needed
   workflow_dispatch:
 
-# 2. EFFICIENCY: Cancel the previous build if you push a new commit to the PR
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -34,7 +31,7 @@ permissions:
   contents: read
 
 jobs:
-  # JOB 0: GUARDRAIL (Prevents lazy PRs)
+  # JOB 0: GUARDRAIL
   check-description:
     name: Check Description 🛑
     runs-on: ubuntu-latest
@@ -76,8 +73,7 @@ jobs:
         with:
           path: Library
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
-          restore-keys: |
-            Library-
+          restore-keys: Library-
 
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
@@ -236,17 +232,10 @@ jobs:
       - name: Generate Folder Name
         id: folder_name
         run: |
-          # Get the branch name (Works for PRs or Manual runs)
           RAW_BRANCH="${{ github.head_ref || github.ref_name }}"
-          
-          # ⚠️ SANITIZE: Replace all '/' with '-' so we don't create sub-folders
-          # e.g., "feature/new-ui" becomes "feature-new-ui"
           BRANCH_CLEAN=${RAW_BRANCH//\//-}
-          
           SHORT_SHA=$(git rev-parse --short HEAD)
           DATE=$(date +'%Y-%m-%d')
-          
-          # Construct final folder name
           FOLDER="Build_${BRANCH_CLEAN}_${DATE}_${SHORT_SHA}"
           
           echo "FOLDER_NAME=$FOLDER" >> $GITHUB_ENV
@@ -254,13 +243,11 @@ jobs:
 
       - name: Upload to Google Drive
         run: |
-          # 'gdrive' here MUST match the name you gave the remote in 'rclone config'
           MASTER_FOLDER="T3G-2026/Game_Builds"
-          
           rclone copy all_builds/Build-WebGL gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/WebGL
           rclone copy all_builds/Build-Windows gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Windows
           rclone copy all_builds/Build-Linux gdrive:$MASTER_FOLDER/${{ env.FOLDER_NAME }}/Linux
-          
+
       - name: Save Folder Name for Next Job
         run: echo "${{ env.FOLDER_NAME }}" > folder_name.txt
 
@@ -269,7 +256,8 @@ jobs:
         with:
           name: build-info
           path: folder_name.txt
-          
+
+  # JOB 6: CREATE JIRA TICKET (AI POWERED)
   createQaTicket:
     needs: [uploadToDrive]
     name: Create AI Jira Task 🧠
@@ -283,21 +271,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-info
-  
+
       - name: Read Folder Name
         run: |
           FOLDER=$(cat folder_name.txt)
           echo "FOLDER_NAME=$FOLDER" >> $GITHUB_ENV
-          echo "✅ Recovered correct folder: $FOLDER"
-          
-      # 2. 🤖 AI STEP (Using Gemini 3 Flash Preview)
+      
+      # 2. 🤖 AI STEP (Gemini 3 Flash Preview)
       - name: Process with Gemini AI
         id: gemini_step
         env:
           API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          # 1. Prepare JSON Payload (Python handles special chars safely)
           python3 -c "
           import os
           import json
@@ -320,66 +306,45 @@ jobs:
               json.dump(payload, f)
           "
 
-          # 2. Send to Google (Gemini 3 Flash Preview)
-          # Note: We use 'v1beta' API version which is required for Preview models
+          # Use Gemini 3 Flash Preview
           curl -s \
             -H 'Content-Type: application/json' \
             -d @request.json \
             "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${API_KEY}" > response.json
 
-          # 3. Extract Output
           AI_OUTPUT=$(cat response.json | jq -r '.candidates[0].content.parts[0].text')
 
-          # 4. Safety Check & Debug
           if [ "$AI_OUTPUT" == "null" ] || [ -z "$AI_OUTPUT" ]; then
-             echo "⚠️ AI Error. Response from Google:"
+             echo "⚠️ AI Error. Response dump:"
              cat response.json
-             AI_OUTPUT="AI generation failed. Check GitHub Action logs for details."
+             AI_OUTPUT="AI generation failed. Proceeding with manual description."
           fi
 
           echo "AI_TEST_PLAN<<EOF" >> $GITHUB_ENV
           echo "$AI_OUTPUT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
       
-      # 3. 🔍 DRY RUN - PREVIEW ONLY (No Jira Ticket Created)
-      - name: 🛑 PREVIEW TICKET (Dry Run)
-        run: |
-          echo "=================================================="
-          echo "       🧪 JIRA TICKET PREVIEW (NOT SENT)          "
-          echo "=================================================="
-          echo "SUMMARY: QA Verify: ${{ github.head_ref }}"
-          echo ""
-          echo "DESCRIPTION:"
-          echo "h3. 🤖 AI-Generated Test Plan"
-          echo "${{ env.AI_TEST_PLAN }}"
-          echo ""
-          echo "----"
-          echo "h3. 📂 Build Info"
-          echo "*Location:* Google Drive > Game_Builds > ${{ env.FOLDER_NAME }}"
-          echo "=================================================="
-      
-      # 4. 🚀 JIRA STEP (Currently Disabled for Testing)
-      # Uncomment the lines below when the Preview looks correct!
-      # - name: Jira Login
-      #   uses: atlassian/gajira-login@v3
-      #   env:
-      #     JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-      #     JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-      #     JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
-      #
-      # - name: Create QA Ticket
-      #   uses: atlassian/gajira-create@v3
-      #   with:
-      #     project: PJT
-      #     issuetype: Task
-      #     summary: "QA Verify: ${{ github.head_ref }}"
-      #     description: |
-      #       h3. 🤖 AI-Generated Test Plan
-      #       ${{ env.AI_TEST_PLAN }}
-      #       
-      #       ----
-      #       h3. 📂 Build Info
-      #       *Location:* Google Drive > Game_Builds > ${{ env.FOLDER_NAME }}
-      #       
-      #       h3. 🔗 Original PR
-      #       [${{ github.event.pull_request.title }}|${{ github.event.pull_request.html_url }}]${{ github.event.pull_request.title }}|${{ github.event.pull_request.html_url }}]
+      # 3. 🚀 JIRA STEP (LIVE!)
+      - name: Jira Login
+        uses: atlassian/gajira-login@v3
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+      - name: Create QA Ticket
+        uses: atlassian/gajira-create@v3
+        with:
+          project: PJT
+          issuetype: Task
+          summary: "QA Verify: ${{ github.head_ref }}"
+          description: |
+            h3. 🤖 AI-Generated Test Plan
+            ${{ env.AI_TEST_PLAN }}
+            
+            ----
+            h3. 📂 Build Info
+            *Location:* Google Drive > Game_Builds > ${{ env.FOLDER_NAME }}
+            
+            h3. 🔗 Original PR
+            [${{ github.event.pull_request.title }}|${{ github.event.pull_request.html_url }}]
