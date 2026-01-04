@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1194504232346740110}
   - component: {fileID: 7916990016204757570}
   - component: {fileID: 6636216438449162131}
+  - component: {fileID: 9022962920428703538}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -155,3 +156,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6014713af4c79ed4795712c66b8ffae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+--- !u!114 &9022962920428703538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394629058114203212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb7735ebda985524b8a99d23c769fb1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
