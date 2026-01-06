@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
         GameManager.Instance.RegisterPlayer(this);
     }
@@ -11,11 +11,6 @@ public class Player : MonoBehaviour
     private void OnDestroy()
     {
         if (GameManager.Instance) GameManager.Instance.UnregisterPlayer();
-    }
-
-    void Start()
-    {
-        
     }
     
     void Update()

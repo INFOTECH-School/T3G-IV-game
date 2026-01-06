@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private void Awake()
+    private void Start()
     {
         GameManager.Instance.RegisterPlayerMovement(this);
     }
