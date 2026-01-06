@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        Instance = this;
+        if (!Instance) Instance = this;
     }
     
     public void RegisterPlayer(Player player)
