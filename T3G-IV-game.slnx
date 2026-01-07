@@ -1,0 +1,4 @@
+﻿<Solution>
+  <Project Path="PlayMode.csproj" />
+  <Project Path="Scripts.csproj" />
+</Solution>
