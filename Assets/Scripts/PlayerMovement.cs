@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public class PlayerMovement : MonoBehaviour
 {
     public float _acceleration = 10f; 
-    public float runningMultiplier = 1.67f;
+    public float _runningMultiplier = 1.67f;
     public float _drag = 1.5f;
     
     private Rigidbody _rigidBody;
@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 friction = -_rigidBody.linearVelocity * _drag ;
         _rigidBody.AddForce(friction);
             
-        float speedMode = Input.GetKey(KeyCode.LeftShift) ? runningMultiplier : 1f;
+        float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
         _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
     }
 }
