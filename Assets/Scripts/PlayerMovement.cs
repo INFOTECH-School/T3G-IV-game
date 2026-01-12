@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
+        GameManager.Instance.RegisterPlayerMovement(this);
     }
     
     void Update()
@@ -34,4 +35,10 @@ public class PlayerMovement : MonoBehaviour
         float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
         _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
     }
+
+    private void OnDestroy()
+    {
+        if (GameManager.Instance) GameManager.Instance.UnregisterPlayerMovement();
+    }
+
 }
