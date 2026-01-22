@@ -11,28 +11,32 @@ public class AliceController : MonoBehaviour
     
     void Start()
     {
+        GameManager.Instance.RegisterAliceController(this);
         _agent = GetComponent<NavMeshAgent>();
+        _agent.SetDestination(waypoints[currentTargetIndex].position); //Initiate the first target
     }
 
     void MoveToNextPoint()
     {
-        if (currentTargetIndex >= waypoints.Count && isLooped)
+        currentTargetIndex++;
+        if (currentTargetIndex >= waypoints.Count)
         {
+            if (!isLooped) return;
             currentTargetIndex = 0;
-        } else if (currentTargetIndex >= waypoints.Count)
-        {
-            return;
         }
         _agent.SetDestination(waypoints[currentTargetIndex].position);
-        currentTargetIndex++;
     }
 
     void Update()
     {
-        Debug.Log(_agent.destination);
         if (_agent.remainingDistance <= _agent.stoppingDistance || _agent.destination == transform.position)
         {
             MoveToNextPoint();
         }
+    }
+    
+    private void OnDestroy()
+    {
+        GameManager.Instance.UnregisterAliceController();
     }
 }
