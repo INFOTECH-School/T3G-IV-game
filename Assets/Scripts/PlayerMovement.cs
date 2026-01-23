@@ -22,6 +22,11 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) {
+            _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0); 
+            return; 
+        }
+
         var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         
         _inputDirection = _rotation * rawInput;
