@@ -22,6 +22,7 @@ public class TimelineTrigger : MonoBehaviour
             if (!director) return;
             _played = true;
             director.Play();
+            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
             Debug.Log("Played");
         }
         
@@ -31,6 +32,7 @@ public class TimelineTrigger : MonoBehaviour
             if (!director) return;
             _played = true;
             director.Play();
+            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
             Debug.Log("Played");
         }
     }
