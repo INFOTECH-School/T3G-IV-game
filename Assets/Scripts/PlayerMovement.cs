@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
+        GameManager.Instance.RegisterPlayerMovement(this); 
     }
 
     void Update()
@@ -71,5 +72,10 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionExit()
     {
         _isGrounded = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.Instance) GameManager.Instance.UnregisterPlayerMovement();
     }
 }
