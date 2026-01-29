@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8392004383242539792}
   - component: {fileID: 7274680136953147945}
   - component: {fileID: 7927354359467764170}
+  - component: {fileID: 8466008763878808540}
   m_Layer: 0
   m_Name: TimelineTrigger
   m_TagString: Untagged
@@ -66,5 +67,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3376d625527b24149964dfb56cc7ae25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::TimelineTrigger
-  director: {fileID: 0}
+  director: {fileID: 8466008763878808540}
   playOnce: 1
+  triggerer: 0
+--- !u!320 &8466008763878808540
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2174186107712145999}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 0}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings: []
+  m_ExposedReferences:
+    m_References: []
