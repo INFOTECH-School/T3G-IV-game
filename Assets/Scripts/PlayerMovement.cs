@@ -14,13 +14,23 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _currentVelocity;
     private bool _isGrounded;
     private bool _isJumpPressed;
-    
+    private int _speedHash;
+    private int _groundedHash;
+    private int _runningHash;
+
+    private Animator _animator;
     private readonly Quaternion _rotation = Quaternion.Euler(0, 45, 0);
 
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
-        GameManager.Instance.RegisterPlayerMovement(this); 
+        
+        _animator = GetComponent<Animator>();
+        _speedHash = Animator.StringToHash("Speed");
+        _groundedHash = Animator.StringToHash("isGrounded");
+        _runningHash = Animator.StringToHash("isRunning");
+        
+        GameManager.Instance.RegisterPlayerMovement(this);
     }
 
     void Update()
@@ -31,6 +41,17 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
             _isJumpPressed = true;
+        }
+
+        if (_animator)
+        {
+            Vector3 horizontalVelocity = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
+            float currentSpeed = horizontalVelocity.magnitude;
+
+            if (currentSpeed < 0.1f) currentSpeed = 0.0f;
+            _animator.SetFloat(_speedHash, currentSpeed);
+            _animator.SetBool(_groundedHash, _isGrounded);
+            _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
         }
     }
 
