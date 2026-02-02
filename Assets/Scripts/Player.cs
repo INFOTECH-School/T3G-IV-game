@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     private Vector3 originalPos;
     private Quaternion originalRot;
 
+    public enum PlayerState { Normal, Pushing }
     private void Start()
     {
         if (GameManager.Instance) GameManager.Instance.RegisterPlayer(this);
