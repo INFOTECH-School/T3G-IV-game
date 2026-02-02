@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public Player Player { private set; get; }
     public PlayerMovement PlayerMovement { private set; get; }
     public AliceController AliceController {private set; get;}
+    public LevelOperator LevelOperator { private set; get;}
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -44,5 +45,15 @@ public class GameManager : MonoBehaviour
     {
         AliceController = null;
     }
-    
+
+    public void RegisterLevelOperator(LevelOperator levelOperator)
+    {
+        if (!levelOperator) return;
+        LevelOperator = levelOperator;
+    }
+
+    public void UnregisterLevelOperator()
+    {
+        LevelOperator = null;
+    }
 }

@@ -11,6 +11,9 @@ public class WallCutoutController : MonoBehaviour
     [Header("Detection Precision")]
     [Tooltip("How thick the detection beam is. Higher = holes stay open longer at edges.")]
     public float castRadius = 0.05f; // Radius of the "Thick Beam"
+    
+    [Tooltip("How far behind the camera to start the cast. Helps detect walls the camera is already inside.")]
+    public float castBackwardsDistance = 0.5f; 
 
     private Camera _camera;
     
@@ -45,16 +48,23 @@ public class WallCutoutController : MonoBehaviour
         
         // STEP 2: Calculate "Thick Beam" (SphereCast)
         Vector3 playerPos = GameManager.Instance.Player.transform.position;
+        Vector3 targetPos = playerPos + Vector3.up * 1.0f; // Aim for chest/head
         
-        // Raise the target slightly so we aim for the chest/head, not the feet (optional but helps)
-        Vector3 targetPos = playerPos + Vector3.up * 1.0f; 
-        
-        Vector3 dir = targetPos - transform.position;
-        float distance = dir.magnitude;
+        Vector3 cameraPos = transform.position;
+        Vector3 dirVector = targetPos - cameraPos;
+        float distanceToPlayer = dirVector.magnitude;
+        Vector3 direction = dirVector.normalized;
 
-        // Use SphereCastAll instead of RaycastAll
-        // Origin, Radius, Direction, Distance, LayerMask
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, castRadius, dir, distance, wallLayer);
+        // --- THE FIX ---
+        // Move the start point backwards. If we start INSIDE a wall, Physics.SphereCast ignores it.
+        // By backing up, we ensure we start outside the wall collider.
+        Vector3 startPoint = cameraPos - (direction * castBackwardsDistance);
+        
+        // We must increase the total distance of the cast to account for the backup
+        float totalCastDistance = distanceToPlayer + castBackwardsDistance;
+
+        // Use SphereCastAll with the new StartPoint and TotalDistance
+        RaycastHit[] hits = Physics.SphereCastAll(startPoint, castRadius, direction, totalCastDistance, wallLayer);
 
 
         // STEP 3: Apply holes to current hits
@@ -66,7 +76,7 @@ public class WallCutoutController : MonoBehaviour
             {
                 rend.GetPropertyBlock(_propBlock);
                 
-                // Always send the raw Player Position (feet) to the shader for the center of the hole
+                // Send Player Position (feet) for the hole center
                 _propBlock.SetVector(PosID, playerPos);
                 _propBlock.SetFloat(SizeID, cutoutSize);
                 _propBlock.SetFloat(FalloffID, falloffSize);
