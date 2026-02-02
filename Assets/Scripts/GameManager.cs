@@ -44,4 +44,5 @@ public class GameManager : MonoBehaviour
     {
         AliceController = null;
     }
+    
 }
