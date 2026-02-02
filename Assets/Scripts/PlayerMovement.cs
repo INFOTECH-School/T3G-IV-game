@@ -1,102 +1,109 @@
-using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float _acceleration = 10f;
+    [Header("Ustawienia Ruchu")]
+    public float _acceleration = 10f; 
     public float _runningMultiplier = 1.67f;
     public float _drag = 1.5f;
-    public float _jumpForce = 5f;
-
+    public float _pushSpeed = 3f;
+    
     private Rigidbody _rigidBody;
     private Vector3 _inputDirection;
-    private Vector3 _currentVelocity;
-    private bool _isGrounded;
-    private bool _isJumpPressed;
-    private int _speedHash;
-    private int _groundedHash;
-    private int _runningHash;
-
-    private Animator _animator;
     private readonly Quaternion _rotation = Quaternion.Euler(0, 45, 0);
-
+    private PlayerInteraction _interactionScript;
+    
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
+        _interactionScript = GetComponent<PlayerInteraction>();
         
-        _animator = GetComponent<Animator>();
-        _speedHash = Animator.StringToHash("Speed");
-        _groundedHash = Animator.StringToHash("isGrounded");
-        _runningHash = Animator.StringToHash("isRunning");
-        
-        GameManager.Instance.RegisterPlayerMovement(this);
+        if (GameManager.Instance != null)
+            GameManager.Instance.RegisterPlayerMovement(this);
+    }
+    
+    void Update()
+    {
+        if (_interactionScript != null && _interactionScript.currentState == Player.PlayerState.Pushing)
+        {
+            PushMovement();
+        }
+        else
+        {
+            HandleNormalInput();
+        }
     }
 
-    void Update()
+    // KLUCZ DO SUKCESU: LateUpdate wykonuje się po wszystkich ruchach w Update.
+    // Wymuszamy tu pozycję gracza, żeby nie "pływał" za klockiem.
+    void LateUpdate()
+    {
+        if (_interactionScript != null && _interactionScript.currentState == Player.PlayerState.Pushing)
+        {
+            if (transform.parent != null)
+            {
+                // Szukamy komponentu na klocku, żeby pobrać grabPoint
+                PushableObject pushable = transform.parent.GetComponent<PushableObject>();
+                if (pushable != null && pushable.grabPoint != null)
+                {
+                    transform.position = pushable.grabPoint.position;
+                    transform.rotation = pushable.grabPoint.rotation;
+                }
+            }
+        }
+    }
+
+    private void HandleNormalInput()
     {
         var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         _inputDirection = _rotation * rawInput;
-        
-        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
-        {
-            _isJumpPressed = true;
-        }
 
-        if (_animator)
+        if (_inputDirection.magnitude > 0.1f)
         {
-            Vector3 horizontalVelocity = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
-            float currentSpeed = horizontalVelocity.magnitude;
-
-            if (currentSpeed < 0.1f) currentSpeed = 0.0f;
-            _animator.SetFloat(_speedHash, currentSpeed);
-            _animator.SetBool(_groundedHash, _isGrounded);
-            _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
+            transform.rotation = Quaternion.LookRotation(_inputDirection);
         }
     }
 
     private void FixedUpdate()
     {
-    /* friction */
-        Vector3 currentVelocity = _rigidBody.linearVelocity;
-        Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
-        var friction = -horizontalVelocity * _drag;
-        
+        if (_interactionScript != null && _interactionScript.currentState != Player.PlayerState.Pushing)
+        {
+            _rigidBody.isKinematic = false;
+            ApplyNormalPhysics();
+        }
+    }
+
+    void ApplyNormalPhysics()
+    {
+        Vector3 friction = -_rigidBody.linearVelocity * _drag;
         _rigidBody.AddForce(friction);
-        
-    /* movement */
-        
+    
         float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
         _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
+    }
+
+    void PushMovement()
+    {
+        if (transform.parent != null)
+        {
+            // Używamy GetAxisRaw("Vertical"), czyli W/S
+            float verticalInput = Input.GetAxisRaw("Vertical");
         
-    /* jumping */
-        if (_isJumpPressed)
-        {
-            _rigidBody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
-            _isJumpPressed = false;
-            _isGrounded = false;
-        }
-    }
+            if (Mathf.Abs(verticalInput) < 0.01f) return;
 
-    void OnCollisionStay(Collision collision)
-    {
-        for (int i = 0; i < collision.contactCount; i++)
-        {
-            if (collision.GetContact(i).normal.y > 0.7f)
-            {
-                _isGrounded = true;
-                return;
-            }
-        }
-    }
+            // KLUCZOWA ZMIANA:
+            // Zamiast brać 'forward' klocka, bierzemy 'forward' gracza.
+            // Ponieważ gracz patrzy na klocek, jego forward to zawsze oś "pchania/ciągnięcia".
+            Vector3 moveDirection = transform.forward * verticalInput;
 
-    private void OnCollisionExit()
-    {
-        _isGrounded = false;
+            // Poruszamy klockiem (rodzicem) w stronę, w którą patrzy gracz
+            transform.parent.position += moveDirection * _pushSpeed * Time.deltaTime;
+        }
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance) GameManager.Instance.UnregisterPlayerMovement();
+        if (GameManager.Instance != null) 
+            GameManager.Instance.UnregisterPlayerMovement();
     }
 }
