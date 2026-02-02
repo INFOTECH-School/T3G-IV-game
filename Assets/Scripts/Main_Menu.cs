@@ -9,6 +9,6 @@ public class Main_Menu : MonoBehaviour
     }
     public void StartGame()
     {
-        SceneManager.LoadScene("Scenes/Test_Gym");
+        SceneManager.LoadScene("Level1");
     }   
 }
