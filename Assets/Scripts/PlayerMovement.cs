@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // 1. Check Interaction State
-        bool isPushing = _interactionScript != null && _interactionScript.currentState == Player.PlayerState.Pushing;
+        bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
 
         if (isPushing)
         {
@@ -64,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Physics forces only apply when NOT pushing (Normal state)
-        if (_interactionScript == null || _interactionScript.currentState != Player.PlayerState.Pushing)
+        if (!_interactionScript || _interactionScript.currentState != Player.PlayerState.Pushing)
         {
             ApplyNormalPhysics();
         }
@@ -73,12 +73,12 @@ public class PlayerMovement : MonoBehaviour
     // Ensures player stays locked to the block frame-perfectly
     void LateUpdate()
     {
-        if (_interactionScript != null && _interactionScript.currentState == Player.PlayerState.Pushing)
+        if (_interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing)
         {
-            if (transform.parent != null)
+            if (transform.parent)
             {
                 PushableObject pushable = transform.parent.GetComponent<PushableObject>();
-                if (pushable != null && pushable.grabPoint != null)
+                if (pushable && pushable.grabPoint)
                 {
                     transform.position = pushable.grabPoint.position;
                     transform.rotation = pushable.grabPoint.rotation;
@@ -135,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void PushMovement()
     {
-        if (transform.parent != null)
+        if (transform.parent)
         {
             // Only read Forward/Backward input (W/S)
             float verticalInput = Input.GetAxisRaw("Vertical");
@@ -145,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDirection = transform.forward * verticalInput;
             
             // Move the PARENT (the block)
-            transform.parent.position += moveDirection * _pushSpeed * Time.deltaTime;
+            transform.parent.position += moveDirection * (_pushSpeed * Time.deltaTime);
         }
     }
 
