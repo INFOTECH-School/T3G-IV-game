@@ -159,9 +159,9 @@ public class PlayerMovement : MonoBehaviour
         {
             // When pushing, we might want a specific "Push" bool in the future.
             // For now, we set speed to 0 so it doesn't play the run animation.
-            _animator.SetFloat(_speedHash, 0); 
-            _animator.SetBool(_groundedHash, true);
-            _animator.SetBool(_runningHash, false);
+            // _animator.SetFloat(_speedHash, 0); 
+            // _animator.SetBool(_groundedHash, true);
+            // _animator.SetBool(_runningHash, false);
         }
         else
         {
@@ -171,9 +171,9 @@ public class PlayerMovement : MonoBehaviour
 
             if (currentSpeed < 0.1f) currentSpeed = 0.0f;
             
-            _animator.SetFloat(_speedHash, currentSpeed);
-            _animator.SetBool(_groundedHash, _isGrounded);
-            _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
+            // _animator.SetFloat(_speedHash, currentSpeed);
+            // _animator.SetBool(_groundedHash, _isGrounded);
+            // _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
         }
     }
 
