@@ -29,6 +29,7 @@ public class Basket : MonoBehaviour
     {
         if (_isHoldingPoint1Free)
         {
+            GameManager.Instance.LevelOperator.level1DependencyScore--;
             // 1. Activate the visual representation in the basket
             if (holdingPoint1) holdingPoint1.SetActive(true);
             
@@ -40,6 +41,7 @@ public class Basket : MonoBehaviour
         }
         else if (_isHoldingPoint2Free)
         {
+            GameManager.Instance.LevelOperator.level1DependencyScore -= 1;
             // 1. Activate the second visual representation
             if (holdingPoint2) holdingPoint2.SetActive(true);
             
@@ -53,6 +55,8 @@ public class Basket : MonoBehaviour
             Debug.Log("Basket Full! Sequence Complete.");
             if (finishResult) finishResult.SetActive(true);
         }
+        Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore);
+        Debug.Log(GameManager.Instance.LevelOperator.canEndLevel1);
     }
 
     // Helper for the Player script to know if it should show the "Press E" text

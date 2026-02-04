@@ -6,7 +6,7 @@ public class LevelOperator : MonoBehaviour
 {
     public bool canEndLevel1 = false;
 
-    private int _level1DependencyScore;
+    private int _level1DependencyScore = 2;
     public int level1DependencyScore
     {
         get
@@ -15,9 +15,13 @@ public class LevelOperator : MonoBehaviour
         }
         set
         {
-            if (value == 0)
+            if (value <= 0)
             {
                 canEndLevel1 = true;
+            }
+            else
+            {
+                _level1DependencyScore = value;
             }
         }
     }
@@ -25,6 +29,8 @@ public class LevelOperator : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.RegisterLevelOperator(this);
+        
+        //set Level Dependency scores;
     }
 
     private void OnDisable()
@@ -32,25 +38,15 @@ public class LevelOperator : MonoBehaviour
         GameManager.Instance.UnregisterLevelOperator();
     }
 
-    private void EndLevel(int number)
+    public void EndLevel(int number)
     {
         switch (number)
         {
             case 1:
-                SceneManager.LoadSceneAsync("Level 1");
+                SceneManager.LoadSceneAsync("Test_Gym"/*"Level2"*/);
                 canEndLevel1 = false;
                 break;
         }
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (canEndLevel1)
-            {
-                EndLevel(1);
-            }
-        }
-    }
 }
+
