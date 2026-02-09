@@ -25,20 +25,19 @@ public class PauseMenuManager : MonoBehaviour
         if (PauseMenu)
         {
             PauseMenu.SetActive(true);
-            Time.timeScale = 0f;
+            GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
         }
     }
     public void QuitButton()
     {
-        Time.timeScale = 1f;
+        GameManager.Instance.CurrentGameState = GameManager.GameState.Gameplay;
         SceneManager.LoadScene("MainMenu");
     }
 
     public void resumeButton()
     {
-        Time.timeScale = 1f;
         PauseMenu.SetActive(false);
-        
+        GameManager.Instance.CurrentGameState = GameManager.GameState.Gameplay;
         
     }
 
