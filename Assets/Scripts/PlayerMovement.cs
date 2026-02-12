@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    public float _acceleration = 10f;
+    [Header("Ustawienia Ruchu")]
+    public float _acceleration = 10f; 
     public float _runningMultiplier = 1.67f;
     public float _drag = 1.5f;
     public float _jumpForce = 5f;
@@ -28,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
         _interactionScript = GetComponent<PlayerInteraction>();
         
         _animator = GetComponent<Animator>();
@@ -41,12 +43,18 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance) GameManager.Instance.RegisterPlayerMovement(this);
     }
 
-    void Update()
+    private void Update()
     {
-        // 1. Check Interaction State
-        bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
+        {
+            // Reset velocity if game is paused
+            _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
+            return;
+        }
 
-        if (isPushing)
+        // --- MERGE FIX HERE ---
+        // logic: If pushing, do push logic. If not, do normal movement.
+        if (_interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing)
         {
             // Handle Push/Pull logic (Kinematic movement)
             PushMovement();
@@ -55,76 +63,65 @@ public class PlayerMovement : MonoBehaviour
         {
             // Handle Normal Walking logic (Input reading)
             HandleNormalInput();
+            HandleJumpInput();
         }
+        
+        UpdateAnimator();
+    }
 
-        // 2. Update Animations (works in both states)
-        UpdateAnimator(isPushing);
+    // --- MERGE FIX: This is the correct version of the function ---
+    private void HandleNormalInput()
+    {
+        // Calculate input relative to the camera angle (_rotation)
+        var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        _inputDirection = _rotation * rawInput;
+
+        // Rotate character to face movement direction
+        if (_inputDirection.magnitude > 0.1f)
+            transform.rotation = Quaternion.LookRotation(_inputDirection);
+    }
+
+    private void HandleJumpInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
+            _isJumpPressed = true;
     }
 
     private void FixedUpdate()
     {
-        // Physics forces only apply when NOT pushing (Normal state)
-        if (!_interactionScript || _interactionScript.currentState != Player.PlayerState.Pushing)
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
         {
-            ApplyNormalPhysics();
+            _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
+            return;
         }
-    }
 
-    // Ensures player stays locked to the block frame-perfectly
-    void LateUpdate()
-    {
+        // If pushing, we handle movement manually (kinematic), so skip physics forces
         if (_interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing)
         {
-            if (transform.parent)
-            {
-                PushableObject pushable = transform.parent.GetComponent<PushableObject>();
-                if (pushable && pushable.grabPoint)
-                {
-                    transform.position = pushable.grabPoint.position;
-                    transform.rotation = pushable.grabPoint.rotation;
-                }
-            }
-        }
-    }
-
-    // --- MOVEMENT LOGIC ---
-
-    private void HandleNormalInput()
-    {
-        // Calculate Direction based on Camera angle (45 deg)
-        var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        _inputDirection = _rotation * rawInput;
-
-        // Rotate Character to face movement direction
-        if (_inputDirection.magnitude > 0.1f)
-        {
-            transform.rotation = Quaternion.LookRotation(_inputDirection);
+            _rigidBody.isKinematic = true;
+            return;
         }
 
-        // Jump Input
-        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
-        {
-            _isJumpPressed = true;
-        }
+        _rigidBody.isKinematic = false;
+        ApplyNormalPhysics();
     }
 
     private void ApplyNormalPhysics()
     {
-        // 1. Friction (Drag)
-        // Using linearVelocity (Unity 6+) or velocity (Older Unity)
-        Vector3 currentVelocity = _rigidBody.linearVelocity; 
-        Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
-        
+        Vector3 velocity = _rigidBody.linearVelocity;
+        Vector3 horizontalVelocity = new Vector3(velocity.x, 0, velocity.z);
+
+        // Apply Drag (Friction)
         Vector3 friction = -horizontalVelocity * _drag;
         _rigidBody.AddForce(friction);
-
-        // 2. Movement Force
+            
+        // Apply Movement
         float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
         
         // Only add force if there is input
         _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
 
-        // 3. Jump Force
+        // Apply Jump
         if (_isJumpPressed)
         {
             _rigidBody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
@@ -135,51 +132,57 @@ public class PlayerMovement : MonoBehaviour
 
     private void PushMovement()
     {
-        if (transform.parent)
-        {
-            // Only read Forward/Backward input (W/S)
-            float verticalInput = Input.GetAxisRaw("Vertical");
-            if (Mathf.Abs(verticalInput) < 0.01f) return;
+        if (!transform.parent) return;
 
-            // Move in the direction the player is facing (Forward/Backward)
-            Vector3 moveDirection = transform.forward * verticalInput;
-            
-            // Move the PARENT (the block)
-            transform.parent.position += moveDirection * (_pushSpeed * Time.deltaTime);
+        float vertical = Input.GetAxisRaw("Vertical");
+        
+        // Prevent micro-movements
+        if (Mathf.Abs(vertical) < 0.01f) return;
+
+        Vector3 moveDir = transform.forward * vertical;
+        // Move the PARENT object (the block), not just the player
+        transform.parent.position += moveDir * (_pushSpeed * Time.deltaTime);
+    }
+
+    private void LateUpdate()
+    {
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) return;
+
+        // Ensure player stays locked to the grab point while pushing
+        if (!_interactionScript || _interactionScript.currentState != Player.PlayerState.Pushing)
+            return;
+
+        if (!transform.parent) return;
+
+        PushableObject pushable = transform.parent.GetComponent<PushableObject>();
+        if (pushable && pushable.grabPoint)
+        {
+            transform.position = pushable.grabPoint.position;
+            transform.rotation = pushable.grabPoint.rotation;
         }
     }
 
-    // --- ANIMATION & COLLISION ---
-
-    private void UpdateAnimator(bool isPushing)
+    private void UpdateAnimator()
     {
         if (!_animator) return;
 
-        if (isPushing)
-        {
-            // When pushing, we might want a specific "Push" bool in the future.
-            // For now, we set speed to 0 so it doesn't play the run animation.
-            // _animator.SetFloat(_speedHash, 0); 
-            // _animator.SetBool(_groundedHash, true);
-            // _animator.SetBool(_runningHash, false);
-        }
-        else
-        {
-            // Normal Movement Animation
-            Vector3 horizontalVelocity = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
-            float currentSpeed = horizontalVelocity.magnitude;
+        Vector3 horizontalVel = new Vector3(
+            _rigidBody.linearVelocity.x,
+            0,
+            _rigidBody.linearVelocity.z
+        );
 
-            if (currentSpeed < 0.1f) currentSpeed = 0.0f;
-            
-            // _animator.SetFloat(_speedHash, currentSpeed);
-            // _animator.SetBool(_groundedHash, _isGrounded);
-            // _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
-        }
+        float speed = horizontalVel.magnitude;
+        if (speed < 0.1f) speed = 0f;
+
+        _animator.SetFloat(_speedHash, speed);
+        _animator.SetBool(_groundedHash, _isGrounded);
+        _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
     }
 
-    void OnCollisionStay(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
-        // Ground Check
+        // Simple ground check
         for (int i = 0; i < collision.contactCount; i++)
         {
             if (collision.GetContact(i).normal.y > 0.7f)

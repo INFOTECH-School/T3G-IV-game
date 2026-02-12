@@ -19,8 +19,8 @@ public class PlayerInteraction : MonoBehaviour
     
     void Update()
     {
-        // Only allow toggling if we have a target
-        if (currentTarget != null && Input.GetKeyDown(KeyCode.X))
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) return;
+        if (currentTarget && Input.GetKeyDown(KeyCode.X))
         {
             TogglePushMode();
         }
@@ -34,7 +34,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void EnterPushState()
     {
-        if (currentTarget == null) return;
+        if (!currentTarget) return;
 
         currentState = Player.PlayerState.Pushing;
 
@@ -48,7 +48,7 @@ public class PlayerInteraction : MonoBehaviour
         transform.SetParent(currentTarget.transform);
         transform.position = currentTarget.grabPoint.position;
         transform.rotation = currentTarget.grabPoint.rotation;
-
+        
         // 3. Update UI to show Pushing controls
         UpdateUI();
     }
@@ -98,6 +98,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) return;
         if (other.TryGetComponent(out PushableObject obj))
         {
             currentTarget = obj;

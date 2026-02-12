@@ -7,10 +7,35 @@ public class GameManager : MonoBehaviour
     public PlayerMovement PlayerMovement { private set; get; }
     public AliceController AliceController {private set; get;}
     public LevelOperator LevelOperator { private set; get;}
+
+    public enum GameState
+    {
+        Gameplay,
+        Paused,
+        Cutscene
+    }
+    public GameState CurrentGameState = GameState.Gameplay;
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
         if (!Instance) Instance = this;
+    }
+
+    public void SetState(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Gameplay:
+                Time.timeScale = 1;
+                break;
+            case GameState.Paused:
+                Time.timeScale = 0;
+                break;
+            case GameState.Cutscene:
+                Time.timeScale = 1;
+                break;
+        }
+        CurrentGameState = state;
     }
     
     public void RegisterPlayer(Player player)
