@@ -17,28 +17,36 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OpenPauseMenu();
+            ChangePauseMenuState();
         }
     }
-    public void OpenPauseMenu()
+    public void ChangePauseMenuState()
     {
         if (PauseMenu)
         {
-            PauseMenu.SetActive(true);
-            GameManager.Instance.CurrentGameState = GameManager.GameState.Paused;
+            if (PauseMenu.activeSelf)
+            {
+                PauseMenu.SetActive(false);
+                GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+            }
+            else
+            {
+                PauseMenu.SetActive(true);
+                GameManager.Instance.SetState(GameManager.GameState.Paused);
+            }
         }
     }
+    
+    
     public void QuitButton()
     {
-        GameManager.Instance.CurrentGameState = GameManager.GameState.Gameplay;
+        GameManager.Instance.SetState(GameManager.GameState.Gameplay);
         SceneManager.LoadScene("MainMenu");
     }
 
     public void resumeButton()
     {
-        PauseMenu.SetActive(false);
-        GameManager.Instance.CurrentGameState = GameManager.GameState.Gameplay;
-        
+        ChangePauseMenuState();
     }
 
     public void saveButton()
