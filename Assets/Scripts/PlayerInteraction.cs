@@ -14,7 +14,8 @@ public class PlayerInteraction : MonoBehaviour
     
     void Update()
     {
-        if (currentTarget != null && Input.GetKeyDown(KeyCode.X))
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) return;
+        if (currentTarget && Input.GetKeyDown(KeyCode.X))
         {
             TogglePushMode();
         }
@@ -28,7 +29,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void EnterPushState()
     {
-        if (currentTarget == null) return;
+        if (!currentTarget) return;
 
         currentState = Player.PlayerState.Pushing;
 
@@ -46,7 +47,7 @@ public class PlayerInteraction : MonoBehaviour
         transform.position = currentTarget.grabPoint.position;
         transform.rotation = currentTarget.grabPoint.rotation;
 
-        if (pushText != null) pushText.SetActive(false);
+        if (pushText) pushText.SetActive(false);
     }
 
     void ExitPushState()
@@ -63,10 +64,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) return;
         if (other.TryGetComponent(out PushableObject obj))
         {
             currentTarget = obj;
-            if (pushText != null) pushText.SetActive(true);
+            if (pushText) pushText.SetActive(true);
         }
     }
 
@@ -75,7 +77,7 @@ public class PlayerInteraction : MonoBehaviour
         if (currentState != Player.PlayerState.Pushing && other.GetComponent<PushableObject>())
         {
             currentTarget = null;
-            if (pushText != null) pushText.SetActive(false);
+            if (pushText) pushText.SetActive(false);
         }
     }
 }

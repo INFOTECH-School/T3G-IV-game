@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,29 +16,36 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            OpenPauseMenu();
+            ChangePauseMenuState();
         }
     }
-    public void OpenPauseMenu()
+    public void ChangePauseMenuState()
     {
         if (PauseMenu)
         {
-            PauseMenu.SetActive(true);
-            Time.timeScale = 0f;
+            if (PauseMenu.activeSelf)
+            {
+                PauseMenu.SetActive(false);
+                GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+            }
+            else
+            {
+                PauseMenu.SetActive(true);
+                GameManager.Instance.SetState(GameManager.GameState.Paused);
+            }
         }
     }
+    
+    
     public void QuitButton()
     {
-        Time.timeScale = 1f;
+        GameManager.Instance.SetState(GameManager.GameState.Gameplay);
         SceneManager.LoadScene("MainMenu");
     }
 
     public void resumeButton()
     {
-        Time.timeScale = 1f;
-        PauseMenu.SetActive(false);
-        
-        
+        ChangePauseMenuState();
     }
 
     public void saveButton()
