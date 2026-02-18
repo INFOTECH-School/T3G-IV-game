@@ -28,6 +28,10 @@ public class PlayerMovement : MonoBehaviour
         {
             PushMovement();
         }
+        else if (_interactionScript != null && _interactionScript.currentState == Player.PlayerState.Interacting)
+        {
+            KinematicMovement();
+        }
         else
         {
             HandleNormalInput();
@@ -51,6 +55,19 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+        else if (_interactionScript != null && _interactionScript.currentState == Player.PlayerState.Interacting)
+        {
+            if (transform.parent != null)
+            {
+                // Ensure player stays at grab position for kinematic objects
+                KinematicObject kinematic = transform.parent.GetComponent<KinematicObject>();
+                if (kinematic != null && kinematic.grabPosition != null)
+                {
+                    transform.position = kinematic.grabPosition.position;
+                    transform.rotation = kinematic.grabPosition.rotation;
+                }
+            }
+        }
     }
 
     private void HandleNormalInput()
@@ -66,7 +83,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_interactionScript != null && _interactionScript.currentState != Player.PlayerState.Pushing)
+        if (_interactionScript != null && 
+            _interactionScript.currentState != Player.PlayerState.Pushing &&
+            _interactionScript.currentState != Player.PlayerState.Interacting)
         {
             _rigidBody.isKinematic = false;
             ApplyNormalPhysics();
@@ -99,6 +118,32 @@ public class PlayerMovement : MonoBehaviour
             // Poruszamy klockiem (rodzicem) w stronę, w którą patrzy gracz
             transform.parent.position += moveDirection * _pushSpeed * Time.deltaTime;
         }
+    }
+    
+    void KinematicMovement()
+    {
+        // Get the kinematic object from the interaction script
+        if (_interactionScript == null) return;
+        
+        KinematicObject kinematicObj = _interactionScript.CurrentKinematicTarget;
+        if (kinematicObj == null) return;
+        
+        // Check if player is holding W (forward input)
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        
+        // Only advance if W is pressed (positive vertical input)
+        if (verticalInput > 0.01f)
+        {
+            // Drive the kinematic object's movement
+            kinematicObj.AdvanceMovement(Time.deltaTime);
+            
+            // Check if reached target and auto-release
+            if (kinematicObj.HasReachedTarget())
+            {
+                Debug.Log("[PlayerMovement] Kinematic object reached target, auto-releasing.");
+            }
+        }
+        // If W is released, the object simply pauses (no reverse/pull in MVP)
     }
 
     private void OnDestroy()
