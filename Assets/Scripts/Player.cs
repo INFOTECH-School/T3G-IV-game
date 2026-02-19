@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using TMPro; // REQUIRED for TextMeshPro
 
 public class Player : MonoBehaviour
 {
+    public enum PlayerState { Normal, Pushing, Interacting }
     [Header("UI Settings")]
     public TextMeshProUGUI interactionText; // Drag your UI Text object here
 
@@ -20,8 +22,7 @@ public class Player : MonoBehaviour
     // Memories for the "Return to Shelf" feature
     private Vector3 originalPos;
     private Quaternion originalRot;
-
-    public enum PlayerState { Normal, Pushing }
+    
     private void Start()
     {
         if (GameManager.Instance) GameManager.Instance.RegisterPlayer(this);
