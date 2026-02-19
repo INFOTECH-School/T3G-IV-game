@@ -150,6 +150,11 @@ public class PlayerMovement : MonoBehaviour
             
             if (kinematicObj.HasReachedTarget())
             {
+                if (kinematicObj.levelObjective)
+                {
+                    GameManager.Instance.LevelOperator.ProgressLevel();
+                }
+
                 Debug.Log("[PlayerMovement] Kinematic object reached target, auto-releasing.");
             }
         }

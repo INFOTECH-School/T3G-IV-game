@@ -49,7 +49,7 @@ public class Basket : MonoBehaviour
             }
             else if (_isHoldingPoint2Free)
             {
-                GameManager.Instance.LevelOperator.level1DependencyScore -= 1;
+                GameManager.Instance.LevelOperator.level1DependencyScore--;
                 // 1. Activate the second visual representation
                 if (holdingPoint2) holdingPoint2.SetActive(true);
 
@@ -64,7 +64,7 @@ public class Basket : MonoBehaviour
                 if (finishResult) finishResult.SetActive(true);
             }
 
-            Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore);
+            Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore + "Level score");
             Debug.Log(GameManager.Instance.LevelOperator.canEndLevel1);
         } else if (level2)
         {

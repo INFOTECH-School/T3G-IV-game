@@ -22,6 +22,8 @@ public class KinematicObject : MonoBehaviour
     [Header("Player Interaction")]
     [Tooltip("Position where the player will be placed when interacting")]
     public Transform grabPosition;
+
+    public bool levelObjective;
     
     [Header("Pivot Settings (Only for Pivot type)")]
     [Tooltip("The anchor point to rotate around (e.g., door hinge)")]
@@ -190,7 +192,7 @@ public class KinematicObject : MonoBehaviour
         switch (movementType)
         {
             case MovementType.Slide:
-                if (targetTransform == null) return false;
+                if (!targetTransform) return false;
                 return Vector3.Distance(transform.position, targetTransform.position) < 0.01f;
                 
             case MovementType.Pivot:

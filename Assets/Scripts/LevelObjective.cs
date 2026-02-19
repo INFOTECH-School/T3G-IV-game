@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelObjective : MonoBehaviour
 {
-    public Transform destination;
+/*    public Transform destination;
 
     private void Start()
     {
@@ -33,4 +33,5 @@ public class LevelObjective : MonoBehaviour
         );
         return dist < 0.1f;
     }
+*/
 }
