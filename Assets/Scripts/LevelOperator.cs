@@ -25,6 +25,27 @@ public class LevelOperator : MonoBehaviour
             }
         }
     }
+    public bool canEndLevel2 = false;
+    private int _level2DependencyScore = 2;
+
+    public int level2DependencyScore
+    {
+        get
+        {
+            return _level2DependencyScore;
+        }
+        set
+        {
+            if (value <= 0)
+            {
+                canEndLevel2 = true;
+            }
+            else
+            {
+                _level2DependencyScore = value;
+            }
+        }
+    }
         
     private void Awake()
     {

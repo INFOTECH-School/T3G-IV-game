@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Basket : MonoBehaviour
@@ -7,7 +8,12 @@ public class Basket : MonoBehaviour
     public GameObject holdingPoint1; 
     
     // Drag the object you want to appear in the second slot (disable it in Editor first)
-    public GameObject holdingPoint2; 
+    public GameObject holdingPoint2;
+
+    public List<GameObject> basketPoints =  new List<GameObject>();
+    private int _basketCounter = 0;
+    public bool level1 = false;
+    public bool level2 = false;
     
     // The object/effect that appears when both are full
     public GameObject finishResult; 
@@ -27,36 +33,51 @@ public class Basket : MonoBehaviour
     // Called by Player when they press 'E'
     public void ReceiveItem(Item item)
     {
-        if (_isHoldingPoint1Free)
+        if (level1)
         {
-            GameManager.Instance.LevelOperator.level1DependencyScore--;
-            // 1. Activate the visual representation in the basket
-            if (holdingPoint1) holdingPoint1.SetActive(true);
-            
-            // 2. Mark slot as taken
-            _isHoldingPoint1Free = false;
+            if (_isHoldingPoint1Free)
+            {
+                GameManager.Instance.LevelOperator.level1DependencyScore--;
+                // 1. Activate the visual representation in the basket
+                if (holdingPoint1) holdingPoint1.SetActive(true);
 
-            // 3. DESTROY the item the player was holding
-            Destroy(item.gameObject);
-        }
-        else if (_isHoldingPoint2Free)
+                // 2. Mark slot as taken
+                _isHoldingPoint1Free = false;
+
+                // 3. DESTROY the item the player was holding
+                Destroy(item.gameObject);
+            }
+            else if (_isHoldingPoint2Free)
+            {
+                GameManager.Instance.LevelOperator.level1DependencyScore -= 1;
+                // 1. Activate the second visual representation
+                if (holdingPoint2) holdingPoint2.SetActive(true);
+
+                // 2. Mark slot as taken
+                _isHoldingPoint2Free = false;
+
+                // 3. DESTROY the item the player was holding
+                Destroy(item.gameObject);
+
+                // 4. Trigger the result (Basket is now full)
+                Debug.Log("Basket Full! Sequence Complete.");
+                if (finishResult) finishResult.SetActive(true);
+            }
+
+            Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore);
+            Debug.Log(GameManager.Instance.LevelOperator.canEndLevel1);
+        } else if (level2)
         {
-            GameManager.Instance.LevelOperator.level1DependencyScore -= 1;
-            // 1. Activate the second visual representation
-            if (holdingPoint2) holdingPoint2.SetActive(true);
-            
-            // 2. Mark slot as taken
-            _isHoldingPoint2Free = false;
-
-            // 3. DESTROY the item the player was holding
+            basketPoints[_basketCounter].SetActive(true);
             Destroy(item.gameObject);
+            _basketCounter++;
+            if (_basketCounter == basketPoints.Count)
+            {
+                if (finishResult) finishResult.SetActive(true);
+            }
 
-            // 4. Trigger the result (Basket is now full)
-            Debug.Log("Basket Full! Sequence Complete.");
-            if (finishResult) finishResult.SetActive(true);
+            GameManager.Instance.LevelOperator.level2DependencyScore--;
         }
-        Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore);
-        Debug.Log(GameManager.Instance.LevelOperator.canEndLevel1);
     }
 
     // Helper for the Player script to know if it should show the "Press E" text
