@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// PlayerMovement handles normal, pushing, and kinematic interaction modes
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Ustawienia Ruchu")]

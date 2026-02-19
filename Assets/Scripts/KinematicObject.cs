@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Kinematic puzzle object that moves along a fixed path (no physics).
-/// Supports both sliding (linear) and pivoting (rotational) movement.
-/// </summary>
+
 public class KinematicObject : MonoBehaviour
 {
     public enum MovementType

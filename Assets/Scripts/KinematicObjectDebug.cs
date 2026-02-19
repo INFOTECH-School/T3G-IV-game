@@ -1,9 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Simple test/debug script for KinematicObject
-/// Attach to a KinematicObject to see debug info in play mode
-/// </summary>
+
 [RequireComponent(typeof(KinematicObject))]
 public class KinematicObjectDebug : MonoBehaviour
 {
