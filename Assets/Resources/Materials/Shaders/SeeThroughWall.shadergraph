@@ -1,4 +1,4 @@
-﻿{
+{
     "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "cba1a691c7894188b720fa484ba1c3d3",
@@ -426,20 +426,6 @@
             },
             "m_InputSlot": {
                 "m_Node": {
-                    "m_Id": "6698ec6bcabc4d5bbc916d7ec38a1748"
-                },
-                "m_SlotId": 1
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "b8bf7a02510940caadf453ec97370a85"
-                },
-                "m_SlotId": 1
-            },
-            "m_InputSlot": {
-                "m_Node": {
                     "m_Id": "7b232a60ce35429288607f8c756dbf84"
                 },
                 "m_SlotId": 0
@@ -455,6 +441,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "d27f8616fde2480eadef2a6951a9c6de"
+                },
+                "m_SlotId": 1
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "ce513b053ad04f1b900780607b1de28e"
+                },
+                "m_SlotId": 0
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "6698ec6bcabc4d5bbc916d7ec38a1748"
                 },
                 "m_SlotId": 1
             }

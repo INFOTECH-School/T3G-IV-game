@@ -6597,6 +6597,18 @@ PrefabInstance:
       propertyPath: level1
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1172273197333309385, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_Center.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1172273197333309385, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_Center.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1172273197333309385, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1286221133261734599, guid: be220abd2069f064a985789b66c0d8be, type: 3}
       propertyPath: m_InitialState
       value: 0
@@ -6621,6 +6633,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level1
       objectReference: {fileID: 0}
+    - target: {fileID: 2865520125832760923, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_Center.x
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2865520125832760923, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_Center.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2865520125832760923, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4021108103050601724, guid: be220abd2069f064a985789b66c0d8be, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.5
@@ -6644,6 +6668,10 @@ PrefabInstance:
     - target: {fileID: 4021108103050601724, guid: be220abd2069f064a985789b66c0d8be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4104177463285431552, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4257709085516253420, guid: be220abd2069f064a985789b66c0d8be, type: 3}
       propertyPath: m_Center.x
