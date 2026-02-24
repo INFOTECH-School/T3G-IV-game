@@ -18,7 +18,13 @@ public class TimelineTrigger : MonoBehaviour
 
     private void PlayCutscene(string sceneName)
     {
-        if (sceneName == "Level 1" && !GameManager.Instance.LevelOperator.canEndLevel1) return;
+        switch (GameManager.Instance.LevelOperator.currentLevel)
+        {
+            case 1 when !GameManager.Instance.LevelOperator.canEndLevel1:
+            case 2 when !GameManager.Instance.LevelOperator.canEndLevel2:
+                return;
+        }
+
         _played = true;
         director.Play();
         Debug.Log("Played");
