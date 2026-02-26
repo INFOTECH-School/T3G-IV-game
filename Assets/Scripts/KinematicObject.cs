@@ -36,6 +36,7 @@ public class KinematicObject : MonoBehaviour
     private float _currentRotationAngle;
     private bool _isInteracting;
     private Transform _playerTransform;
+    private bool _hasReachedTarget;
     
     void Awake()
     {
@@ -139,6 +140,7 @@ public class KinematicObject : MonoBehaviour
         // Check if already at target
         if (Vector3.Distance(transform.position, targetTransform.position) < 0.01f)
         {
+            _hasReachedTarget = true;
             return;
         }
         
@@ -148,6 +150,12 @@ public class KinematicObject : MonoBehaviour
             targetTransform.position,
             speed * deltaTime
         );
+        
+        // Check again after moving
+        if (Vector3.Distance(transform.position, targetTransform.position) < 0.01f)
+        {
+            _hasReachedTarget = true;
+        }
     }
     
     /// <summary>
@@ -160,6 +168,7 @@ public class KinematicObject : MonoBehaviour
         // Check if reached max rotation
         if (_currentRotationAngle >= maxRotationAngle)
         {
+            _hasReachedTarget = true;
             return;
         }
         
@@ -180,6 +189,12 @@ public class KinematicObject : MonoBehaviour
         );
         
         _currentRotationAngle += rotationStep;
+        
+        // Check if just reached target
+        if (_currentRotationAngle >= maxRotationAngle)
+        {
+            _hasReachedTarget = true;
+        }
     }
     
     /// <summary>
@@ -209,6 +224,7 @@ public class KinematicObject : MonoBehaviour
         transform.position = _startPosition;
         transform.rotation = _startRotation;
         _currentRotationAngle = 0f;
+        _hasReachedTarget = false;
         
         if (_isInteracting)
         {
@@ -217,6 +233,11 @@ public class KinematicObject : MonoBehaviour
     }
     
     public bool IsInteracting => _isInteracting;
+    
+    /// <summary>
+    /// Check if this object can still be interacted with (hasn't reached target yet)
+    /// </summary>
+    public bool CanInteract => !_hasReachedTarget;
     
     // Gizmos for editor visualization
     void OnDrawGizmos()

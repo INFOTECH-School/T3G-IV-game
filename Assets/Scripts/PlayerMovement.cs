@@ -142,6 +142,8 @@ public class PlayerMovement : MonoBehaviour
             if (kinematicObj.HasReachedTarget())
             {
                 Debug.Log("[PlayerMovement] Kinematic object reached target, auto-releasing.");
+                // Auto-release the player
+                _interactionScript.ToggleKinematicMode();
             }
         }
         // If W is released, the object simply pauses (no reverse/pull in MVP)

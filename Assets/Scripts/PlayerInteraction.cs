@@ -34,7 +34,7 @@ public class PlayerInteraction : MonoBehaviour
         else ExitPushState();
     }
     
-    private void ToggleKinematicMode()
+    public void ToggleKinematicMode()
     {
         if (currentState == Player.PlayerState.Normal) EnterKinematicState();
         else ExitKinematicState();
@@ -116,8 +116,12 @@ public class PlayerInteraction : MonoBehaviour
         }
         else if (other.TryGetComponent(out KinematicObject kinObj))
         {
-            currentKinematicTarget = kinObj;
-            if (pushText != null) pushText.SetActive(true);
+            // Only allow interaction if the object hasn't reached its target
+            if (kinObj.CanInteract)
+            {
+                currentKinematicTarget = kinObj;
+                if (pushText != null) pushText.SetActive(true);
+            }
         }
     }
 
