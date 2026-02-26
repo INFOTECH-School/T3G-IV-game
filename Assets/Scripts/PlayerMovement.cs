@@ -157,6 +157,8 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 Debug.Log("[PlayerMovement] Kinematic object reached target, auto-releasing.");
+                // Auto-release the player
+                _interactionScript.ToggleKinematicMode();
             }
         }
     }

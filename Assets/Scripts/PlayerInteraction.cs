@@ -1,15 +1,15 @@
 using UnityEngine;
-using TMPro; // Required for TextMeshPro
+using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
     public Player.PlayerState currentState = Player.PlayerState.Normal;
     
     private PushableObject currentTarget;
-    private KinematicObject currentKinematicTarget; // Added from Script 2
+    private KinematicObject currentKinematicTarget;
     
     [Header("UI Settings")]
-    [SerializeField] private TextMeshProUGUI interactionText; // Prioritized TMP over standard GameObject
+    [SerializeField] private TextMeshProUGUI interactionText; 
     
     private Rigidbody _rb;
 
@@ -21,16 +21,16 @@ public class PlayerInteraction : MonoBehaviour
     
     void Update()
     {
-        // GameManager check from Script 1
+        // GameManager check from local script
         if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) return;
 
         // Handle PushableObject interaction
-        if (currentTarget && Input.GetKeyDown(KeyCode.X))
+        if (currentTarget != null && Input.GetKeyDown(KeyCode.X))
         {
             TogglePushMode();
         }
-        // Handle KinematicObject interaction (uses 'else if' to prevent double inputs if overlapping)
-        else if (currentKinematicTarget && Input.GetKeyDown(KeyCode.X))
+        // Handle KinematicObject interaction
+        else if (currentKinematicTarget != null && Input.GetKeyDown(KeyCode.X))
         {
             ToggleKinematicMode();
         }
@@ -42,7 +42,8 @@ public class PlayerInteraction : MonoBehaviour
         else ExitPushState();
     }
 
-    private void ToggleKinematicMode()
+    // Kept PUBLIC from origin script to allow auto-release from KinematicObject triggers
+    public void ToggleKinematicMode()
     {
         if (currentState == Player.PlayerState.Normal) EnterKinematicState();
         else ExitKinematicState();
@@ -50,7 +51,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void EnterPushState()
     {
-        if (!currentTarget) return;
+        if (currentTarget == null) return;
 
         currentState = Player.PlayerState.Pushing;
 
@@ -86,7 +87,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void EnterKinematicState()
     {
-        if (!currentKinematicTarget) return;
+        if (currentKinematicTarget == null) return;
 
         currentState = Player.PlayerState.Interacting;
 
@@ -105,7 +106,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void ExitKinematicState()
     {
-        if (!currentKinematicTarget) return;
+        if (currentKinematicTarget == null) return;
 
         // 1. Notify kinematic object to stop interaction
         currentKinematicTarget.StopInteraction();
@@ -138,13 +139,13 @@ public class PlayerInteraction : MonoBehaviour
             interactionText.text = "Press <color=red>[X]</color> to Stop";
             interactionText.gameObject.SetActive(true);
         }
-        else if (currentTarget)
+        else if (currentTarget != null)
         {
             // HOVER PUSHABLE TEXT
             interactionText.text = "Press <color=green>[X]</color> to Grab";
             interactionText.gameObject.SetActive(true);
         }
-        else if (currentKinematicTarget)
+        else if (currentKinematicTarget != null)
         {
             // HOVER KINEMATIC TEXT
             interactionText.text = "Press <color=green>[X]</color> to Interact";
@@ -170,8 +171,12 @@ public class PlayerInteraction : MonoBehaviour
         }
         else if (other.TryGetComponent(out KinematicObject kinObj))
         {
-            currentKinematicTarget = kinObj;
-            UpdateUI();
+            // Auto-release fix from origin: Only allow interaction if the object is available
+            if (kinObj.CanInteract)
+            {
+                currentKinematicTarget = kinObj;
+                UpdateUI();
+            }
         }
     }
 
