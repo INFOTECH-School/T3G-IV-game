@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fence
-  m_Shader: {fileID: -6465566751694194690, guid: 0a5f26181f973a64ca824956ebd32d48, type: 3}
+  m_Name: SteelGate
+  m_Shader: {fileID: -6465566751694194690, guid: 0bc8d2104c3657745be70990868a6152, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,16 +24,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Alpha:
-        m_Texture: {fileID: 2800000, guid: 487ec3e0dbad40c4dad688c3b728d061, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _Ambient_Occlusion:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Ambient_Occlussion:
-        m_Texture: {fileID: 2800000, guid: c5f3ada68c367f740a9a52315b2d46e2, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3abecaf5b2666314c994694706af1778, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -61,7 +53,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Height_Map:
-        m_Texture: {fileID: 2800000, guid: 56a916001689ea044a09e9da61f61bf8, type: 3}
+        m_Texture: {fileID: 2800000, guid: ff047fb703de3d043b8a21e613067414, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -69,15 +61,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 1faaae28dcdf17143863f89e5148e2d3, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Main_Texture:
-        m_Texture: {fileID: 2800000, guid: 1faaae28dcdf17143863f89e5148e2d3, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Metallic:
-        m_Texture: {fileID: 2800000, guid: bb2f0e56294abf54c91346b733fcbdb6, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0d90fc262fc72b944aa7792169f501a1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -85,15 +69,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metallic_Map:
-        m_Texture: {fileID: 2800000, guid: bb2f0e56294abf54c91346b733fcbdb6, type: 3}
+        m_Texture: {fileID: 2800000, guid: 01cfdcfb05457d545a00da630ca47aa7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: e4407aa77287b4d4ebf535c8b3dc0aba, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Normal_Map:
-        m_Texture: {fileID: 2800000, guid: e4407aa77287b4d4ebf535c8b3dc0aba, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3bf59de3a79c4c240a98159b043a01ca, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -105,7 +85,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Smoothness:
-        m_Texture: {fileID: 2800000, guid: c5f3ada68c367f740a9a52315b2d46e2, type: 3}
+        m_Texture: {fileID: 2800000, guid: e49ff14d542f7404b98e4e2b923b2ac9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -167,7 +147,7 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &2290236847588686485
+--- !u!114 &4262302416421245826
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
