@@ -110,22 +110,21 @@ public class PlayerMovement : MonoBehaviour
         // Grounded and no input, apply braking
         if (_isGrounded && _inputDirection.magnitude < 0.1f)
         {
-            Vector3 targetVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
+            var targetVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
             _rigidBody.linearVelocity = Vector3.Lerp(_rigidBody.linearVelocity, targetVelocity, stoppingSpeed * Time.fixedDeltaTime);
         }
         else
         {
-            // Apply regular movement forces
-            Vector3 velocity = _rigidBody.linearVelocity;
+            var velocity = _rigidBody.linearVelocity;
+    
+        // Horizontal friction allows jumping to feel natural without vertical drag
+        Vector3 horizontalVelocity = new Vector3(velocity.x, 0, velocity.z);
+        Vector3 friction = -horizontalVelocity * _drag;
+        _rigidBody.AddForce(friction);
         
-            // Horizontal friction allows jumping to feel natural without vertical drag
-            Vector3 horizontalVelocity = new Vector3(velocity.x, 0, velocity.z);
-            Vector3 friction = -horizontalVelocity * _drag;
-            _rigidBody.AddForce(friction);
-            
-            float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
-        
-            _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
+        float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
+    
+        _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
         }
 
 
