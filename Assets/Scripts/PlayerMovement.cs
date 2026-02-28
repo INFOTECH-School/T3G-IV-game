@@ -152,7 +152,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (kinematicObj.levelObjective)
                 {
-                    GameManager.Instance.LevelOperator.ProgressLevel();
+                    // GameManager.Instance.LevelOperator.ProgressLevel();
                     kinematicObj.levelObjective = false;
                 }
 

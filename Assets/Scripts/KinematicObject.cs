@@ -1,35 +1,32 @@
 using UnityEngine;
-
+using System;
 
 public class KinematicObject : MonoBehaviour
 {
+    public event Action OnTargetReached;
+
     public enum MovementType
     {
         Slide,  // Linear movement between start and target
-        Pivot   // Rotational movement around a pivot point
+        Pivot,   // Rotational movement around a pivot point
+        Car     // Spring-loaded slide movement
     }
 
     [Header("Movement Configuration")]
-    [Tooltip("Type of movement for this object")]
     public MovementType movementType = MovementType.Slide;
-    
-    [Tooltip("Transform that defines the end position/rotation")]
     public Transform targetTransform;
-    
-    [Tooltip("Movement speed (units/sec for Slide, degrees/sec for Pivot)")]
     public float speed = 2.0f;
     
     [Header("Player Interaction")]
-    [Tooltip("Position where the player will be placed when interacting")]
     public Transform grabPosition;
-
     public bool levelObjective;
+
+    [Header("Car Settings")]
+    [Tooltip("Optional: An empty GameObject at the front of the car to serve as the origin for the return-path raycast.")]
+    public Transform raycastOrigin;
     
     [Header("Pivot Settings (Only for Pivot type)")]
-    [Tooltip("The anchor point to rotate around (e.g., door hinge)")]
     public Transform pivotAnchor;
-    
-    [Tooltip("Maximum rotation angle in degrees (for clamping)")]
     public float maxRotationAngle = 90f;
     
     // Internal state
@@ -38,85 +35,72 @@ public class KinematicObject : MonoBehaviour
     private float _currentRotationAngle;
     private bool _isInteracting;
     private Transform _playerTransform;
-    private bool _hasReachedTarget;
-    
+    private bool _hasReachedTarget; // Used for Slide/Pivot to lock them
+    private bool _isReturning;
+    private bool _targetReachedEventFired; // Used to fire the event only once per interaction
+    private bool _interactionDisabled = false; // Locks the object after objective completion
+    private LevelObjective _levelObjectiveComponent;
+
     void Awake()
     {
-        // Cache starting position and rotation
         _startPosition = transform.position;
         _startRotation = transform.rotation;
-        
-        // Validation
+        TryGetComponent(out _levelObjectiveComponent);
         ValidateSetup();
+    }
+
+    void Update()
+    {
+        if (movementType == MovementType.Car)
+        {
+            UpdateCar();
+        }
     }
     
     void ValidateSetup()
     {
-        if (targetTransform == null)
-        {
-            Debug.LogError($"[KinematicObject] {gameObject.name}: targetTransform is not assigned!", this);
-        }
-        
-        if (grabPosition == null)
-        {
-            Debug.LogError($"[KinematicObject] {gameObject.name}: grabPosition is not assigned!", this);
-        }
-        
-        if (movementType == MovementType.Pivot && pivotAnchor == null)
-        {
-            Debug.LogError($"[KinematicObject] {gameObject.name}: Pivot type requires pivotAnchor!", this);
-        }
-        
-        // Scale warning
-        if (transform.localScale != Vector3.one)
-        {
-            Debug.LogWarning($"[KinematicObject] {gameObject.name}: Non-uniform scale detected! " +
-                           "This may cause player deformation when parented. Use scale on child mesh instead.", this);
-        }
+        if (targetTransform == null) Debug.LogError($"[KinematicObject] {gameObject.name}: targetTransform is not assigned!", this);
+        if (grabPosition == null) Debug.LogError($"[KinematicObject] {gameObject.name}: grabPosition is not assigned!", this);
+        if (movementType == MovementType.Pivot && pivotAnchor == null) Debug.LogError($"[KinematicObject] {gameObject.name}: Pivot type requires pivotAnchor!", this);
+        if (transform.localScale != Vector3.one) Debug.LogWarning($"[KinematicObject] {gameObject.name}: Non-uniform scale detected!", this);
     }
     
-    /// <summary>
-    /// Called by PlayerInteraction when player presses X to start interacting
-    /// </summary>
     public void StartInteraction(Transform player)
     {
-        if (_isInteracting) return;
+        if (_isInteracting || !CanInteract) return;
         
         _isInteracting = true;
+        _isReturning = false;
+        _targetReachedEventFired = false; 
         _playerTransform = player;
         
-        // Snap player to grab position
         player.position = grabPosition.position;
         player.rotation = grabPosition.rotation;
-        
-        // Parent player to this object (keep world position)
         player.SetParent(transform, true);
         
         Debug.Log($"[KinematicObject] Started interaction with {gameObject.name}");
     }
     
-    /// <summary>
-    /// Called by PlayerInteraction when player releases X or reaches target
-    /// </summary>
     public void StopInteraction()
     {
         if (!_isInteracting) return;
         
         _isInteracting = false;
         
-        // Un-parent player
         if (_playerTransform != null)
         {
             _playerTransform.SetParent(null);
             _playerTransform = null;
         }
+
+        if (movementType == MovementType.Car)
+        {
+            _isReturning = true;
+        }
         
         Debug.Log($"[KinematicObject] Stopped interaction with {gameObject.name}");
     }
     
-    /// <summary>
-    /// Called by PlayerMovement when player holds W during interaction
-    /// </summary>
     public void AdvanceMovement(float deltaTime)
     {
         if (!_isInteracting) return;
@@ -124,6 +108,7 @@ public class KinematicObject : MonoBehaviour
         switch (movementType)
         {
             case MovementType.Slide:
+            case MovementType.Car:
                 AdvanceSlide(deltaTime);
                 break;
             case MovementType.Pivot:
@@ -132,81 +117,119 @@ public class KinematicObject : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Linear movement towards target position
-    /// </summary>
     private void AdvanceSlide(float deltaTime)
     {
         if (targetTransform == null) return;
-        
-        // Check if already at target
+
         if (Vector3.Distance(transform.position, targetTransform.position) < 0.01f)
         {
-            _hasReachedTarget = true;
+            HandleTargetReached();
             return;
         }
         
-        // Move towards target
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            targetTransform.position,
-            speed * deltaTime
-        );
+        transform.position = Vector3.MoveTowards(transform.position, targetTransform.position, speed * deltaTime);
         
-        // Check again after moving
         if (Vector3.Distance(transform.position, targetTransform.position) < 0.01f)
+        {
+            HandleTargetReached();
+        }
+    }
+
+    private void HandleTargetReached()
+    {
+        if (!_targetReachedEventFired)
+        {
+            _targetReachedEventFired = true;
+            OnTargetReached?.Invoke();
+        }
+        
+        if (movementType != MovementType.Car)
         {
             _hasReachedTarget = true;
         }
     }
     
-    /// <summary>
-    /// Rotational movement around pivot anchor
-    /// </summary>
     private void AdvancePivot(float deltaTime)
     {
         if (pivotAnchor == null) return;
         
-        // Check if reached max rotation
         if (_currentRotationAngle >= maxRotationAngle)
         {
-            _hasReachedTarget = true;
+            HandleTargetReached();
             return;
         }
         
-        // Calculate rotation step
         float rotationStep = speed * deltaTime;
         
-        // Clamp to max angle
         if (_currentRotationAngle + rotationStep > maxRotationAngle)
         {
             rotationStep = maxRotationAngle - _currentRotationAngle;
         }
         
-        // Rotate around the pivot anchor (World Up axis)
-        transform.RotateAround(
-            pivotAnchor.position,
-            Vector3.up,
-            rotationStep
-        );
-        
+        transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
         _currentRotationAngle += rotationStep;
         
-        // Check if just reached target
         if (_currentRotationAngle >= maxRotationAngle)
         {
-            _hasReachedTarget = true;
+            HandleTargetReached();
+        }
+    }
+
+    private void UpdateCar()
+    {
+        if (_isReturning && Vector3.Distance(transform.position, _startPosition) > 0.01f)
+        {
+            Vector3 returnDirection = (_startPosition - transform.position).normalized;
+            float returnSpeed = speed * Time.deltaTime;
+            float lookAheadDistance = 0.5f;
+            
+            Vector3 origin = raycastOrigin != null ? raycastOrigin.position : transform.position;
+
+            if (Physics.Raycast(origin, returnDirection, out RaycastHit hit, lookAheadDistance))
+            {
+                Debug.DrawRay(origin, returnDirection * lookAheadDistance, Color.red);
+                
+                if (hit.collider.CompareTag("Prop"))
+                {
+                    if (hit.distance < 0.5f)
+                    {
+                        _isReturning = false; // Stop the car
+                        
+                        if (levelObjective && _levelObjectiveComponent != null)
+                        {
+                            Debug.Log($"[Dev Info] Car stopped by prop '{hit.collider.name}'. Completing level objective.");
+                            _levelObjectiveComponent.CompleteObjective();
+                            levelObjective = false;
+                            _interactionDisabled = true; // Disable future interactions
+                        }
+                        return; // Exit UpdateCar
+                    }
+                }
+                else if (hit.collider.CompareTag("Player") && hit.distance < 1.0f)
+                {
+                    hit.transform.position += returnDirection * returnSpeed;
+                }
+            }
+            else
+            {
+                Debug.DrawRay(origin, returnDirection * lookAheadDistance, Color.green);
+            }
+            
+            transform.position = Vector3.MoveTowards(transform.position, _startPosition, returnSpeed);
+
+            if (Vector3.Distance(transform.position, _startPosition) < 0.01f)
+            {
+                _isReturning = false;
+            }
         }
     }
     
-    /// <summary>
-    /// Check if object has reached its target
-    /// </summary>
     public bool HasReachedTarget()
     {
         switch (movementType)
         {
             case MovementType.Slide:
+            case MovementType.Car:
                 if (!targetTransform) return false;
                 return Vector3.Distance(transform.position, targetTransform.position) < 0.01f;
                 
@@ -218,15 +241,13 @@ public class KinematicObject : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Reset object to starting position/rotation (for level reset)
-    /// </summary>
     public void ResetToStart()
     {
         transform.position = _startPosition;
         transform.rotation = _startRotation;
         _currentRotationAngle = 0f;
         _hasReachedTarget = false;
+        _isReturning = false;
         
         if (_isInteracting)
         {
@@ -235,16 +256,11 @@ public class KinematicObject : MonoBehaviour
     }
     
     public bool IsInteracting => _isInteracting;
+    public bool IsReturning => _isReturning;
+    public bool CanInteract => !_interactionDisabled && (movementType == MovementType.Car || !_hasReachedTarget);
     
-    /// <summary>
-    /// Check if this object can still be interacted with (hasn't reached target yet)
-    /// </summary>
-    public bool CanInteract => !_hasReachedTarget;
-    
-    // Gizmos for editor visualization
     void OnDrawGizmos()
     {
-        // Draw grab position
         if (grabPosition != null)
         {
             Gizmos.color = Color.cyan;
@@ -252,22 +268,19 @@ public class KinematicObject : MonoBehaviour
             Gizmos.DrawLine(grabPosition.position, grabPosition.position + grabPosition.forward * 0.5f);
         }
         
-        // Draw target position/rotation indicator
         if (targetTransform != null)
         {
-            if (movementType == MovementType.Slide)
+            if (movementType == MovementType.Slide || movementType == MovementType.Car)
             {
                 Gizmos.color = Color.green;
                 Gizmos.DrawWireCube(targetTransform.position, Vector3.one * 0.5f);
                 
-                // Draw path line
-            Gizmos.color = Color.yellow;
-            Vector3 startPos = Application.isPlaying ? _startPosition : transform.position;
-            Gizmos.DrawLine(startPos, targetTransform.position);
+                Gizmos.color = Color.yellow;
+                Vector3 startPos = Application.isPlaying ? _startPosition : transform.position;
+                Gizmos.DrawLine(startPos, targetTransform.position);
             }
         }
         
-        // Draw pivot anchor
         if (movementType == MovementType.Pivot && pivotAnchor != null)
         {
             Gizmos.color = Color.red;
@@ -278,13 +291,11 @@ public class KinematicObject : MonoBehaviour
     
     void OnDrawGizmosSelected()
     {
-        // Draw rotation arc for pivot objects
         if (movementType == MovementType.Pivot && pivotAnchor != null)
         {
             Gizmos.color = Color.yellow;
             Vector3 from = transform.position - pivotAnchor.position;
             
-            // Draw arc segments
             int segments = 20;
             float angleStep = maxRotationAngle / segments;
             
@@ -301,4 +312,3 @@ public class KinematicObject : MonoBehaviour
         }
     }
 }
-
