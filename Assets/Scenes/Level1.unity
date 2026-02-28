@@ -6705,6 +6705,10 @@ PrefabInstance:
       propertyPath: _acceleration
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6636216438449162131, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
+      propertyPath: stoppingSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6855642984788854802, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
       propertyPath: m_IsActive
       value: 0

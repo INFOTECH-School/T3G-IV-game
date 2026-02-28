@@ -9,7 +9,9 @@ public class PlayerMovement : MonoBehaviour
     public float _drag = 1.5f;
     public float _jumpForce = 5f;
     public float _pushSpeed = 3f;
-
+    [Tooltip("How quickly the player stops when grounded and not moving.")]
+    public float stoppingSpeed = 5f;
+    
     [Header("References")]
     private Rigidbody _rigidBody;
     private Animator _animator;
@@ -105,16 +107,27 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyNormalPhysics()
     {
-        Vector3 velocity = _rigidBody.linearVelocity;
+        // Grounded and no input, apply braking
+        if (_isGrounded && _inputDirection.magnitude < 0.1f)
+        {
+            Vector3 targetVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
+            _rigidBody.linearVelocity = Vector3.Lerp(_rigidBody.linearVelocity, targetVelocity, stoppingSpeed * Time.fixedDeltaTime);
+        }
+        else
+        {
+            // Apply regular movement forces
+            Vector3 velocity = _rigidBody.linearVelocity;
         
-        // Horizontal friction allows jumping to feel natural without vertical drag
-        Vector3 horizontalVelocity = new Vector3(velocity.x, 0, velocity.z);
-        Vector3 friction = -horizontalVelocity * _drag;
-        _rigidBody.AddForce(friction);
+            // Horizontal friction allows jumping to feel natural without vertical drag
+            Vector3 horizontalVelocity = new Vector3(velocity.x, 0, velocity.z);
+            Vector3 friction = -horizontalVelocity * _drag;
+            _rigidBody.AddForce(friction);
             
-        float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
+            float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
         
-        _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
+            _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
+        }
+
 
         if (_isJumpPressed)
         {
