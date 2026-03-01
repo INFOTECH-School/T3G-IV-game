@@ -241,26 +241,3 @@ public class PlayerMovement : MonoBehaviour
     }
 }
 
-
-/*"Plan: 2
-"Plan: 3
-"Plan: 5
-"Plan: 8
-"Plan: 5
-"Plan: 3
-"Plan: 3
-"Plan: 2
-"Plan: 8
-"Plan: 3
-"Plan: 2
-"Plan: 5
-"Plan: 3
-"Plan: 3
-"Plan: 3
-"Plan: 2
-"Plan: 2
-"Plan: 1
-"Plan: 3
-"Plan: 3
-"Plan: 1
-"Plan: 3*/
