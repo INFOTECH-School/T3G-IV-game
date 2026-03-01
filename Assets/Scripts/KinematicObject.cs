@@ -194,7 +194,7 @@ public class KinematicObject : MonoBehaviour
                     if (hit.distance < 0.5f)
                     {
                         _isReturning = false; // Stop the car
-                        
+                        Debug.Log($"[Debug] {levelObjective}, {_levelObjectiveComponent}");
                         if (levelObjective && _levelObjectiveComponent != null)
                         {
                             Debug.Log($"[Dev Info] Car stopped by prop '{hit.collider.name}'. Completing level objective.");

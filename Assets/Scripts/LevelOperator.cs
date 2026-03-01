@@ -48,12 +48,24 @@ public class LevelOperator : MonoBehaviour
             }
         }
     }
+    
+    [Header("Truck Settings")]
+    public int truckDependencyScore = 3;
+    public BoxCollider truckTriggerCollider;
         
     private void Awake()
     {
         GameManager.Instance.RegisterLevelOperator(this);
         
         //set Level Dependency scores;
+    }
+
+    private void Start()
+    {
+        if (truckTriggerCollider)
+        {
+            truckTriggerCollider.enabled = false;
+        }
     }
 
     private void OnDisable()
@@ -80,12 +92,25 @@ public class LevelOperator : MonoBehaviour
         {
             case 1:
                 level1DependencyScore--;
+                Debug.Log("Level score:" + level1DependencyScore);
                 break;
             case 2:
                 level2DependencyScore--;
+                Debug.Log("Level score:" + level2DependencyScore);
                 break;
         }
-        Debug.Log("Level score:" + level1DependencyScore);
+    }
+
+    public void ProgressTruck()
+    {
+        if (truckDependencyScore > 0)
+        {
+            truckDependencyScore--;
+        }
+        if (truckTriggerCollider && truckDependencyScore == 0)
+        {
+            truckTriggerCollider.enabled = true;
+        }
     }
 }
 

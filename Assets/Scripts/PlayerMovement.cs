@@ -162,7 +162,7 @@ public class PlayerMovement : MonoBehaviour
             
             if (kinematicObj.HasReachedTarget())
             {
-                if (kinematicObj.levelObjective)
+                if (kinematicObj.levelObjective && kinematicObj.movementType != KinematicObject.MovementType.Car)
                 {
                     // GameManager.Instance.LevelOperator.ProgressLevel();
                     kinematicObj.levelObjective = false;
@@ -240,3 +240,27 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance) GameManager.Instance.UnregisterPlayerMovement();
     }
 }
+
+
+/*"Plan: 2
+"Plan: 3
+"Plan: 5
+"Plan: 8
+"Plan: 5
+"Plan: 3
+"Plan: 3
+"Plan: 2
+"Plan: 8
+"Plan: 3
+"Plan: 2
+"Plan: 5
+"Plan: 3
+"Plan: 3
+"Plan: 3
+"Plan: 2
+"Plan: 2
+"Plan: 1
+"Plan: 3
+"Plan: 3
+"Plan: 1
+"Plan: 3*/
