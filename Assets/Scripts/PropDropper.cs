@@ -29,6 +29,12 @@ public class PropDropper : MonoBehaviour
         carObject.OnTargetReached += HandleCarTargetReached;
     }
 
+    private void Start()
+    {
+        propObject.SetActive(false);
+        fakePropObject.SetActive(true);
+    }
+
     private void OnDestroy()
     {
         if (carObject != null)

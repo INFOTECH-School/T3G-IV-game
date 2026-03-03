@@ -260,6 +260,10 @@ public class PlayerMovement : MonoBehaviour
             if (kinematicObj.HasReachedTarget())
             {
                 _interactionScript.ToggleKinematicMode();
+                if (kinematicObj.movementType != KinematicObject.MovementType.Car)
+                {
+                    kinematicObj.CompleteObjective();
+                }
             }
         }
     }

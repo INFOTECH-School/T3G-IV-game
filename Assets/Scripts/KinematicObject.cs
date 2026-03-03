@@ -223,6 +223,11 @@ public class KinematicObject : MonoBehaviour
             }
         }
     }
+
+    public void CompleteObjective()
+    {
+        _levelObjectiveComponent.CompleteObjective();
+    }
     
     public bool HasReachedTarget()
     {
