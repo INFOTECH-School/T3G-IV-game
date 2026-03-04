@@ -183,7 +183,7 @@ public class KinematicObject : MonoBehaviour
             float returnSpeed = speed * Time.deltaTime;
             float lookAheadDistance = 0.5f;
             
-            Vector3 origin = raycastOrigin != null ? raycastOrigin.position : transform.position;
+            Vector3 origin = raycastOrigin ? raycastOrigin.position : transform.position;
 
             if (Physics.Raycast(origin, returnDirection, out RaycastHit hit, lookAheadDistance))
             {

@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
     [Header("Settings")]
     public Transform holdPoint; 
+    public float itemScale = 0.5f;
     public LayerMask itemLayer;
 
     [Header("State")]
@@ -18,10 +19,12 @@ public class Player : MonoBehaviour
     // Track nearby objects
     private Item nearbyItem;
     private Basket nearbyBasket; 
+    private BrokenWheel nearbyWheel;
 
     // Memories for the "Return to Shelf" feature
     private Vector3 originalPos;
     private Quaternion originalRot;
+    private Vector3 originalScale;
     
     private void Start()
     {
@@ -42,6 +45,7 @@ public class Player : MonoBehaviour
             if (currentItem)
             {
                 if (nearbyBasket) PlaceInBasket();
+                else if (nearbyWheel && currentItem == nearbyWheel.requiredItem) FixWheel();
                 else Unequip();
             }
             else if (nearbyItem)
@@ -63,6 +67,7 @@ public class Player : MonoBehaviour
         currentItem = itemToEquip;
         originalPos = currentItem.transform.position;
         originalRot = currentItem.transform.rotation;
+        originalScale = currentItem.transform.localScale;
 
         var rb = currentItem.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
@@ -73,15 +78,17 @@ public class Player : MonoBehaviour
         currentItem.transform.SetParent(holdPoint); 
         currentItem.transform.localPosition = Vector3.zero;
         currentItem.transform.localRotation = Quaternion.identity;
+        currentItem.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
     }
 
     public void Unequip()
     {
-        if (currentItem == null) return;
+        if (!currentItem) return;
 
         currentItem.transform.SetParent(null);
         currentItem.transform.position = originalPos; 
         currentItem.transform.rotation = originalRot;
+        currentItem.transform.localScale = originalScale;
 
         ResetItemPhysics();
         currentItem = null;
@@ -89,15 +96,25 @@ public class Player : MonoBehaviour
 
     public void PlaceInBasket()
     {
-        if (currentItem == null || nearbyBasket == null) return;
+        if (!currentItem || !nearbyBasket) return;
 
+        currentItem.transform.localScale = originalScale;
         nearbyBasket.ReceiveItem(currentItem);
+        currentItem = null;
+    }
+
+    private void FixWheel()
+    {
+        if (!currentItem || !nearbyWheel || currentItem != nearbyWheel.requiredItem) return;
+
+        nearbyWheel.Fix();
+        Destroy(currentItem.gameObject);
         currentItem = null;
     }
 
     private void ResetItemPhysics()
     {
-        if (currentItem == null) return;
+        if (!currentItem) return;
         var col = currentItem.GetComponent<Collider>();
         if (col) col.enabled = true;
     }
@@ -117,6 +134,10 @@ public class Player : MonoBehaviour
         var basketScript = other.GetComponent<Basket>();
         if (basketScript) nearbyBasket = basketScript;
         
+        // Check BrokenWheel
+        var wheelScript = other.GetComponent<BrokenWheel>();
+        if (wheelScript) nearbyWheel = wheelScript;
+
         UpdateUIText();
     }
 
@@ -133,6 +154,10 @@ public class Player : MonoBehaviour
         var basketScript = other.GetComponent<Basket>();
         if (basketScript && basketScript == nearbyBasket) nearbyBasket = null;
         
+        // Clear BrokenWheel
+        var wheelScript = other.GetComponent<BrokenWheel>();
+        if (wheelScript && wheelScript == nearbyWheel) nearbyWheel = null;
+
         UpdateUIText();
     }
 
@@ -147,6 +172,11 @@ public class Player : MonoBehaviour
             if (nearbyBasket)
             {
                 interactionText.text = "Press [E] to Place";
+                interactionText.gameObject.SetActive(true);
+            }
+            else if (nearbyWheel && currentItem == nearbyWheel.requiredItem)
+            {
+                interactionText.text = "Press [E] to Fix";
                 interactionText.gameObject.SetActive(true);
             }
             else

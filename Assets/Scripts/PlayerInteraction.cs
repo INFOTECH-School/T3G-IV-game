@@ -25,12 +25,12 @@ public class PlayerInteraction : MonoBehaviour
         if (GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay) return;
 
         // Handle PushableObject interaction
-        if (currentTarget != null && Input.GetKeyDown(KeyCode.X))
+        if (currentTarget && Input.GetKeyDown(KeyCode.X))
         {
             TogglePushMode();
         }
         // Handle KinematicObject interaction
-        else if (currentKinematicTarget != null && Input.GetKeyDown(KeyCode.X))
+        else if (currentKinematicTarget && Input.GetKeyDown(KeyCode.X))
         {
             ToggleKinematicMode();
         }
@@ -51,7 +51,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void EnterPushState()
     {
-        if (currentTarget == null) return;
+        if (!currentTarget) return;
 
         currentState = Player.PlayerState.Pushing;
 
@@ -87,7 +87,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void EnterKinematicState()
     {
-        if (currentKinematicTarget == null) return;
+        if (!currentKinematicTarget) return;
 
         currentState = Player.PlayerState.Interacting;
 
@@ -106,7 +106,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void ExitKinematicState()
     {
-        if (currentKinematicTarget == null) return;
+        if (!currentKinematicTarget) return;
 
         // 1. Notify kinematic object to stop interaction
         currentKinematicTarget.StopInteraction();
@@ -139,13 +139,13 @@ public class PlayerInteraction : MonoBehaviour
             interactionText.text = "Press <color=red>[X]</color> to Stop";
             interactionText.gameObject.SetActive(true);
         }
-        else if (currentTarget != null)
+        else if (currentTarget)
         {
             // HOVER PUSHABLE TEXT
             interactionText.text = "Press <color=green>[X]</color> to Grab";
             interactionText.gameObject.SetActive(true);
         }
-        else if (currentKinematicTarget != null)
+        else if (currentKinematicTarget)
         {
             // HOVER KINEMATIC TEXT
             interactionText.text = "Press <color=green>[X]</color> to Interact";
