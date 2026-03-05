@@ -712,6 +712,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8d97b8fa843842a4e9e06e72e760ffd2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1da46ff694e1bfc4e9f76ebce73cc327, type: 2}
     - target: {fileID: 919132149155446097, guid: 8d97b8fa843842a4e9e06e72e760ffd2, type: 3}
       propertyPath: m_Name
       value: szafka10x6
@@ -925,6 +929,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8d97b8fa843842a4e9e06e72e760ffd2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1da46ff694e1bfc4e9f76ebce73cc327, type: 2}
     - target: {fileID: 919132149155446097, guid: 8d97b8fa843842a4e9e06e72e760ffd2, type: 3}
       propertyPath: m_Name
       value: szafka10x6
@@ -2333,6 +2341,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 1da46ff694e1bfc4e9f76ebce73cc327, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 7a7925130af2c4244aa5951694a61d12, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 84d2a7b589bae274a9a6dcb1dd59d598, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 7a7925130af2c4244aa5951694a61d12, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 84d2a7b589bae274a9a6dcb1dd59d598, type: 2}
     - target: {fileID: 919132149155446097, guid: 7a7925130af2c4244aa5951694a61d12, type: 3}
       propertyPath: m_Name
       value: szafka8x6
@@ -2405,7 +2421,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 2afb00028c65c4047abcf1989b069e8f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4ba4a6e10c9ea114198c4ca29d6704f6, type: 2}
+      objectReference: {fileID: 2100000, guid: 1da46ff694e1bfc4e9f76ebce73cc327, type: 2}
     - target: {fileID: 919132149155446097, guid: 2afb00028c65c4047abcf1989b069e8f, type: 3}
       propertyPath: m_Name
       value: szafka6x5
@@ -5180,7 +5196,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 9fe663b085226614695b4cbfa736aa9a, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4ba4a6e10c9ea114198c4ca29d6704f6, type: 2}
+      objectReference: {fileID: 2100000, guid: 1da46ff694e1bfc4e9f76ebce73cc327, type: 2}
     - target: {fileID: 919132149155446097, guid: 9fe663b085226614695b4cbfa736aa9a, type: 3}
       propertyPath: m_Name
       value: szafka10x7
@@ -11639,6 +11655,10 @@ PrefabInstance:
     - target: {fileID: 3261715809123279365, guid: be220abd2069f064a985789b66c0d8be, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3261715809123279365, guid: be220abd2069f064a985789b66c0d8be, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3311194892279088302, guid: be220abd2069f064a985789b66c0d8be, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
