@@ -3,7 +3,22 @@ guid: 8d97b8fa843842a4e9e06e72e760ffd2
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Aged_Wood_Procedural.001
+    second: {fileID: 2100000, guid: 4ba4a6e10c9ea114198c4ca29d6704f6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 84d2a7b589bae274a9a6dcb1dd59d598, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 0822b2edae4e7ad43a42c1a0d6d23e44, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

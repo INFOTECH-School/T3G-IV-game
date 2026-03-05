@@ -90,17 +90,17 @@ public class IllustrationCutscene : MonoBehaviour
         // End of cutscene
         cutsceneCoroutine = null;
 
-        if (objectToActivate != null)
+        if (objectToActivate)
         {
             objectToActivate.SetActive(true);
         }
 
         // Disable all cutscene UI elements
-        if (illustrationImage != null)
+        if (illustrationImage)
         {
             illustrationImage.enabled = false;
         }
-        if (fadeCanvasGroup != null)
+        if (fadeCanvasGroup)
         {
             fadeCanvasGroup.gameObject.SetActive(false);
         }

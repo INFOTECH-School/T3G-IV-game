@@ -14,6 +14,7 @@ public class Basket : MonoBehaviour
     private int _basketCounter = 0;
     public bool level1 = false;
     public bool level2 = false;
+    public List<Item> allowedItems = new List<Item>();
     
     // The object/effect that appears when both are full
     public GameObject finishResult; 
@@ -33,50 +34,54 @@ public class Basket : MonoBehaviour
     // Called by Player when they press 'E'
     public void ReceiveItem(Item item)
     {
-        if (level1)
+        if (allowedItems.Contains(item))
         {
-            if (_isHoldingPoint1Free)
+            if (level1)
             {
-                GameManager.Instance.LevelOperator.level1DependencyScore--;
-                // 1. Activate the visual representation in the basket
-                if (holdingPoint1) holdingPoint1.SetActive(true);
+                if (_isHoldingPoint1Free)
+                {
+                    GameManager.Instance.LevelOperator.ProgressLevel();
+                    // 1. Activate the visual representation in the basket
+                    if (holdingPoint1) holdingPoint1.SetActive(true);
 
-                // 2. Mark slot as taken
-                _isHoldingPoint1Free = false;
+                    // 2. Mark slot as taken
+                    _isHoldingPoint1Free = false;
 
-                // 3. DESTROY the item the player was holding
+                    // 3. DESTROY the item the player was holding
+                    Destroy(item.gameObject);
+                }
+                else if (_isHoldingPoint2Free)
+                {
+                    GameManager.Instance.LevelOperator.ProgressLevel();
+                    // 1. Activate the second visual representation
+                    if (holdingPoint2) holdingPoint2.SetActive(true);
+
+                    // 2. Mark slot as taken
+                    _isHoldingPoint2Free = false;
+
+                    // 3. DESTROY the item the player was holding
+                    Destroy(item.gameObject);
+
+                    // 4. Trigger the result (Basket is now full)
+                    Debug.Log("Basket Full! Sequence Complete.");
+                    if (finishResult) finishResult.SetActive(true);
+                }
+
+                Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore + "Level score");
+                Debug.Log(GameManager.Instance.LevelOperator.canEndLevel1);
+            }
+            else if (level2)
+            {
+                basketPoints[_basketCounter].SetActive(true);
                 Destroy(item.gameObject);
+                _basketCounter++;
+                if (_basketCounter == basketPoints.Count)
+                {
+                    if (finishResult) finishResult.SetActive(true);
+                }
+
+                GameManager.Instance.LevelOperator.ProgressLevel();
             }
-            else if (_isHoldingPoint2Free)
-            {
-                GameManager.Instance.LevelOperator.level1DependencyScore--;
-                // 1. Activate the second visual representation
-                if (holdingPoint2) holdingPoint2.SetActive(true);
-
-                // 2. Mark slot as taken
-                _isHoldingPoint2Free = false;
-
-                // 3. DESTROY the item the player was holding
-                Destroy(item.gameObject);
-
-                // 4. Trigger the result (Basket is now full)
-                Debug.Log("Basket Full! Sequence Complete.");
-                if (finishResult) finishResult.SetActive(true);
-            }
-
-            Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore + "Level score");
-            Debug.Log(GameManager.Instance.LevelOperator.canEndLevel1);
-        } else if (level2)
-        {
-            basketPoints[_basketCounter].SetActive(true);
-            Destroy(item.gameObject);
-            _basketCounter++;
-            if (_basketCounter == basketPoints.Count)
-            {
-                if (finishResult) finishResult.SetActive(true);
-            }
-
-            GameManager.Instance.LevelOperator.level2DependencyScore--;
         }
     }
 

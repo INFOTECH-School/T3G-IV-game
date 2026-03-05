@@ -183,11 +183,12 @@ public class PlayerMovement : MonoBehaviour
     #region Throwing Logic
     private void Aim()
     {
+        if (!Camera.current.CompareTag("MainCamera")) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, _groundLayer))
         {
             _hasValidTarget = true;
-            
+
             // Rotate player to face target
             Vector3 lookDirection = hit.point - transform.position;
             lookDirection.y = 0;
@@ -221,7 +222,7 @@ public class PlayerMovement : MonoBehaviour
         for (int i = 0; i < _lineSegments; i++)
         {
             float t = i * _timeBetweenDots;
-            positions[i] = _throwingPoint.position + (velocity * t) + (0.5f * Physics.gravity * t * t);
+            positions[i] = _throwingPoint.position + (velocity * t) + (Physics.gravity * (0.5f * t * t));
         }
         _lineRenderer.SetPositions(positions);
     }
