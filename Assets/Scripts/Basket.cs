@@ -82,6 +82,11 @@ public class Basket : MonoBehaviour
 
                 GameManager.Instance.LevelOperator.ProgressLevel();
             }
+            else
+            {
+                if( holdingPoint1 ) holdingPoint1.SetActive(true); 
+                Destroy(item.gameObject);
+            }
         }
     }
 
