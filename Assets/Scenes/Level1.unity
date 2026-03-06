@@ -7613,7 +7613,7 @@ Transform:
   m_Children:
   - {fileID: 1128155384}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 359}
+  m_LocalEulerAnglesHint: {x: 315, y: 2, z: 9}
 --- !u!114 &470792713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19723,6 +19723,7 @@ Transform:
   - {fileID: 566169552}
   - {fileID: 1248593258}
   - {fileID: 1127653801}
+  - {fileID: 1932460720}
   m_Father: {fileID: 721222910}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &910111090
@@ -27676,7 +27677,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 435335224131283811, guid: 0c7b5dcedab9d3b499f23b9914c13bf8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0.82
       objectReference: {fileID: 0}
     - target: {fileID: 435335224131283811, guid: 0c7b5dcedab9d3b499f23b9914c13bf8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -44291,6 +44292,106 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1918871584}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1932460719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1932460720}
+  - component: {fileID: 1932460723}
+  - component: {fileID: 1932460722}
+  - component: {fileID: 1932460721}
+  m_Layer: 0
+  m_Name: Level2OpenCutscene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1932460720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932460719}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.12, y: 3.19, z: 5.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 909271852}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &1932460721
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932460719}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: c533f1be2b8fcf144a7ddcaa01400bf6, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 4089264775596739848, guid: c533f1be2b8fcf144a7ddcaa01400bf6, type: 2}
+    value: {fileID: 364763314}
+  - key: {fileID: 6792080131240820436, guid: c533f1be2b8fcf144a7ddcaa01400bf6, type: 2}
+    value: {fileID: 1594358136}
+  - key: {fileID: 5988839764944189005, guid: c533f1be2b8fcf144a7ddcaa01400bf6, type: 2}
+    value: {fileID: 470792716}
+  - key: {fileID: 6052284089590767592, guid: c533f1be2b8fcf144a7ddcaa01400bf6, type: 2}
+    value: {fileID: 470792711}
+  - key: {fileID: -6863356248574055264, guid: c533f1be2b8fcf144a7ddcaa01400bf6, type: 2}
+    value: {fileID: 1011894795}
+  - key: {fileID: 914062372620689370, guid: c533f1be2b8fcf144a7ddcaa01400bf6, type: 2}
+    value: {fileID: 1011894799}
+  m_ExposedReferences:
+    m_References: []
+--- !u!114 &1932460722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932460719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3376d625527b24149964dfb56cc7ae25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::TimelineTrigger
+  director: {fileID: 1932460721}
+  playOnce: 1
+  ending: 0
+  triggerer: 0
+--- !u!65 &1932460723
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932460719}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1958703172
 PrefabInstance:
   m_ObjectHideFlags: 0
