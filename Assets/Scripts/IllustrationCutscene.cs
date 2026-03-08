@@ -23,8 +23,10 @@ public class IllustrationCutscene : MonoBehaviour
     [Tooltip("The GameObject to activate after the cutscene is finished.")]
     public GameObject objectToActivate;
 
-    private int currentIndex = 0;
-    private Coroutine cutsceneCoroutine;
+    public GameObject infoText;
+    
+    private int _currentIndex;
+    private Coroutine _cutsceneCoroutine;
 
     void Start()
     {
@@ -38,14 +40,14 @@ public class IllustrationCutscene : MonoBehaviour
     /// </summary>
     public void Illustrate()
     {
-        if (cutsceneCoroutine != null) return;
+        if (_cutsceneCoroutine != null) return;
 
         if (illustrations.Count > 0 && illustrationImage != null && fadeCanvasGroup != null)
         {
             gameObject.SetActive(true);
             illustrationImage.enabled = true;
             fadeCanvasGroup.gameObject.SetActive(true);
-            cutsceneCoroutine = StartCoroutine(PlayCutscene());
+            _cutsceneCoroutine = StartCoroutine(PlayCutscene());
         }
         else
         {
@@ -56,14 +58,20 @@ public class IllustrationCutscene : MonoBehaviour
 
     private IEnumerator PlayCutscene()
     {
+        GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+        if (infoText)
+        {
+            infoText.SetActive(true);
+        }
+
         // Start with a black screen
         fadeCanvasGroup.alpha = 1f;
-        currentIndex = 0;
+        _currentIndex = 0;
 
-        while (currentIndex < illustrations.Count)
+        while (_currentIndex < illustrations.Count)
         {
             // Set the new illustration while the screen is black
-            illustrationImage.sprite = illustrations[currentIndex];
+            illustrationImage.sprite = illustrations[_currentIndex];
 
             // Fade in (reveal the illustration)
             yield return StartCoroutine(Fade(0f)); // Fade to transparent
@@ -84,11 +92,11 @@ public class IllustrationCutscene : MonoBehaviour
             // Fade out (back to black)
             yield return StartCoroutine(Fade(1f)); // Fade to black
 
-            currentIndex++;
+            _currentIndex++;
         }
 
         // End of cutscene
-        cutsceneCoroutine = null;
+        _cutsceneCoroutine = null;
 
         if (objectToActivate)
         {
@@ -104,6 +112,12 @@ public class IllustrationCutscene : MonoBehaviour
         {
             fadeCanvasGroup.gameObject.SetActive(false);
         }
+        GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+        if (infoText)
+        {
+            infoText.SetActive(false);
+        }
+
         gameObject.SetActive(false);
     }
 

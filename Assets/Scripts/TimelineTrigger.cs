@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,7 @@ public class TimelineTrigger : MonoBehaviour
     public bool playOnce = true;
     private bool _played;
     public bool ending = false;
+    public bool level2 = false;
     [SerializeField] private Triggerer triggerer;
     private enum Triggerer
     {
@@ -16,6 +18,9 @@ public class TimelineTrigger : MonoBehaviour
         Alice,
         Activable
     }
+    public List<GameObject> hideObjects = new List<GameObject>();
+    public List<GameObject> hideOutlines = new List<GameObject>();
+    private Dictionary<GameObject, int> _outlineLayers = new Dictionary<GameObject, int>();
 
     private void PlayCutscene(string sceneName)
     {
@@ -29,9 +34,49 @@ public class TimelineTrigger : MonoBehaviour
             }
         }
 
+        if (level2 && GameManager.Instance.LevelOperator.currentLevel != 2) return;
+        GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+        foreach (var objectToHide in hideObjects)
+        {
+            if (objectToHide.activeSelf)
+            {
+                objectToHide.SetActive(false);
+            }
+        }
+
+        foreach (var outlineToHide in hideOutlines)
+        {
+            if (outlineToHide)
+            {
+                _outlineLayers.Add(outlineToHide, outlineToHide.layer);
+                outlineToHide.layer = LayerMask.NameToLayer("Hidden");
+            }
+        }
+
+        director.stopped += OnCutsceneFinished;
         _played = true;
         director.Play();
         Debug.Log("Played" + _played + gameObject.name);
+    }
+
+    private void OnCutsceneFinished(PlayableDirector obj)
+    {
+        GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+        foreach (var objectToHide in hideObjects)
+        {
+            if (objectToHide)
+            {
+                objectToHide.SetActive(true);
+            }
+        }
+        foreach (var outlineToHide in hideOutlines)
+        {
+            if (_outlineLayers.TryGetValue(outlineToHide, out var layer))
+            {
+                outlineToHide.layer = layer;
+            }
+        }
+        director.stopped -= OnCutsceneFinished;
     }
 
     private void OnTriggerEnter(Collider other)

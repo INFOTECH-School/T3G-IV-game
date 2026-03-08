@@ -48,7 +48,7 @@ public class WallCutoutController : MonoBehaviour
         
         // STEP 2: Calculate "Thick Beam" (SphereCast)
         Vector3 playerPos = GameManager.Instance.Player.transform.position;
-        Vector3 targetPos = playerPos + Vector3.up * 1.0f; // Aim for chest/head
+        Vector3 targetPos = playerPos;
         
         Vector3 cameraPos = transform.position;
         Vector3 dirVector = targetPos - cameraPos;
@@ -76,8 +76,14 @@ public class WallCutoutController : MonoBehaviour
             {
                 rend.GetPropertyBlock(_propBlock);
                 
-                // Send Player Position (feet) for the hole center
-                _propBlock.SetVector(PosID, playerPos);
+                // 1. Get the player's position on the screen (0 to 1 range)
+                Vector3 viewportPos = _camera.WorldToViewportPoint(targetPos);
+
+                // 2. Correct for screen aspect ratio so the hole is a circle, not an oval
+                viewportPos.x *= (float)Screen.width / Screen.height;
+
+                // 3. Send the modified Viewport Position to the shader
+                _propBlock.SetVector(PosID, viewportPos);
                 _propBlock.SetFloat(SizeID, cutoutSize);
                 _propBlock.SetFloat(FalloffID, falloffSize);
                 

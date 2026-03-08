@@ -28,7 +28,11 @@ public class KinematicObject : MonoBehaviour
     [Header("Pivot Settings (Only for Pivot type)")]
     public Transform pivotAnchor;
     public float maxRotationAngle = 90f;
-    
+
+    [Header("Effects")]
+    [SerializeField] private ParticleSystem confettiParticle;
+    [SerializeField] private GameObject sparkleEffect;
+
     // Internal state
     private Vector3 _startPosition;
     private Quaternion _startRotation;
@@ -77,6 +81,11 @@ public class KinematicObject : MonoBehaviour
         player.position = grabPosition.position;
         player.rotation = grabPosition.rotation;
         player.SetParent(transform, true);
+
+        if (sparkleEffect)
+        {
+            sparkleEffect.SetActive(false);
+        }
         
         Debug.Log($"[KinematicObject] Started interaction with {gameObject.name}");
     }
@@ -96,6 +105,11 @@ public class KinematicObject : MonoBehaviour
         if (movementType == MovementType.Car)
         {
             _isReturning = true;
+        }
+
+        if (sparkleEffect && !_interactionDisabled)
+        {
+            sparkleEffect.SetActive(true);
         }
         
         Debug.Log($"[KinematicObject] Stopped interaction with {gameObject.name}");
@@ -141,6 +155,18 @@ public class KinematicObject : MonoBehaviour
         {
             _targetReachedEventFired = true;
             OnTargetReached?.Invoke();
+
+            if (levelObjective)
+            {
+                if (confettiParticle)
+                {
+                    confettiParticle.Play();
+                }
+                if (sparkleEffect)
+                {
+                    sparkleEffect.SetActive(false);
+                }
+            }
         }
         
         if (movementType != MovementType.Car)
@@ -151,7 +177,7 @@ public class KinematicObject : MonoBehaviour
     
     private void AdvancePivot(float deltaTime)
     {
-        if (pivotAnchor == null) return;
+        if (!pivotAnchor) return;
         
         if (_currentRotationAngle >= maxRotationAngle)
         {
@@ -199,6 +225,15 @@ public class KinematicObject : MonoBehaviour
                         {
                             Debug.Log($"[Dev Info] Car stopped by prop '{hit.collider.name}'. Completing level objective.");
                             _levelObjectiveComponent.CompleteObjective();
+                            targetTransform.gameObject.SetActive(false);
+                            if (confettiParticle)
+                            {
+                                confettiParticle.Play();
+                            }
+                            if (sparkleEffect)
+                            {
+                                sparkleEffect.SetActive(false);
+                            }
                             levelObjective = false;
                             _interactionDisabled = true; // Disable future interactions
                         }

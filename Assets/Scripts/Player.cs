@@ -46,7 +46,6 @@ public class Player : MonoBehaviour
             {
                 if (nearbyBasket) PlaceInBasket();
                 else if (nearbyWheel && currentItem == nearbyWheel.requiredItem) FixWheel();
-                else Unequip();
             }
             else if (nearbyItem)
             {
@@ -181,9 +180,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                // Optional: Show "Drop" text, or keep it hidden if you only want prompt for interactions
-                interactionText.text = "Press [E] to Drop"; 
-                interactionText.gameObject.SetActive(true);
+                interactionText.gameObject.SetActive(false);
             }
         }
         else

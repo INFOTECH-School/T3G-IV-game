@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public int _lineSegments = 30;
     public float _timeBetweenDots = 0.1f;
     public float _timeToTarget = 1f;
+    public bool throwingEnabled = true;
 
     [Header("References")]
     private Rigidbody _rigidBody;
@@ -101,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleAimingInput()
     {
+        if (!throwingEnabled) return;
         // Start Aiming (Only if grounded and not moving fast)
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         if (Input.GetMouseButtonDown(1) && _isGrounded && horizontalVel.magnitude < 0.5f)
@@ -263,6 +265,7 @@ public class PlayerMovement : MonoBehaviour
                 _interactionScript.ToggleKinematicMode();
                 if (kinematicObj.movementType != KinematicObject.MovementType.Car)
                 {
+                    kinematicObj.targetTransform.gameObject.SetActive(false);
                     kinematicObj.CompleteObjective();
                 }
             }
