@@ -6,6 +6,7 @@ public class BrokenWheel : MonoBehaviour
     public GameObject fixedWheelObject;
     public Item requiredItem; // The specific item needed to fix the wheel
     private LevelObjective _levelObjective;
+    public GameObject objectToEnable;
 
     private void Start()
     {
@@ -21,6 +22,11 @@ public class BrokenWheel : MonoBehaviour
         if (_levelObjective)
         {
             _levelObjective.CompleteObjective();
+        }
+
+        if (objectToEnable)
+        {
+            objectToEnable.SetActive(true);
         }
         // The script is now disabled after fixing to prevent further interaction.
         enabled = false;

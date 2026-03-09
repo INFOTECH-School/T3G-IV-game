@@ -12,6 +12,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactionText; 
     
     private Rigidbody _rb;
+    [SerializeField] private BoxCollider _collider;
 
     void Awake()
     {
@@ -38,8 +39,22 @@ public class PlayerInteraction : MonoBehaviour
 
     private void TogglePushMode()
     {
-        if (currentState == Player.PlayerState.Normal) EnterPushState();
-        else ExitPushState();
+        if (currentState == Player.PlayerState.Normal)
+        {
+            EnterPushState();
+        }
+        else if (currentState == Player.PlayerState.Pushing)
+        {
+            if (IsExitLocationSafe())
+            {
+                ExitPushState();
+            }
+            else
+            {
+                Debug.LogWarning("Cannot let go here, position is obstructed!");
+                // Optional: Play a "cannot do" sound effect or show a UI prompt.
+            }
+        }
     }
 
     // Kept PUBLIC from origin script to allow auto-release from KinematicObject triggers
@@ -68,6 +83,31 @@ public class PlayerInteraction : MonoBehaviour
         
         // 3. Update UI
         UpdateUI();
+    }
+
+    private bool IsExitLocationSafe()
+    {
+        if (!_collider)
+        {
+            Debug.LogError("Player has no CapsuleCollider to perform a safety check!");
+            return false; // Fail safe
+        }
+
+        Vector3 worldCenter = transform.TransformPoint(_collider.center);
+
+        // Get the top and bottom points of the capsule.
+        Vector3 halfExtents = Vector3.Scale(_collider.size, transform.lossyScale) * 0.5f;
+        Quaternion orientation = transform.rotation;
+
+        // We want to check for collisions against everything except the player itself
+        // and the object we are currently pushing.
+        int layerMask = ~(1 << gameObject.layer | 1 << currentTarget.gameObject.layer);
+
+        // Physics.CheckCapsule returns true if it overlaps with anything.
+        // We want it to be false (no overlaps) for the location to be safe.
+        bool isOverlapping = Physics.CheckBox(worldCenter, halfExtents, orientation, layerMask, QueryTriggerInteraction.Ignore);
+
+        return !isOverlapping;
     }
 
     void ExitPushState()

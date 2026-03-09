@@ -70,9 +70,12 @@ public class Player : MonoBehaviour
 
         var rb = currentItem.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
-
-        var col = currentItem.GetComponent<Collider>();
-        if (col) col.enabled = false; 
+        
+        var colliders = currentItem.GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = false;
+        }
 
         currentItem.transform.SetParent(holdPoint); 
         currentItem.transform.localPosition = Vector3.zero;

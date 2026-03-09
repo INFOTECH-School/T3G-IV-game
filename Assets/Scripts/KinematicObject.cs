@@ -158,7 +158,7 @@ public class KinematicObject : MonoBehaviour
 
             if (levelObjective)
             {
-                if (confettiParticle)
+                if (confettiParticle && movementType != MovementType.Car)
                 {
                     confettiParticle.Play();
                 }
@@ -172,6 +172,7 @@ public class KinematicObject : MonoBehaviour
         if (movementType != MovementType.Car)
         {
             _hasReachedTarget = true;
+            _interactionDisabled = true;
         }
     }
     
@@ -262,6 +263,7 @@ public class KinematicObject : MonoBehaviour
     public void CompleteObjective()
     {
         _levelObjectiveComponent.CompleteObjective();
+        sparkleEffect.SetActive(false);
     }
     
     public bool HasReachedTarget()

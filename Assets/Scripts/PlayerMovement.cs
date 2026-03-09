@@ -70,15 +70,7 @@ public class PlayerMovement : MonoBehaviour
         bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
         bool isInteracting = _interactionScript && _interactionScript.currentState == Player.PlayerState.Interacting;
 
-        if (isInteracting)
-        {
-            KinematicMovement();
-        }
-        else if (isPushing)
-        {
-            PushMovement();
-        }
-        else
+        if (!isInteracting && !isPushing)
         {
             HandleNormalInput();
             HandleAimingInput();
@@ -137,14 +129,20 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
             return;
 
-        // Toggle Kinematic based on state
-        bool isSpecialState = _interactionScript && 
-            (_interactionScript.currentState == Player.PlayerState.Pushing || 
-             _interactionScript.currentState == Player.PlayerState.Interacting);
+        bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
+        bool isInteracting = _interactionScript && _interactionScript.currentState == Player.PlayerState.Interacting;
+    
+        _rigidBody.isKinematic = isPushing || isInteracting;
 
-        _rigidBody.isKinematic = isSpecialState;
-
-        if (!isSpecialState)
+        if (isInteracting)
+        {
+            KinematicMovement();
+        }
+        else if (isPushing)
+        {
+            PushMovement();
+        }
+        else
         {
             ApplyNormalPhysics();
         }
@@ -249,7 +247,7 @@ public class PlayerMovement : MonoBehaviour
         if (Mathf.Abs(vertical) < 0.01f) return;
 
         Vector3 moveDir = transform.forward * vertical;
-        transform.parent.position += moveDir * (_pushSpeed * Time.deltaTime);
+        transform.parent.position += moveDir * (_pushSpeed * Time.fixedDeltaTime);
     }
 
     private void KinematicMovement()
@@ -259,7 +257,7 @@ public class PlayerMovement : MonoBehaviour
         KinematicObject kinematicObj = _interactionScript.CurrentKinematicTarget;
         if (Input.GetAxisRaw("Vertical") > 0.01f)
         {
-            kinematicObj.AdvanceMovement(Time.deltaTime);
+            kinematicObj.AdvanceMovement(Time.fixedDeltaTime);
             if (kinematicObj.HasReachedTarget())
             {
                 _interactionScript.ToggleKinematicMode();
