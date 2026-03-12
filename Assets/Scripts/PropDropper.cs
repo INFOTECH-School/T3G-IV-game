@@ -12,9 +12,13 @@ public class PropDropper : MonoBehaviour
     [Header("Car Reference")]
     [Tooltip("The KinematicObject representing the car. This is required to check the car's state.")]
     public KinematicObject carObject;
+    
+    [Header("Timeline Settings")]
+    [Tooltip("The TimelineTrigger to play when the prop is dropped.")]
+    public TimelineTrigger timelineTrigger;
 
-    private bool _playerInTrigger = false;
-    private bool _carHasReachedTarget = false;
+    private bool _playerInTrigger;
+    private bool _carInTrigger;
 
     private void Awake()
     {
@@ -22,35 +26,15 @@ public class PropDropper : MonoBehaviour
         {
             Debug.LogError("[PropDropper] Car Object is not assigned. This component requires a reference to a KinematicObject.", this);
             this.enabled = false;
-            return;
         }
-
-        Debug.Log($"[Dev Info] PropDropper initialized. Subscribing to OnTargetReached event for car '{carObject.name}'.");
-        carObject.OnTargetReached += HandleCarTargetReached;
     }
 
     private void Start()
     {
-        propObject.SetActive(false);
-        fakePropObject.SetActive(true);
-    }
-
-    private void OnDestroy()
-    {
-        if (carObject != null)
+        if (propObject && fakePropObject)
         {
-            carObject.OnTargetReached -= HandleCarTargetReached;
-            Debug.Log($"[Dev Info] PropDropper destroyed. Unsubscribed from OnTargetReached event for car '{carObject.name}'.");
-        }
-    }
-
-    private void HandleCarTargetReached()
-    {
-        _carHasReachedTarget = true;
-        Debug.Log($"[Dev Info] Received OnTargetReached event from '{carObject.name}'. Prop drop is now enabled.");
-        if (_playerInTrigger)
-        {
-            Debug.Log("[Player Info] You can now press 'E' to drop the prop!");
+            propObject.SetActive(false);
+            fakePropObject.SetActive(true);
         }
     }
 
@@ -60,17 +44,19 @@ public class PropDropper : MonoBehaviour
         {
             _playerInTrigger = true;
             Debug.Log("[Dev Info] Player entered the trigger zone.");
-            if (_carHasReachedTarget)
+            if (_carInTrigger)
             {
-                Debug.Log("[Player Info] You can now press 'E' to drop the prop!");
+                Debug.Log($"[Player Info] You can now press '{dropKey}' to drop the prop!");
             }
         }
-        else if (other.gameObject == carObject.gameObject)
+        // Check if the entering collider belongs to the assigned car object.
+        else if (other.GetComponentInParent<KinematicObject>() == carObject)
         {
-            if (_carHasReachedTarget)
+            _carInTrigger = true;
+            Debug.Log($"[Dev Info] Car '{carObject.name}' entered the trigger. Prop drop is now enabled.");
+            if (_playerInTrigger)
             {
-                Debug.Log($"[Dev Info] Car '{carObject.name}' re-entered the trigger on its return trip. Disabling drop ability.");
-                _carHasReachedTarget = false;
+                Debug.Log($"[Player Info] You can now press '{dropKey}' to drop the prop!");
             }
         }
     }
@@ -82,11 +68,17 @@ public class PropDropper : MonoBehaviour
             _playerInTrigger = false;
             Debug.Log("[Dev Info] Player exited the trigger zone.");
         }
+        // Check if the exiting collider belongs to the assigned car object.
+        else if (other.GetComponentInParent<KinematicObject>() == carObject)
+        {
+            _carInTrigger = false;
+            Debug.Log($"[Dev Info] Car '{carObject.name}' exited the trigger. Prop drop is now disabled.");
+        }
     }
 
     private void Update()
     {
-        bool canDrop = _playerInTrigger && _carHasReachedTarget;
+        bool canDrop = _playerInTrigger && _carInTrigger;
 
         if (canDrop && Input.GetKeyDown(dropKey))
         {
@@ -97,18 +89,26 @@ public class PropDropper : MonoBehaviour
 
     private void DropProp()
     {
-        if (propObject != null && fakePropObject != null)
+        if (timelineTrigger)
         {
-            propObject.SetActive(true);
-            fakePropObject.SetActive(false);
-            Debug.Log("[Player Info] Prop dropped!");
-            Debug.Log("[Dev Info] PropDropper component disabled to prevent re-use.");
-            
-            enabled = false; 
+            timelineTrigger.Play();
+            Debug.Log("[Dev Info] TimelineTrigger activated.");
         }
         else
         {
-            Debug.LogWarning("[Dev Info] Attempted to drop prop, but Prop prefab or fake prop object is not set.", this);
+            if (propObject && fakePropObject)
+            {
+                propObject.SetActive(true);
+                fakePropObject.SetActive(false);
+                Debug.Log("[Player Info] Prop dropped!");
+            }
+            else
+            {
+                Debug.LogWarning("[Dev Info] Attempted to drop prop, but Prop prefab or fake prop object is not set.", this);
+            }
         }
+        
+        Debug.Log("[Dev Info] PropDropper component disabled to prevent re-use.");
+        enabled = false;
     }
 }

@@ -22,6 +22,17 @@ public class TimelineTrigger : MonoBehaviour
     public List<GameObject> hideOutlines = new List<GameObject>();
     private Dictionary<GameObject, int> _outlineLayers = new Dictionary<GameObject, int>();
 
+    public void Play()
+    {
+        if (playOnce && _played) return;
+        if (!director)
+        {
+            Debug.LogWarning("TimelineTrigger: Director not set!", this);
+            return;
+        }
+        PlayCutscene(SceneManager.GetActiveScene().name);
+    }
+
     private void PlayCutscene(string sceneName)
     {
         if (ending)
