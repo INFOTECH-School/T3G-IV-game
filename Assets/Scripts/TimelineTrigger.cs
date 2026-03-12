@@ -9,8 +9,10 @@ public class TimelineTrigger : MonoBehaviour
     public PlayableDirector director;
     public bool playOnce = true;
     private bool _played;
+    private bool _canPlay;
     public bool ending = false;
     public bool level2 = false;
+    public KeyCode interactKey = KeyCode.Alpha0;
     [SerializeField] private Triggerer triggerer;
     private enum Triggerer
     {
@@ -90,13 +92,28 @@ public class TimelineTrigger : MonoBehaviour
         director.stopped -= OnCutsceneFinished;
     }
 
+    private void Update()
+    {
+        if (_canPlay && Input.GetKeyDown(interactKey))
+        {
+            PlayCutscene(SceneManager.GetActiveScene().name);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && triggerer == Triggerer.Player)
         {
             if (playOnce && _played) return;
             if (!director) return;
-            PlayCutscene(SceneManager.GetActiveScene().name);
+            if (interactKey != KeyCode.Alpha0)
+            {
+                _canPlay = true;
+            }
+            else
+            {
+                PlayCutscene(SceneManager.GetActiveScene().name);
+            }
         }
         
         if (other.CompareTag("Alice") && triggerer == Triggerer.Alice)
@@ -111,6 +128,17 @@ public class TimelineTrigger : MonoBehaviour
             if (playOnce && _played) return;
             if (!director) return;
             PlayCutscene(SceneManager.GetActiveScene().name);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && triggerer == Triggerer.Player)
+        {
+            if (_canPlay)
+            {
+                _canPlay = false;
+            }
         }
     }
 }
