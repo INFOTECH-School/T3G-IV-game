@@ -85,6 +85,10 @@ public class PlayerMovement : MonoBehaviour
         var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         _inputDirection = _rotation * rawInput;
 
+        // If there's any movement input, wake up the Rigidbody to ensure OnCollisionStay is called.
+        // This prevents a bug where a sleeping Rigidbody fails the ground check.
+        if (rawInput.magnitude > 0.1f) _rigidBody.WakeUp();
+        
         // Only rotate toward movement if we aren't aiming
         if (!_isAiming && _inputDirection.magnitude > 0.1f)
         {
@@ -120,14 +124,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJumpInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded && !_isAiming)
-            _isJumpPressed = true;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _rigidBody.WakeUp();
+
+            if (_isGrounded && !_isAiming)
+            {
+                _isJumpPressed = true;
+            }
+        }
     }
 
     private void FixedUpdate()
     {
         if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
             return;
+
+        // Reset grounded state at the start of each physics step
+        _isGrounded = false;
 
         bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
         bool isInteracting = _interactionScript && _interactionScript.currentState == Player.PlayerState.Interacting;
@@ -309,13 +323,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
+        // This check is now more reliable because we reset _isGrounded in FixedUpdate.
+        // We only need to check if we are currently touching a valid ground surface.
         foreach (var contact in collision.contacts)
         {
-            if (contact.normal.y > 0.7f) { _isGrounded = true; return; }
+            // A normal.y > 0.7f means the slope is less than ~45 degrees.
+            if (contact.normal.y > 0.7f)
+            {
+                _isGrounded = true;
+                return;
+            }
         }
     }
 
-    private void OnCollisionExit() => _isGrounded = false;
+    // By removing OnCollisionExit, we prevent cases where leaving one collider while still on another would incorrectly set _isGrounded to false.
 
     private void OnDestroy()
     {

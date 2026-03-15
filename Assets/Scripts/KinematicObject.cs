@@ -262,7 +262,11 @@ public class KinematicObject : MonoBehaviour
 
     public void CompleteObjective()
     {
-        _levelObjectiveComponent.CompleteObjective();
+        if (_levelObjectiveComponent)
+        {
+            _levelObjectiveComponent.CompleteObjective();
+        }
+
         sparkleEffect.SetActive(false);
     }
     

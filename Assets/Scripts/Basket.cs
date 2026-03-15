@@ -85,6 +85,7 @@ public class Basket : MonoBehaviour
             else
             {
                 if( holdingPoint1 ) holdingPoint1.SetActive(true); 
+                if (finishResult) finishResult.SetActive(true); 
                 Destroy(item.gameObject);
             }
         }

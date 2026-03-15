@@ -17,8 +17,13 @@ public class GameManager : MonoBehaviour
     public GameState CurrentGameState = GameState.Gameplay;
     void Awake()
     {
+        if (Instance)
+        {
+            //Add information transition from old to new instance.
+            Destroy(Instance.gameObject);
+        }
+        Instance = this;
         DontDestroyOnLoad(gameObject);
-        if (!Instance) Instance = this;
     }
 
     public void SetState(GameState state)
