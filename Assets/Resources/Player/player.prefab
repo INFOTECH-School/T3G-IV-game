@@ -234,6 +234,9 @@ MonoBehaviour:
   _jumpForce: 5
   _pushSpeed: 3
   stoppingSpeed: 8
+  stepHeight: 0.4
+  stepSmooth: 0.1
+  stepCheckDistance: 0.2
   _itemPrefab: {fileID: 916867064113499871, guid: 963555fda92085f4abffbbda926a65b4, type: 3}
   _throwingPoint: {fileID: 3621689810019117177}
   _lineRenderer: {fileID: 4657702855204142606}
@@ -257,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   interactionText: {fileID: 0}
-  holdPoint: {fileID: 3621689810019117177}
+  holdPoint: {fileID: 1432528708749770136}
   itemScale: 0.5
   itemLayer:
     serializedVersion: 2
@@ -395,6 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::PlayerInteraction
   currentState: 0
   interactionText: {fileID: 0}
+  _collider: {fileID: 0}
 --- !u!95 &2715110302575608712
 Animator:
   serializedVersion: 7
