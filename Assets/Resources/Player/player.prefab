@@ -244,6 +244,11 @@ MonoBehaviour:
   _timeBetweenDots: 0.1
   _timeToTarget: 1
   throwingEnabled: 0
+  _walkClip: {fileID: 0}
+  _runClip: {fileID: 0}
+  _jumpClip: {fileID: 0}
+  _walkStepRate: 0.5
+  _runStepRate: 0.3
 --- !u!114 &9022962920428703538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,6 +400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::PlayerInteraction
   currentState: 0
   interactionText: {fileID: 0}
+  _collider: {fileID: 0}
 --- !u!95 &2715110302575608712
 Animator:
   serializedVersion: 7
