@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Animator))]
+[RequireComponent(typeof(Rigidbody), typeof(Animator), typeof(AudioSource))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
@@ -22,10 +22,19 @@ public class PlayerMovement : MonoBehaviour
     public float _timeToTarget = 1.5f; // Increased from 1f to 1.5f to reduce power
     public bool throwingEnabled = true;
 
+    [Header("Audio Settings")]
+    public AudioClip[] _footstepClips;
+    public AudioClip _jumpClip;
+    public float _walkStepRate = 0.5f;
+    public float _runStepRate = 0.3f;
+    private float _footstepTimer;
+
+
     [Header("References")]
     private Rigidbody _rigidBody;
     private Animator _animator;
     private PlayerInteraction _interactionScript;
+    private AudioSource _audioSource;
 
     // State Variables
     private Vector3 _inputDirection;
@@ -46,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _interactionScript = GetComponent<PlayerInteraction>();
+        _audioSource = GetComponent<AudioSource>();
 
         if (_animator)
         {
@@ -75,10 +85,34 @@ public class PlayerMovement : MonoBehaviour
             HandleNormalInput();
             HandleAimingInput();
             HandleJumpInput();
+            HandleFootstepSounds();
         }
 
         UpdateAnimator();
     }
+
+    private void HandleFootstepSounds()
+    {
+        if (!_isGrounded || _inputDirection.magnitude < 0.1f) return;
+
+        _footstepTimer -= Time.deltaTime;
+        if (_footstepTimer <= 0)
+        {
+            bool isRunning = Input.GetKey(KeyCode.LeftShift);
+            _footstepTimer = isRunning ? _runStepRate : _walkStepRate;
+
+            if (_footstepClips != null && _footstepClips.Length > 0)
+            {
+                int index = Random.Range(0, _footstepClips.Length);
+                AudioClip clip = _footstepClips[index];
+                if (clip)
+                {
+                    _audioSource.PlayOneShot(clip);
+                }
+            }
+        }
+    }
+
 
     private void HandleNormalInput()
     {
@@ -133,6 +167,10 @@ public class PlayerMovement : MonoBehaviour
             if (_isGrounded && !_isAiming)
             {
                 _isJumpPressed = true;
+                if (_jumpClip)
+                {
+                    _audioSource.PlayOneShot(_jumpClip);
+                }
             }
         }
     }

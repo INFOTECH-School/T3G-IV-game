@@ -243,6 +243,11 @@ MonoBehaviour:
   _timeBetweenDots: 0.1
   _timeToTarget: 1.67
   throwingEnabled: 1
+  _walkClip: {fileID: 0}
+  _runClip: {fileID: 0}
+  _jumpClip: {fileID: 0}
+  _walkStepRate: 0.5
+  _runStepRate: 0.3
 --- !u!114 &9022962920428703538
 MonoBehaviour:
   m_ObjectHideFlags: 0
