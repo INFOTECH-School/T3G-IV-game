@@ -183,7 +183,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -234,7 +234,6 @@ MonoBehaviour:
   _jumpForce: 5
   _pushSpeed: 3
   stoppingSpeed: 8
-  _itemPrefab: {fileID: 916867064113499871, guid: 963555fda92085f4abffbbda926a65b4, type: 3}
   _throwingPoint: {fileID: 3621689810019117177}
   _lineRenderer: {fileID: 4657702855204142606}
   _groundLayer:
@@ -242,8 +241,8 @@ MonoBehaviour:
     m_Bits: 8
   _lineSegments: 30
   _timeBetweenDots: 0.1
-  _timeToTarget: 1
-  throwingEnabled: 0
+  _timeToTarget: 1.67
+  throwingEnabled: 1
 --- !u!114 &9022962920428703538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,6 +394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::PlayerInteraction
   currentState: 0
   interactionText: {fileID: 0}
+  _collider: {fileID: 0}
 --- !u!95 &2715110302575608712
 Animator:
   serializedVersion: 7
@@ -436,8 +436,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.75, y: 2, z: 0.75}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.35, y: 0.05, z: 0.35}
+  m_Center: {x: 0, y: -0.975, z: 0}
 --- !u!120 &4657702855204142606
 LineRenderer:
   serializedVersion: 3
@@ -446,7 +446,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3394629058114203212}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -464,7 +464,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f5a45e95f520f354cb15aba974c1a2f4, type: 2}
+  - {fileID: 2100000, guid: cd3311841b4681741ab3a06c556d944f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -487,9 +487,7 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -506,7 +504,7 @@ LineRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.23987734
+        time: 0.3490616
         value: 0
         inSlope: 0
         outSlope: 0

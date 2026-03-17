@@ -13,13 +13,13 @@ public class PlayerMovement : MonoBehaviour
     public float stoppingSpeed = 5f;
 
     [Header("Throw Settings")]
-    public GameObject _itemPrefab;
     public Transform _throwingPoint;
     public LineRenderer _lineRenderer;
     public LayerMask _groundLayer;
     public int _lineSegments = 30;
-    public float _timeBetweenDots = 0.1f;
-    public float _timeToTarget = 1f;
+    public float _timeBetweenDots = 0.1f; // Restored this variable
+    [Tooltip("Controls the power of the throw. A higher value means a weaker, higher-arcing throw.")]
+    public float _timeToTarget = 1.5f; // Increased from 1f to 1.5f to reduce power
     public bool throwingEnabled = true;
 
     [Header("References")]
@@ -98,10 +98,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleAimingInput()
     {
-        if (!throwingEnabled) return;
-        // Start Aiming (Only if grounded and not moving fast)
+        if (!throwingEnabled || GameManager.Instance.Player == null) return;
+
+        // Start Aiming (Only if grounded, not moving fast, and holding a throwable item)
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
-        if (Input.GetMouseButtonDown(1) && _isGrounded && horizontalVel.magnitude < 0.5f)
+        if (Input.GetMouseButtonDown(1) && _isGrounded && horizontalVel.magnitude < 0.5f &&
+            GameManager.Instance.Player.currentItem && GameManager.Instance.Player.currentItem.CompareTag("Throwable"))
         {
             _isAiming = true;
         }
@@ -197,7 +199,7 @@ public class PlayerMovement : MonoBehaviour
     #region Throwing Logic
     private void Aim()
     {
-        if (!Camera.current.CompareTag("MainCamera")) return;
+        if (Camera.main == null || !Camera.main.CompareTag("MainCamera")) return;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, _groundLayer))
         {
@@ -245,7 +247,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void ThrowItem()
     {
-        GameObject projectile = Instantiate(_itemPrefab, _throwingPoint.position, Quaternion.identity);
+        if (GameManager.Instance.Player.currentItem == null) return;
+
+        GameObject projectile = GameManager.Instance.Player.currentItem.gameObject;
+        GameManager.Instance.Player.UnequipForThrow();
+
         if (projectile.TryGetComponent(out Rigidbody rb))
         {
             rb.linearVelocity = _calculatedVelocity;
