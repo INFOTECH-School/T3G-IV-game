@@ -234,6 +234,9 @@ MonoBehaviour:
   _jumpForce: 5
   _pushSpeed: 3
   stoppingSpeed: 8
+  stepHeight: 0.4
+  stepSmooth: 0.1
+  stepCheckDistance: 0.2
   _throwingPoint: {fileID: 3621689810019117177}
   _lineRenderer: {fileID: 4657702855204142606}
   _groundLayer:
@@ -261,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   interactionText: {fileID: 0}
-  holdPoint: {fileID: 3621689810019117177}
+  holdPoint: {fileID: 1432528708749770136}
   itemScale: 0.5
   itemLayer:
     serializedVersion: 2
