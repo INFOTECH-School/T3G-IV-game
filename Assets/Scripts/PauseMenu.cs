@@ -6,10 +6,13 @@ public class PauseMenuManager : MonoBehaviour
 
 {
     public GameObject PauseMenu;
+    public GameObject settingsMenu;
+    public GameObject ControlsPanel;
 
     private void Start()
     {
         PauseMenu.SetActive(false);
+        
     }
 
     void Update()
@@ -17,6 +20,10 @@ public class PauseMenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ChangePauseMenuState();
+            settingsMenu.SetActive(false);
+            ControlsPanel.SetActive(false);
+            
+            
         }
     }
     public void ChangePauseMenuState()
