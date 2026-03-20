@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelOperator : MonoBehaviour
 {
@@ -8,56 +9,58 @@ public class LevelOperator : MonoBehaviour
     public bool canEndLevel1 = false;
 
     private int _level1DependencyScore = 6;
+    private int _initialLevel1Score;
     public int level1DependencyScore
     {
-        get
-        {
-            return _level1DependencyScore;
-        }
+        get { return _level1DependencyScore; }
         set
         {
-            if (value <= 0)
+            _level1DependencyScore = value;
+            if (_level1DependencyScore <= 0)
             {
-                canEndLevel1 = true;
                 _level1DependencyScore = 0;
+                canEndLevel1 = true;
+                if (level1ProgressBarCanvas) level1ProgressBarCanvas.SetActive(false);
             }
-            else
-            {
-                _level1DependencyScore = value;
-            }
+            UpdateProgressBar();
         }
     }
+
     public bool canEndLevel2 = false;
     private int _level2DependencyScore = 2;
+    private int _initialLevel2Score;
 
     public int level2DependencyScore
     {
-        get
-        {
-            return _level2DependencyScore;
-        }
+        get { return _level2DependencyScore; }
         set
         {
-            if (value <= 0)
+            _level2DependencyScore = value;
+            if (_level2DependencyScore <= 0)
             {
+                _level2DependencyScore = 0;
                 canEndLevel2 = true;
+                if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(false);
             }
-            else
-            {
-                _level2DependencyScore = value;
-            }
+            UpdateProgressBar();
         }
     }
-    
-    [Header("Truck Settings")]
+
+    [Header("UI Settings")]
+    public Slider level1ProgressBar;
+    public GameObject level1ProgressBarCanvas;
+    public Slider level2ProgressBar;
+    public GameObject level2ProgressBarCanvas;
+
+    [Header("Truck Settings")] 
     public int truckDependencyScore = 3;
     public BoxCollider truckTriggerCollider;
-        
+
     private void Awake()
     {
         GameManager.Instance.RegisterLevelOperator(this);
-        
-        //set Level Dependency scores;
+        _initialLevel1Score = _level1DependencyScore;
+        _initialLevel2Score = _level2DependencyScore;
     }
 
     private void Start()
@@ -66,6 +69,22 @@ public class LevelOperator : MonoBehaviour
         {
             truckTriggerCollider.enabled = false;
         }
+
+        // Configure Level 1 UI
+        if (level1ProgressBar != null)
+        {
+            level1ProgressBar.maxValue = _initialLevel1Score;
+            level1ProgressBarCanvas.SetActive(true);
+        }
+
+        // Configure and hide Level 2 UI
+        if (level2ProgressBar != null)
+        {
+            level2ProgressBar.maxValue = _initialLevel2Score;
+            level2ProgressBarCanvas.SetActive(false);
+        }
+        
+        UpdateProgressBar();
     }
 
     private void OnDisable()
@@ -75,15 +94,18 @@ public class LevelOperator : MonoBehaviour
 
     public void EndLevel(int number)
     {
-        switch (number)
+        if (number == 1)
         {
-            case 1:
-                //SceneManager.LoadSceneAsync("Test_Gym"/*"Level2"*/);
-                Debug.Log("Ending level 1");
-                canEndLevel1 = false;
-                break;
+            Debug.Log("Ending level 1");
+            canEndLevel1 = false;
+            currentLevel = 2;
+
+            // Switch UI
+            if (level1ProgressBarCanvas) level1ProgressBarCanvas.SetActive(false);
+            if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(true);
+            
+            UpdateProgressBar(); // Update the new progress bar to its initial state
         }
-        currentLevel++;
     }
 
     public void ProgressLevel()
@@ -107,10 +129,22 @@ public class LevelOperator : MonoBehaviour
         {
             truckDependencyScore--;
         }
+
         if (truckTriggerCollider && truckDependencyScore == 0)
         {
             truckTriggerCollider.enabled = true;
         }
     }
-}
 
+    private void UpdateProgressBar()
+    {
+        if (currentLevel == 1 && level1ProgressBar != null)
+        {
+            level1ProgressBar.value = _initialLevel1Score - _level1DependencyScore;
+        }
+        else if (currentLevel == 2 && level2ProgressBar != null)
+        {
+            level2ProgressBar.value = _initialLevel2Score - _level2DependencyScore;
+        }
+    }
+}
