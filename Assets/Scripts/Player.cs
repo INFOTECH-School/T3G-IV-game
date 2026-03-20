@@ -64,6 +64,10 @@ public class Player : MonoBehaviour
         if (!itemToEquip) return;
 
         currentItem = itemToEquip;
+        if (currentItem.CompareTag("Throwable"))
+        {
+            currentItem.GetComponent<ThrowablePhysics>().OnPickup();
+        }
         originalPos = currentItem.transform.position;
         originalRot = currentItem.transform.rotation;
         originalScale = currentItem.transform.localScale;
@@ -93,6 +97,25 @@ public class Player : MonoBehaviour
         currentItem.transform.localScale = originalScale;
 
         ResetItemPhysics();
+        currentItem = null;
+    }
+    
+    public void UnequipForThrow()
+    {
+        if (!currentItem) return;
+
+        currentItem.transform.SetParent(null);
+        currentItem.transform.localScale = originalScale;
+        
+        var rb = currentItem.GetComponent<Rigidbody>();
+        if (rb) rb.isKinematic = false;
+
+        var colliders = currentItem.GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = true;
+        }
+
         currentItem = null;
     }
 
