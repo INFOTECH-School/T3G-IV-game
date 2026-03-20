@@ -5,6 +5,7 @@ public class LevelObjective : MonoBehaviour
 {
     public bool truckObjective;
     public GameObject finishResult;
+    private bool _isCompleted = false;
 
     private void Start()
     {
@@ -13,6 +14,9 @@ public class LevelObjective : MonoBehaviour
 
     public void CompleteObjective()
     {
+        if (_isCompleted) return;
+
+        _isCompleted = true;
         if (truckObjective)
         {
             GameManager.Instance.LevelOperator.ProgressTruck();
@@ -23,8 +27,22 @@ public class LevelObjective : MonoBehaviour
         {
             GameManager.Instance.LevelOperator.ProgressLevel();
         }
+    }
 
-        // Optionally, disable this component to prevent repeated calls
-        this.enabled = false;
+    public void RegressObjective()
+    {
+        if (!_isCompleted) return;
+
+        _isCompleted = false;
+        if (truckObjective)
+        {
+            GameManager.Instance.LevelOperator.RegressTruck();
+        }
+
+        if (finishResult) finishResult.SetActive(false);
+        if (GameManager.Instance.LevelOperator)
+        {
+            GameManager.Instance.LevelOperator.RegressLevel();
+        }
     }
 }

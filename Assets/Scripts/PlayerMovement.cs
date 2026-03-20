@@ -313,18 +313,15 @@ public class PlayerMovement : MonoBehaviour
         if (!_interactionScript || !_interactionScript.CurrentKinematicTarget) return;
 
         KinematicObject kinematicObj = _interactionScript.CurrentKinematicTarget;
-        if (Input.GetAxisRaw("Vertical") > 0.01f)
+        float verticalInput = Input.GetAxisRaw("Vertical");
+
+        if (verticalInput > 0.01f) // Pushing
         {
             kinematicObj.AdvanceMovement(Time.fixedDeltaTime);
-            if (kinematicObj.HasReachedTarget())
-            {
-                _interactionScript.ToggleKinematicMode();
-                if (kinematicObj.movementType != KinematicObject.MovementType.Car)
-                {
-                    kinematicObj.targetTransform.gameObject.SetActive(false);
-                    kinematicObj.CompleteObjective();
-                }
-            }
+        }
+        else if (verticalInput < -0.01f) // Pulling
+        {
+            kinematicObj.ReverseMovement(Time.fixedDeltaTime);
         }
     }
 

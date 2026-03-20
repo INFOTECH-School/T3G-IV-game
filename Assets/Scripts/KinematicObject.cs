@@ -30,8 +30,8 @@ public class KinematicObject : MonoBehaviour
     public float maxRotationAngle = 90f;
 
     [Header("Effects")]
-    [SerializeField] private ParticleSystem confettiParticle;
     [SerializeField] private GameObject sparkleEffect;
+    [SerializeField] private MeshRenderer fall_guide; // Changed from GameObject to MeshRenderer
 
     // Internal state
     private Vector3 _startPosition;
@@ -39,10 +39,8 @@ public class KinematicObject : MonoBehaviour
     private float _currentRotationAngle;
     private bool _isInteracting;
     private Transform _playerTransform;
-    private bool _hasReachedTarget; // Used for Slide/Pivot to lock them
     private bool _isReturning;
     private bool _targetReachedEventFired; // Used to fire the event only once per interaction
-    private bool _interactionDisabled = false; // Locks the object after objective completion
     private LevelObjective _levelObjectiveComponent;
 
     void Awake()
@@ -51,6 +49,10 @@ public class KinematicObject : MonoBehaviour
         _startRotation = transform.rotation;
         TryGetComponent(out _levelObjectiveComponent);
         ValidateSetup();
+        if (fall_guide)
+        {
+            fall_guide.enabled = false; // Use .enabled for MeshRenderer
+        }
     }
 
     void Update()
@@ -86,6 +88,11 @@ public class KinematicObject : MonoBehaviour
         {
             sparkleEffect.SetActive(false);
         }
+
+        if (fall_guide)
+        {
+            fall_guide.enabled = true; // Use .enabled for MeshRenderer
+        }
         
         Debug.Log($"[KinematicObject] Started interaction with {gameObject.name}");
     }
@@ -107,9 +114,14 @@ public class KinematicObject : MonoBehaviour
             _isReturning = true;
         }
 
-        if (sparkleEffect && !_interactionDisabled)
+        if (sparkleEffect)
         {
             sparkleEffect.SetActive(true);
+        }
+
+        if (fall_guide)
+        {
+            fall_guide.enabled = false; // Use .enabled for MeshRenderer
         }
         
         Debug.Log($"[KinematicObject] Stopped interaction with {gameObject.name}");
@@ -155,51 +167,91 @@ public class KinematicObject : MonoBehaviour
         {
             _targetReachedEventFired = true;
             OnTargetReached?.Invoke();
-
-            if (levelObjective)
-            {
-                if (confettiParticle && movementType != MovementType.Car)
-                {
-                    confettiParticle.Play();
-                }
-                if (sparkleEffect)
-                {
-                    sparkleEffect.SetActive(false);
-                }
-            }
-        }
-        
-        if (movementType != MovementType.Car)
-        {
-            _hasReachedTarget = true;
-            _interactionDisabled = true;
         }
     }
     
     private void AdvancePivot(float deltaTime)
     {
         if (!pivotAnchor) return;
-        
-        if (_currentRotationAngle >= maxRotationAngle)
+
+        float rotationDirection = Mathf.Sign(maxRotationAngle);
+        float targetAngle = maxRotationAngle;
+
+        // Check if the target has been reached
+        if ((rotationDirection > 0 && _currentRotationAngle >= targetAngle) ||
+            (rotationDirection < 0 && _currentRotationAngle <= targetAngle))
         {
             HandleTargetReached();
             return;
         }
-        
-        float rotationStep = speed * deltaTime;
-        
-        if (_currentRotationAngle + rotationStep > maxRotationAngle)
+
+        float rotationStep = speed * deltaTime * rotationDirection;
+
+        // Clamp the rotation step to not overshoot the target
+        if ((rotationDirection > 0 && _currentRotationAngle + rotationStep > targetAngle) ||
+            (rotationDirection < 0 && _currentRotationAngle + rotationStep < targetAngle))
         {
-            rotationStep = maxRotationAngle - _currentRotationAngle;
+            rotationStep = targetAngle - _currentRotationAngle;
         }
-        
+
         transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
         _currentRotationAngle += rotationStep;
-        
-        if (_currentRotationAngle >= maxRotationAngle)
+
+        // Final check after rotation
+        if ((rotationDirection > 0 && _currentRotationAngle >= targetAngle) ||
+            (rotationDirection < 0 && _currentRotationAngle <= targetAngle))
         {
             HandleTargetReached();
         }
+    }
+
+    public void ReverseMovement(float deltaTime)
+    {
+        if (!_isInteracting) return;
+
+        switch (movementType)
+        {
+            case MovementType.Slide:
+            case MovementType.Car:
+                ReverseSlide(deltaTime);
+                break;
+            case MovementType.Pivot:
+                ReversePivot(deltaTime);
+                break;
+        }
+    }
+
+    private void ReverseSlide(float deltaTime)
+    {
+        if (Vector3.Distance(transform.position, _startPosition) < 0.01f) return;
+
+        transform.position = Vector3.MoveTowards(transform.position, _startPosition, speed * deltaTime);
+    }
+
+    private void ReversePivot(float deltaTime)
+    {
+        if (!pivotAnchor) return;
+
+        float rotationDirection = Mathf.Sign(maxRotationAngle);
+
+        // Check if we are at the start
+        if ((rotationDirection > 0 && _currentRotationAngle <= 0) ||
+            (rotationDirection < 0 && _currentRotationAngle >= 0))
+        {
+            return;
+        }
+
+        float rotationStep = speed * deltaTime * rotationDirection;
+
+        // Clamp the rotation step to not overshoot the start
+        if ((rotationDirection > 0 && _currentRotationAngle - rotationStep < 0) ||
+            (rotationDirection < 0 && _currentRotationAngle - rotationStep > 0))
+        {
+            rotationStep = _currentRotationAngle;
+        }
+
+        transform.RotateAround(pivotAnchor.position, Vector3.down, rotationStep);
+        _currentRotationAngle -= rotationStep;
     }
 
     private void UpdateCar()
@@ -227,16 +279,11 @@ public class KinematicObject : MonoBehaviour
                             Debug.Log($"[Dev Info] Car stopped by prop '{hit.collider.name}'. Completing level objective.");
                             _levelObjectiveComponent.CompleteObjective();
                             targetTransform.gameObject.SetActive(false);
-                            if (confettiParticle)
-                            {
-                                confettiParticle.Play();
-                            }
                             if (sparkleEffect)
                             {
                                 sparkleEffect.SetActive(false);
                             }
                             levelObjective = false;
-                            _interactionDisabled = true; // Disable future interactions
                         }
                         return; // Exit UpdateCar
                     }
@@ -280,7 +327,10 @@ public class KinematicObject : MonoBehaviour
                 return Vector3.Distance(transform.position, targetTransform.position) < 0.01f;
                 
             case MovementType.Pivot:
-                return _currentRotationAngle >= maxRotationAngle;
+                if (maxRotationAngle > 0)
+                    return _currentRotationAngle >= maxRotationAngle;
+                else
+                    return _currentRotationAngle <= maxRotationAngle;
                 
             default:
                 return false;
@@ -292,7 +342,6 @@ public class KinematicObject : MonoBehaviour
         transform.position = _startPosition;
         transform.rotation = _startRotation;
         _currentRotationAngle = 0f;
-        _hasReachedTarget = false;
         _isReturning = false;
         
         if (_isInteracting)
@@ -303,7 +352,7 @@ public class KinematicObject : MonoBehaviour
     
     public bool IsInteracting => _isInteracting;
     public bool IsReturning => _isReturning;
-    public bool CanInteract => !_interactionDisabled && (movementType == MovementType.Car || !_hasReachedTarget);
+    public bool CanInteract => true; // Always allow interaction
     
     void OnDrawGizmos()
     {

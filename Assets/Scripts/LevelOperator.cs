@@ -101,6 +101,21 @@ public class LevelOperator : MonoBehaviour
         }
     }
 
+    public void RegressLevel()
+    {
+        switch (currentLevel)
+        {
+            case 1:
+                level1DependencyScore++;
+                Debug.Log("Level score:" + level1DependencyScore);
+                break;
+            case 2:
+                level2DependencyScore++;
+                Debug.Log("Level score:" + level2DependencyScore);
+                break;
+        }
+    }
+
     public void ProgressTruck()
     {
         if (truckDependencyScore > 0)
@@ -112,5 +127,13 @@ public class LevelOperator : MonoBehaviour
             truckTriggerCollider.enabled = true;
         }
     }
-}
 
+    public void RegressTruck()
+    {
+        truckDependencyScore++;
+        if (truckTriggerCollider)
+        {
+            truckTriggerCollider.enabled = false;
+        }
+    }
+}
