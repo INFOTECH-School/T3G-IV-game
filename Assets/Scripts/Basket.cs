@@ -18,6 +18,9 @@ public class Basket : MonoBehaviour
     
     // The object/effect that appears when both are full
     public GameObject finishResult; 
+    
+    // The guide that appears when player is close and holds right item
+    public GameObject guide;
 
     // Internal tracking
     private bool _isHoldingPoint1Free = true;
@@ -29,6 +32,7 @@ public class Basket : MonoBehaviour
         if (holdingPoint1) holdingPoint1.SetActive(false);
         if (holdingPoint2) holdingPoint2.SetActive(false);
         if (finishResult) finishResult.SetActive(false);
+        if (guide) guide.SetActive(false);
     }
 
     // Called by Player when they press 'E'

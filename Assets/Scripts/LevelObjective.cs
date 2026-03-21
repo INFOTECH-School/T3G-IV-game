@@ -17,7 +17,7 @@ public class LevelObjective : MonoBehaviour
         if (_isCompleted) return;
 
         _isCompleted = true;
-        if (truckObjective)
+        if (truckObjective && GameManager.Instance.LevelOperator)
         {
             GameManager.Instance.LevelOperator.ProgressTruck();
         }
@@ -34,7 +34,7 @@ public class LevelObjective : MonoBehaviour
         if (!_isCompleted) return;
 
         _isCompleted = false;
-        if (truckObjective)
+        if (truckObjective && GameManager.Instance.LevelOperator)
         {
             GameManager.Instance.LevelOperator.RegressTruck();
         }

@@ -357,9 +357,9 @@ public class PlayerMovement : MonoBehaviour
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         float speed = horizontalVel.magnitude;
         
-        _animator.SetFloat(_speedHash, speed < 0.1f ? 0f : speed);
-        _animator.SetBool(_groundedHash, _isGrounded);
-        _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
+        // _animator.SetFloat(_speedHash, speed < 0.1f ? 0f : speed);
+        // _animator.SetBool(_groundedHash, _isGrounded);
+        // _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
     }
 
     private void OnCollisionStay(Collision collision)

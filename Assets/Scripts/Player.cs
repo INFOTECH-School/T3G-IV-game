@@ -1,12 +1,9 @@
 using System;
 using UnityEngine;
-using TMPro; // REQUIRED for TextMeshPro
 
 public class Player : MonoBehaviour
 {
     public enum PlayerState { Normal, Pushing, Interacting }
-    [Header("UI Settings")]
-    public TextMeshProUGUI interactionText; // Drag your UI Text object here
 
     [Header("Settings")]
     public Transform holdPoint; 
@@ -29,7 +26,6 @@ public class Player : MonoBehaviour
     private void Start()
     {
         if (GameManager.Instance) GameManager.Instance.RegisterPlayer(this);
-        UpdateUIText(); // clear text on start
     }
 
     private void OnDestroy()
@@ -44,16 +40,23 @@ public class Player : MonoBehaviour
         {
             if (currentItem)
             {
-                if (nearbyBasket) PlaceInBasket();
+                if (nearbyBasket && nearbyBasket.allowedItems.Contains(currentItem)) PlaceInBasket();
                 else if (nearbyWheel && currentItem == nearbyWheel.requiredItem) FixWheel();
             }
             else if (nearbyItem)
             {
                 Equip(nearbyItem);
             }
-            
-            // Update UI immediately after any action
-            UpdateUIText();
+        }
+        
+        // === GUIDE LOGIC ===
+        if (nearbyBasket && nearbyBasket.guide)
+        {
+            bool isCorrectItem = currentItem != null && nearbyBasket.allowedItems.Contains(currentItem);
+            if (nearbyBasket.guide.activeSelf != isCorrectItem)
+            {
+                nearbyBasket.guide.SetActive(isCorrectItem);
+            }
         }
     }
 
@@ -162,8 +165,6 @@ public class Player : MonoBehaviour
         // Check BrokenWheel
         var wheelScript = other.GetComponent<BrokenWheel>();
         if (wheelScript) nearbyWheel = wheelScript;
-
-        UpdateUIText();
     }
 
     private void OnTriggerExit(Collider other)
@@ -177,51 +178,14 @@ public class Player : MonoBehaviour
 
         // Clear Basket
         var basketScript = other.GetComponent<Basket>();
-        if (basketScript && basketScript == nearbyBasket) nearbyBasket = null;
+        if (basketScript && basketScript == nearbyBasket)
+        {
+            if (nearbyBasket.guide) nearbyBasket.guide.SetActive(false);
+            nearbyBasket = null;
+        }
         
         // Clear BrokenWheel
         var wheelScript = other.GetComponent<BrokenWheel>();
         if (wheelScript && wheelScript == nearbyWheel) nearbyWheel = null;
-
-        UpdateUIText();
-    }
-
-    // === UI UPDATE ===
-    private void UpdateUIText()
-    {
-        if (!interactionText) return;
-
-        if (currentItem)
-        {
-            // We are holding something...
-            if (nearbyBasket)
-            {
-                interactionText.text = "Press [E] to Place";
-                interactionText.gameObject.SetActive(true);
-            }
-            else if (nearbyWheel && currentItem == nearbyWheel.requiredItem)
-            {
-                interactionText.text = "Press [E] to Fix";
-                interactionText.gameObject.SetActive(true);
-            }
-            else
-            {
-                interactionText.gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            // Hands are empty...
-            if (nearbyItem)
-            {
-                interactionText.text = "Press [E] to Pick Up " + nearbyItem.name;
-                interactionText.gameObject.SetActive(true);
-            }
-            else
-            {
-                // Nothing nearby
-                interactionText.gameObject.SetActive(false);
-            }
-        }
     }
 }

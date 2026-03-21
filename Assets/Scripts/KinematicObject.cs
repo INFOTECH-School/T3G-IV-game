@@ -16,6 +16,7 @@ public class KinematicObject : MonoBehaviour
     public MovementType movementType = MovementType.Slide;
     public Transform targetTransform;
     public float speed = 2.0f;
+    public bool inverted = false;
     
     [Header("Player Interaction")]
     public Transform grabPosition;
@@ -31,7 +32,15 @@ public class KinematicObject : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] private GameObject sparkleEffect;
-    [SerializeField] private MeshRenderer fall_guide; // Changed from GameObject to MeshRenderer
+    [SerializeField] private MeshRenderer fall_guide;
+
+    [Header("Collision Settings (Only for Slide type)")]
+    [SerializeField] private LayerMask kinematicObstacleLayer;
+    [SerializeField] private Collider _blockingCollider;
+
+    [Header("Gizmo Settings")]
+    [SerializeField] private bool _drawDebugGizmos = true;
+    [SerializeField] private float _gizmoCastDistance = 0.5f;
 
     // Internal state
     private Vector3 _startPosition;
@@ -40,8 +49,9 @@ public class KinematicObject : MonoBehaviour
     private bool _isInteracting;
     private Transform _playerTransform;
     private bool _isReturning;
-    private bool _targetReachedEventFired; // Used to fire the event only once per interaction
+    private bool _targetReachedEventFired;
     private LevelObjective _levelObjectiveComponent;
+    private bool _isCompleted;
 
     void Awake()
     {
@@ -51,7 +61,30 @@ public class KinematicObject : MonoBehaviour
         ValidateSetup();
         if (fall_guide)
         {
-            fall_guide.enabled = false; // Use .enabled for MeshRenderer
+            fall_guide.enabled = false;
+        }
+
+        if (_blockingCollider == null)
+        {
+            Collider[] colliders = GetComponents<Collider>();
+            foreach (Collider col in colliders)
+            {
+                if (!col.isTrigger)
+                {
+                    _blockingCollider = col;
+                    break;
+                }
+            }
+        }
+
+        if (_blockingCollider == null)
+        {
+            Debug.LogWarning($"[KinematicObject] {gameObject.name}: No non-trigger Collider found or assigned. Collision checks for Slide movement will not work.", this);
+        }
+        
+        if (sparkleEffect)
+        {
+            sparkleEffect.SetActive(true);
         }
     }
 
@@ -91,7 +124,7 @@ public class KinematicObject : MonoBehaviour
 
         if (fall_guide)
         {
-            fall_guide.enabled = true; // Use .enabled for MeshRenderer
+            fall_guide.enabled = true;
         }
         
         Debug.Log($"[KinematicObject] Started interaction with {gameObject.name}");
@@ -116,12 +149,12 @@ public class KinematicObject : MonoBehaviour
 
         if (sparkleEffect)
         {
-            sparkleEffect.SetActive(true);
+            sparkleEffect.SetActive(!_isCompleted);
         }
 
         if (fall_guide)
         {
-            fall_guide.enabled = false; // Use .enabled for MeshRenderer
+            fall_guide.enabled = false;
         }
         
         Debug.Log($"[KinematicObject] Stopped interaction with {gameObject.name}");
@@ -131,15 +164,31 @@ public class KinematicObject : MonoBehaviour
     {
         if (!_isInteracting) return;
         
-        switch (movementType)
+        if (inverted)
         {
-            case MovementType.Slide:
-            case MovementType.Car:
-                AdvanceSlide(deltaTime);
-                break;
-            case MovementType.Pivot:
-                AdvancePivot(deltaTime);
-                break;
+            switch (movementType)
+            {
+                case MovementType.Slide:
+                case MovementType.Car:
+                    ReverseSlide(deltaTime);
+                    break;
+                case MovementType.Pivot:
+                    ReversePivot(deltaTime);
+                    break;
+            }
+        }
+        else
+        {
+            switch (movementType)
+            {
+                case MovementType.Slide:
+                case MovementType.Car:
+                    AdvanceSlide(deltaTime);
+                    break;
+                case MovementType.Pivot:
+                    AdvancePivot(deltaTime);
+                    break;
+            }
         }
     }
     
@@ -147,15 +196,42 @@ public class KinematicObject : MonoBehaviour
     {
         if (targetTransform == null) return;
 
-        if (Vector3.Distance(transform.position, targetTransform.position) < 0.01f)
+        Vector3 currentPosition = transform.position;
+        Vector3 targetPosition = targetTransform.position;
+        Vector3 moveDirection = (targetPosition - currentPosition).normalized;
+        float maxMoveDistance = speed * deltaTime;
+        float distanceToTarget = Vector3.Distance(currentPosition, targetPosition);
+        float actualMoveDistance = Mathf.Min(maxMoveDistance, distanceToTarget);
+
+        if (actualMoveDistance < 0.01f)
         {
             HandleTargetReached();
             return;
         }
-        
-        transform.position = Vector3.MoveTowards(transform.position, targetTransform.position, speed * deltaTime);
-        
-        if (Vector3.Distance(transform.position, targetTransform.position) < 0.01f)
+
+        if (_blockingCollider != null && _blockingCollider is BoxCollider)
+        {
+            BoxCollider boxCollider = _blockingCollider as BoxCollider;
+            Vector3 worldCenter = transform.TransformPoint(boxCollider.center);
+            Vector3 scaledHalfExtents = Vector3.Scale(boxCollider.size / 2, transform.lossyScale);
+            Quaternion castRotation = transform.rotation;
+            float skinWidth = 0.01f;
+            float checkDistance = actualMoveDistance + skinWidth;
+
+            RaycastHit hit;
+            if (Physics.BoxCast(worldCenter, scaledHalfExtents, moveDirection, out hit, castRotation, checkDistance, kinematicObstacleLayer))
+            {
+                if (hit.collider.gameObject != this.gameObject && hit.collider.GetComponent<KinematicObject>() != null)
+                {
+                    Debug.Log($"[KinematicObject] {gameObject.name} Slide movement blocked by another KinematicObject: {hit.collider.name}", this);
+                    return;
+                }
+            }
+        }
+
+        transform.position = Vector3.MoveTowards(currentPosition, targetPosition, actualMoveDistance);
+
+        if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
         {
             HandleTargetReached();
         }
@@ -177,7 +253,6 @@ public class KinematicObject : MonoBehaviour
         float rotationDirection = Mathf.Sign(maxRotationAngle);
         float targetAngle = maxRotationAngle;
 
-        // Check if the target has been reached
         if ((rotationDirection > 0 && _currentRotationAngle >= targetAngle) ||
             (rotationDirection < 0 && _currentRotationAngle <= targetAngle))
         {
@@ -187,7 +262,6 @@ public class KinematicObject : MonoBehaviour
 
         float rotationStep = speed * deltaTime * rotationDirection;
 
-        // Clamp the rotation step to not overshoot the target
         if ((rotationDirection > 0 && _currentRotationAngle + rotationStep > targetAngle) ||
             (rotationDirection < 0 && _currentRotationAngle + rotationStep < targetAngle))
         {
@@ -197,7 +271,6 @@ public class KinematicObject : MonoBehaviour
         transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
         _currentRotationAngle += rotationStep;
 
-        // Final check after rotation
         if ((rotationDirection > 0 && _currentRotationAngle >= targetAngle) ||
             (rotationDirection < 0 && _currentRotationAngle <= targetAngle))
         {
@@ -209,15 +282,31 @@ public class KinematicObject : MonoBehaviour
     {
         if (!_isInteracting) return;
 
-        switch (movementType)
+        if (inverted)
         {
-            case MovementType.Slide:
-            case MovementType.Car:
-                ReverseSlide(deltaTime);
-                break;
-            case MovementType.Pivot:
-                ReversePivot(deltaTime);
-                break;
+            switch (movementType)
+            {
+                case MovementType.Slide:
+                case MovementType.Car:
+                    AdvanceSlide(deltaTime);
+                    break;
+                case MovementType.Pivot:
+                    AdvancePivot(deltaTime);
+                    break;
+            }
+        }
+        else
+        {
+            switch (movementType)
+            {
+                case MovementType.Slide:
+                case MovementType.Car:
+                    ReverseSlide(deltaTime);
+                    break;
+                case MovementType.Pivot:
+                    ReversePivot(deltaTime);
+                    break;
+            }
         }
     }
 
@@ -234,7 +323,6 @@ public class KinematicObject : MonoBehaviour
 
         float rotationDirection = Mathf.Sign(maxRotationAngle);
 
-        // Check if we are at the start
         if ((rotationDirection > 0 && _currentRotationAngle <= 0) ||
             (rotationDirection < 0 && _currentRotationAngle >= 0))
         {
@@ -243,7 +331,6 @@ public class KinematicObject : MonoBehaviour
 
         float rotationStep = speed * deltaTime * rotationDirection;
 
-        // Clamp the rotation step to not overshoot the start
         if ((rotationDirection > 0 && _currentRotationAngle - rotationStep < 0) ||
             (rotationDirection < 0 && _currentRotationAngle - rotationStep > 0))
         {
@@ -272,11 +359,9 @@ public class KinematicObject : MonoBehaviour
                 {
                     if (hit.distance < 0.5f)
                     {
-                        _isReturning = false; // Stop the car
-                        Debug.Log($"[Debug] {levelObjective}, {_levelObjectiveComponent}");
+                        _isReturning = false;
                         if (levelObjective && _levelObjectiveComponent != null)
                         {
-                            Debug.Log($"[Dev Info] Car stopped by prop '{hit.collider.name}'. Completing level objective.");
                             _levelObjectiveComponent.CompleteObjective();
                             targetTransform.gameObject.SetActive(false);
                             if (sparkleEffect)
@@ -284,8 +369,9 @@ public class KinematicObject : MonoBehaviour
                                 sparkleEffect.SetActive(false);
                             }
                             levelObjective = false;
+                            _isCompleted = true;
                         }
-                        return; // Exit UpdateCar
+                        return;
                     }
                 }
                 else if (hit.collider.CompareTag("Player") && hit.distance < 1.0f)
@@ -309,12 +395,22 @@ public class KinematicObject : MonoBehaviour
 
     public void CompleteObjective()
     {
-        if (_levelObjectiveComponent)
-        {
-            _levelObjectiveComponent.CompleteObjective();
-        }
+        // if (_levelObjectiveComponent)
+        // {
+        //     _levelObjectiveComponent.CompleteObjective();
+        // }
 
         sparkleEffect.SetActive(false);
+        _isCompleted = true;
+    }
+    
+    public void DisableInteraction()
+    {
+        _isCompleted = true;
+        if (sparkleEffect != null)
+        {
+            sparkleEffect.SetActive(false);
+        }
     }
     
     public bool HasReachedTarget()
@@ -352,10 +448,11 @@ public class KinematicObject : MonoBehaviour
     
     public bool IsInteracting => _isInteracting;
     public bool IsReturning => _isReturning;
-    public bool CanInteract => true; // Always allow interaction
+    public bool CanInteract => !_isCompleted;
     
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
+        // --- Original Gizmos ---
         if (grabPosition != null)
         {
             Gizmos.color = Color.cyan;
@@ -382,8 +479,36 @@ public class KinematicObject : MonoBehaviour
             Gizmos.DrawWireSphere(pivotAnchor.position, 0.3f);
             Gizmos.DrawLine(pivotAnchor.position, pivotAnchor.position + Vector3.up * 1f);
         }
+
+        // --- New BoxCast Gizmo ---
+        if (!_drawDebugGizmos || movementType != MovementType.Slide || !(_blockingCollider is BoxCollider) || targetTransform == null)
+        {
+            return;
+        }
+
+        BoxCollider boxCollider = _blockingCollider as BoxCollider;
+        Vector3 worldCenter = transform.TransformPoint(boxCollider.center);
+        Vector3 scaledHalfExtents = Vector3.Scale(boxCollider.size / 2, transform.lossyScale);
+        Quaternion castRotation = transform.rotation;
+        Vector3 moveDirection = (targetTransform.position - transform.position).normalized;
+
+        Matrix4x4 originalMatrix = Gizmos.matrix;
+
+        Gizmos.color = Color.green;
+        Gizmos.matrix = Matrix4x4.TRS(worldCenter, castRotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, scaledHalfExtents * 2);
+
+        Gizmos.color = Color.red;
+        Vector3 endCenter = worldCenter + moveDirection * _gizmoCastDistance;
+        Gizmos.matrix = Matrix4x4.TRS(endCenter, castRotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, scaledHalfExtents * 2);
+
+        Gizmos.matrix = originalMatrix;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(worldCenter, endCenter);
     }
-    
+
     void OnDrawGizmosSelected()
     {
         if (movementType == MovementType.Pivot && pivotAnchor != null)

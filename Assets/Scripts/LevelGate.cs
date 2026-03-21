@@ -6,6 +6,7 @@ public class LevelGate : MonoBehaviour
 {
     public int level;
     public bool interact = false;
+    public GameObject objectToEnable;
     private bool _inTrigger;
     private void OnTriggerEnter(Collider other)
     {
@@ -65,6 +66,11 @@ public class LevelGate : MonoBehaviour
                     GameManager.Instance.LevelOperator.EndLevel(2);
                 }
                 break;
+        }
+
+        if (objectToEnable)
+        {
+            objectToEnable.SetActive(true);
         }
     }
 }

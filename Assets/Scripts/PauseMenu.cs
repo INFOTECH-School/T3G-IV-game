@@ -19,6 +19,7 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Debug.Log("EScape pressed");
             ChangePauseMenuState();
             settingsMenu.SetActive(false);
             ControlsPanel.SetActive(false);

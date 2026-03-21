@@ -27,7 +27,7 @@ public class LevelOperator : MonoBehaviour
     }
 
     public bool canEndLevel2 = false;
-    private int _level2DependencyScore = 2;
+    private int _level2DependencyScore = 9;
     private int _initialLevel2Score;
 
     public int level2DependencyScore
@@ -105,6 +105,10 @@ public class LevelOperator : MonoBehaviour
             if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(true);
             
             UpdateProgressBar(); // Update the new progress bar to its initial state
+        }
+        else if (number == 2)
+        {
+            if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(false);
         }
     }
 

@@ -1,45 +1,101 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsMenuSimple : MonoBehaviour
+public class settings : MonoBehaviour
 {
-    public GameObject settingsPanel;
+    public static settings Instance { get; private set; }
+
+    [Header("UI Elements")]
+    public Slider volumeSlider;
     public Slider brightnessSlider;
     public Slider sensitivitySlider;
-    public Slider volumeSlider;
+    public Image brightnessPanel; // Assign a black UI Image panel here
 
+    // Public properties to access settings from other scripts
+    public float MouseSensitivity { get; private set; }
 
+    // PlayerPrefs keys
+    private const string VolumeKey = "MasterVolume";
+    private const string BrightnessKey = "Brightness";
+    private const string SensitivityKey = "MouseSensitivity";
 
-    public void ChangeGlobalVolume(float value)
+    // Default values
+    private const float DefaultVolume = 0.8f;
+    private const float DefaultBrightness = 1.0f;
+    private const float DefaultSensitivity = 1.0f;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            Initialize();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Initialize()
+    {
+        LoadSettings();
+        SetupListeners();
+    }
+
+    private void LoadSettings()
+    {
+        // Load values from PlayerPrefs or use defaults
+        float volume = PlayerPrefs.GetFloat(VolumeKey, DefaultVolume);
+        float brightness = PlayerPrefs.GetFloat(BrightnessKey, DefaultBrightness);
+        MouseSensitivity = PlayerPrefs.GetFloat(SensitivityKey, DefaultSensitivity);
+
+        // Update sliders if they are assigned
+        if (volumeSlider) volumeSlider.value = volume;
+        if (brightnessSlider) brightnessSlider.value = brightness;
+        if (sensitivitySlider) sensitivitySlider.value = MouseSensitivity;
+
+        // Apply the loaded settings
+        ApplyVolume(volume);
+        ApplyBrightness(brightness);
+    }
+
+    private void SetupListeners()
+    {
+        if (volumeSlider)
+        {
+            volumeSlider.onValueChanged.AddListener(ApplyVolume);
+        }
+        if (brightnessSlider)
+        {
+            brightnessSlider.onValueChanged.AddListener(ApplyBrightness);
+        }
+        if (sensitivitySlider)
+        {
+            sensitivitySlider.onValueChanged.AddListener(ApplySensitivity);
+        }
+    }
+
+    public void ApplyVolume(float value)
     {
         AudioListener.volume = value;
+        PlayerPrefs.SetFloat(VolumeKey, value);
     }
 
-    private void OnDisable()
+    public void ApplyBrightness(float value)
     {
-        PlayerPrefs.SetFloat("MasterVolume", volumeSlider.value);
-        PlayerPrefs.SetFloat("Brightness", brightnessSlider.value);
+        if (brightnessPanel)
+        {
+            // Assuming 1.0 is full brightness (panel is transparent) and 0.0 is dark (panel is opaque)
+            brightnessPanel.color = new Color(0, 0, 0, 1 - value);
+        }
+        PlayerPrefs.SetFloat(BrightnessKey, value);
     }
 
-    private void OnEnable()
+    public void ApplySensitivity(float value)
     {
-        volumeSlider.value = PlayerPrefs.GetFloat("MasterVolume");
-        brightnessSlider.value = PlayerPrefs.GetFloat("Brightness");
-    }
-
-    private void Start()
-    {
-        volumeSlider.onValueChanged.AddListener(delegate { ChangeGlobalVolume(volumeSlider.value); });
-        brightnessSlider.onValueChanged.AddListener(delegate { SetBrightness(brightnessSlider.value); });
-    }
-
-    public void SetBrightness(float value)
-    {
-        brightnessSlider.value = value;
-    }
-    public void SetSensitivity(float value)
-    {
-        sensitivitySlider.value = value;
+        MouseSensitivity = value;
+        PlayerPrefs.SetFloat(SensitivityKey, value);
     }
 }

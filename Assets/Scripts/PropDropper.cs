@@ -7,7 +7,7 @@ public class PropDropper : MonoBehaviour
     public GameObject fakePropObject;
 
     [Tooltip("The key to press to drop the prop.")]
-    public KeyCode dropKey = KeyCode.E;
+    private KeyCode dropKey = KeyCode.E;
 
     [Header("Car Reference")]
     [Tooltip("The KinematicObject representing the car. This is required to check the car's state.")]
@@ -91,6 +91,7 @@ public class PropDropper : MonoBehaviour
     {
         if (timelineTrigger)
         {
+            carObject.CompleteObjective();
             timelineTrigger.Play();
             Debug.Log("[Dev Info] TimelineTrigger activated.");
         }
