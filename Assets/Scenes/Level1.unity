@@ -18432,7 +18432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &580340505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49770,7 +49770,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelGate
   level: 2
   interact: 0
-  objectToEnable: {fileID: 0}
+  objectToEnable: {fileID: 262513159}
 --- !u!65 &1137470348
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -52037,6 +52037,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5455375624248968875, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1958703174}
     - target: {fileID: 5821476432970629075, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
