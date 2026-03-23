@@ -51,6 +51,7 @@ public class LevelOperator : MonoBehaviour
     public GameObject level1ProgressBarCanvas;
     public Slider level2ProgressBar;
     public GameObject level2ProgressBarCanvas;
+    public ParticleSystem confettiParticles;
 
     [Header("Truck Settings")] 
     public int truckDependencyScore = 3;
@@ -58,13 +59,13 @@ public class LevelOperator : MonoBehaviour
 
     private void Awake()
     {
-        GameManager.Instance.RegisterLevelOperator(this);
         _initialLevel1Score = _level1DependencyScore;
         _initialLevel2Score = _level2DependencyScore;
     }
 
     private void Start()
     {
+        if (GameManager.Instance) GameManager.Instance.RegisterLevelOperator(this);
         if (truckTriggerCollider)
         {
             truckTriggerCollider.enabled = false;
@@ -89,7 +90,7 @@ public class LevelOperator : MonoBehaviour
 
     private void OnDisable()
     {
-        GameManager.Instance.UnregisterLevelOperator();
+        if (GameManager.Instance) GameManager.Instance.UnregisterLevelOperator();
     }
 
     public void EndLevel(int number)
@@ -110,6 +111,7 @@ public class LevelOperator : MonoBehaviour
         {
             if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(false);
         }
+        confettiParticles.Play();
     }
 
     public void ProgressLevel()

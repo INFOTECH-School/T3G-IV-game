@@ -349,7 +349,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 928641635}
+      - m_Target: {fileID: 6908662861107064631}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -1324,12 +1324,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3162408883026075148, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3162408883026075148, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.01
       objectReference: {fileID: 0}
     - target: {fileID: 3162408883026075148, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_LocalScale.y
       value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3162408883026075148, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3229668951227169319, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_Enabled
@@ -1544,13 +1552,21 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5109165726424130783, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5109165726424130783, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_SpriteState.m_PressedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 18b522ab59aa9a24f8e4eb95998c2e97, type: 3}
+    - target: {fileID: 5109165726424130783, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_SpriteState.m_DisabledSprite
       value: 
       objectReference: {fileID: 21300000, guid: 18b522ab59aa9a24f8e4eb95998c2e97, type: 3}
     - target: {fileID: 5109165726424130783, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_SpriteState.m_SelectedSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 18b522ab59aa9a24f8e4eb95998c2e97, type: 3}
+      objectReference: {fileID: 21300000, guid: a781e43ba8370394890ca11846803a8d, type: 3}
     - target: {fileID: 5109165726424130783, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_SpriteState.m_HighlightedSprite
       value: 
@@ -1854,6 +1870,11 @@ PrefabInstance:
       addedObject: {fileID: 1790553617}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 05376c4466af00944848cce5f1295286, type: 3}
+--- !u!1 &6908662861107064631 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2124630092984844082, guid: 05376c4466af00944848cce5f1295286, type: 3}
+  m_PrefabInstance: {fileID: 6908662861107064630}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

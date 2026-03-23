@@ -3053,7 +3053,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::PropDropper
   propObject: {fileID: 0}
   fakePropObject: {fileID: 0}
-  dropKey: 101
   carObject: {fileID: 357047570}
   timelineTrigger: {fileID: 1178122018}
 --- !u!4 &550557213
@@ -4344,7 +4343,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14917
+      value: -68.14971
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4352,7 +4351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.730388
+      value: -13.729852
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4604,7 +4603,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14917
+      value: -68.14971
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4612,7 +4611,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.730388
+      value: -13.729852
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8340,6 +8339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelGate
   level: 0
   interact: 1
+  objectToEnable: {fileID: 0}
 --- !u!1001 &1479086814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12833,6 +12833,22 @@ PrefabInstance:
       propertyPath: m_PlaneDistance
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5623215052105771626, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
+      propertyPath: m_SpriteState.m_PressedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cca7e65cffb2d9b4bb36c790f7d29121, type: 3}
+    - target: {fileID: 5623215052105771626, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
+      propertyPath: m_SpriteState.m_DisabledSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: cca7e65cffb2d9b4bb36c790f7d29121, type: 3}
+    - target: {fileID: 5623215052105771626, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
+      propertyPath: m_SpriteState.m_SelectedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9043477fca2a5a541b3b41645deb7fe1, type: 3}
+    - target: {fileID: 5623215052105771626, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
+      propertyPath: m_SpriteState.m_HighlightedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9043477fca2a5a541b3b41645deb7fe1, type: 3}
     - target: {fileID: 6149342584559839991, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13018,7 +13034,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4579192902002915696, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}

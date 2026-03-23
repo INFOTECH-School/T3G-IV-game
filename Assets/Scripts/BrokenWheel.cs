@@ -12,9 +12,6 @@ public class BrokenWheel : MonoBehaviour
 
     [Header("Guide Settings")]
     public GameObject guideGameObject;
-    public float activationRange = 3f;
-
-    private Transform _playerTransform;
 
     private void Start()
     {
@@ -25,25 +22,10 @@ public class BrokenWheel : MonoBehaviour
         {
             guideGameObject.SetActive(false);
         }
-        if (GameManager.Instance.Player != null)
-        {
-            _playerTransform = GameManager.Instance.Player.transform;
-        }
-    }
 
-    private void Update()
-    {
-        if (_playerTransform != null && guideGameObject != null)
+        if (sparklesToEnable)
         {
-            float distanceToPlayer = Vector3.Distance(transform.position, _playerTransform.position);
-            if (distanceToPlayer <= activationRange)
-            {
-                guideGameObject.SetActive(true);
-            }
-            else
-            {
-                guideGameObject.SetActive(false);
-            }
+            sparklesToEnable.SetActive(false);
         }
     }
 
@@ -67,7 +49,30 @@ public class BrokenWheel : MonoBehaviour
         {
             objectToEnable.SetActive(true);
         }
-        // The script is now disabled after fixing to prevent further interaction.
+        
+        // Hide the guide and disable the script to prevent further interaction.
+        if (guideGameObject)
+        {
+            guideGameObject.SetActive(false);
+        }
         enabled = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Show guide only if the wheel is not fixed and the player enters the trigger.
+        if (other.CompareTag("Player") && guideGameObject != null && !fixedWheelObject.activeSelf)
+        {
+            guideGameObject.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Hide guide when the player exits the trigger.
+        if (other.CompareTag("Player") && guideGameObject != null)
+        {
+            guideGameObject.SetActive(false);
+        }
     }
 }
