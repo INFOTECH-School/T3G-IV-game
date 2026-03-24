@@ -48,7 +48,7 @@ public class PauseMenuManager : MonoBehaviour
     public void QuitButton()
     {
         GameManager.Instance.SetState(GameManager.GameState.Gameplay);
-        SceneManager.LoadScene("MainMenu");
+        Utils.AsynchronousSceneLoad("MainMenu");
     }
 
     public void resumeButton()

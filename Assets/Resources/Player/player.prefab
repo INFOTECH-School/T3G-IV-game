@@ -263,7 +263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb7735ebda985524b8a99d23c769fb1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  interactionText: {fileID: 0}
   holdPoint: {fileID: 1432528708749770136}
   itemScale: 0.5
   itemLayer:

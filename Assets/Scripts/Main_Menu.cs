@@ -9,6 +9,6 @@ public class Main_Menu : MonoBehaviour
     }
     public void StartGame() //New Game
     {
-        SceneManager.LoadScene("Scene_TutorialGym");
+        Utils.AsynchronousSceneLoad("Scene_TutorialGym");
     }   
 }
