@@ -9,6 +9,7 @@ TagManager:
   - Activable
   - Prop
   - Throwable
+  - LoadingScreen
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Outlined
   - Hidden
   - NonEquipOutline
-  - 
+  - Loading3D
   - 
   - 
   - 
