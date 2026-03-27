@@ -42,6 +42,12 @@ public class Player : MonoBehaviour
             {
                 if (nearbyBasket && nearbyBasket.allowedItems.Contains(currentItem)) PlaceInBasket();
                 else if (nearbyWheel && currentItem == nearbyWheel.requiredItem) FixWheel();
+                else if (nearbyItem)
+                {
+                    // Player tries to pick up a new item while already holding one
+                    var feedback = currentItem.GetComponentInChildren<InteractionFeedback>();
+                    if (feedback) feedback.ShowErrorFeedback();
+                }
             }
             else if (nearbyItem)
             {

@@ -8,7 +8,8 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject settingsMenu;
     public GameObject ControlsPanel;
-
+    public GameObject basePanel;
+    
     private void Start()
     {
         PauseMenu.SetActive(false);
@@ -33,11 +34,17 @@ public class PauseMenuManager : MonoBehaviour
         {
             if (PauseMenu.activeSelf)
             {
+                basePanel.SetActive(true);
+                settingsMenu.SetActive(false);
+                ControlsPanel.SetActive(false);
                 PauseMenu.SetActive(false);
                 GameManager.Instance.SetState(GameManager.GameState.Gameplay);
             }
             else
             {
+                basePanel.SetActive(true);
+                settingsMenu.SetActive(false);
+                ControlsPanel.SetActive(false);
                 PauseMenu.SetActive(true);
                 GameManager.Instance.SetState(GameManager.GameState.Paused);
             }

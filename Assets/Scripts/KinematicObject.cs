@@ -314,7 +314,33 @@ public class KinematicObject : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, _startPosition) < 0.01f) return;
 
-        transform.position = Vector3.MoveTowards(transform.position, _startPosition, speed * deltaTime);
+        Vector3 currentPosition = transform.position;
+        Vector3 moveDirection = (_startPosition - currentPosition).normalized;
+        float maxMoveDistance = speed * deltaTime;
+        float distanceToStart = Vector3.Distance(currentPosition, _startPosition);
+        float actualMoveDistance = Mathf.Min(maxMoveDistance, distanceToStart);
+
+        if (_blockingCollider != null && _blockingCollider is BoxCollider)
+        {
+            BoxCollider boxCollider = _blockingCollider as BoxCollider;
+            Vector3 worldCenter = transform.TransformPoint(boxCollider.center);
+            Vector3 scaledHalfExtents = Vector3.Scale(boxCollider.size / 2, transform.lossyScale);
+            Quaternion castRotation = transform.rotation;
+            float skinWidth = 0.01f;
+            float checkDistance = actualMoveDistance + skinWidth;
+
+            RaycastHit hit;
+            if (Physics.BoxCast(worldCenter, scaledHalfExtents, moveDirection, out hit, castRotation, checkDistance, kinematicObstacleLayer))
+            {
+                if (hit.collider.gameObject != this.gameObject && hit.collider.GetComponent<KinematicObject>() != null)
+                {
+                    Debug.Log($"[KinematicObject] {gameObject.name} Reverse slide blocked by another KinematicObject: {hit.collider.name}", this);
+                    return;
+                }
+            }
+        }
+
+        transform.position = Vector3.MoveTowards(currentPosition, _startPosition, actualMoveDistance);
     }
 
     private void ReversePivot(float deltaTime)
@@ -468,8 +494,8 @@ public class KinematicObject : MonoBehaviour
                 Gizmos.DrawWireCube(targetTransform.position, Vector3.one * 0.5f);
                 
                 Gizmos.color = Color.yellow;
-                Vector3 startPos = Application.isPlaying ? _startPosition : transform.position;
-                Gizmos.DrawLine(startPos, targetTransform.position);
+                Vector3 startPoss = Application.isPlaying ? _startPosition : transform.position;
+                Gizmos.DrawLine(startPoss, targetTransform.position);
             }
         }
         
@@ -490,23 +516,34 @@ public class KinematicObject : MonoBehaviour
         Vector3 worldCenter = transform.TransformPoint(boxCollider.center);
         Vector3 scaledHalfExtents = Vector3.Scale(boxCollider.size / 2, transform.lossyScale);
         Quaternion castRotation = transform.rotation;
-        Vector3 moveDirection = (targetTransform.position - transform.position).normalized;
+        Vector3 forwardDirection = (targetTransform.position - transform.position).normalized;
+        Vector3 startPos = Application.isPlaying ? _startPosition : transform.position;
+        Vector3 reverseDirection = (startPos - transform.position).normalized;
 
         Matrix4x4 originalMatrix = Gizmos.matrix;
 
+        // Origin box
         Gizmos.color = Color.green;
         Gizmos.matrix = Matrix4x4.TRS(worldCenter, castRotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, scaledHalfExtents * 2);
 
+        // Forward cast end
         Gizmos.color = Color.red;
-        Vector3 endCenter = worldCenter + moveDirection * _gizmoCastDistance;
-        Gizmos.matrix = Matrix4x4.TRS(endCenter, castRotation, Vector3.one);
+        Vector3 forwardEnd = worldCenter + forwardDirection * _gizmoCastDistance;
+        Gizmos.matrix = Matrix4x4.TRS(forwardEnd, castRotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, scaledHalfExtents * 2);
+
+        // Reverse cast end
+        Gizmos.color = Color.magenta;
+        Vector3 reverseEnd = worldCenter + reverseDirection * _gizmoCastDistance;
+        Gizmos.matrix = Matrix4x4.TRS(reverseEnd, castRotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, scaledHalfExtents * 2);
 
         Gizmos.matrix = originalMatrix;
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(worldCenter, endCenter);
+        Gizmos.DrawLine(worldCenter, forwardEnd);
+        Gizmos.DrawLine(worldCenter, reverseEnd);
     }
 
     void OnDrawGizmosSelected()

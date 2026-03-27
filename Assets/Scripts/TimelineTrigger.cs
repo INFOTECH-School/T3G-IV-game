@@ -23,10 +23,20 @@ public class TimelineTrigger : MonoBehaviour
     public List<GameObject> hideObjects = new List<GameObject>();
     public List<GameObject> hideOutlines = new List<GameObject>();
     private Dictionary<GameObject, int> _outlineLayers = new Dictionary<GameObject, int>();
+    private InteractionFeedback _feedback;
+
+    private void Awake()
+    {
+        _feedback = GetComponentInChildren<InteractionFeedback>();
+    }
 
     public void Play()
     {
-        if (playOnce && _played) return;
+        if (playOnce && _played)
+        {
+            if (_feedback) _feedback.ShowErrorFeedback();
+            return;
+        }
         if (!director)
         {
             Debug.LogWarning("TimelineTrigger: Director not set!", this);
@@ -43,11 +53,16 @@ public class TimelineTrigger : MonoBehaviour
             {
                 case 1 when !GameManager.Instance.LevelOperator.canEndLevel1:
                 case 2 when !GameManager.Instance.LevelOperator.canEndLevel2:
+                    if (_feedback) _feedback.ShowErrorFeedback();
                     return;
             }
         }
 
-        if (level2 && GameManager.Instance.LevelOperator.currentLevel != 2) return;
+        if (level2 && GameManager.Instance.LevelOperator.currentLevel != 2)
+        {
+            if (_feedback) _feedback.ShowErrorFeedback();
+            return;
+        }
         GameManager.Instance.SetState(GameManager.GameState.Cutscene);
         foreach (var objectToHide in hideObjects)
         {
@@ -104,7 +119,11 @@ public class TimelineTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && triggerer == Triggerer.Player)
         {
-            if (playOnce && _played) return;
+            if (playOnce && _played)
+            {
+                if (_feedback) _feedback.ShowErrorFeedback();
+                return;
+            }
             if (!director) return;
             if (interactKey != KeyCode.Alpha0)
             {

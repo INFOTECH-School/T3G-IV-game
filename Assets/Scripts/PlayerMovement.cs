@@ -137,9 +137,18 @@ public class PlayerMovement : MonoBehaviour
         // Start Aiming (Only if grounded, not moving fast, and holding a throwable item)
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         if (Input.GetMouseButtonDown(1) && _isGrounded && horizontalVel.magnitude < 0.5f &&
-            GameManager.Instance.Player.currentItem && GameManager.Instance.Player.currentItem.CompareTag("Throwable"))
+            GameManager.Instance.Player.currentItem)
         {
-            _isAiming = true;
+            if (GameManager.Instance.Player.currentItem.CompareTag("Throwable"))
+            {
+                _isAiming = true;
+            }
+            else
+            {
+                // Item is not throwable — show error feedback on the held item
+                var feedback = GameManager.Instance.Player.currentItem.GetComponentInChildren<InteractionFeedback>();
+                if (feedback) feedback.ShowErrorFeedback();
+            }
         }
 
         if (_isAiming)

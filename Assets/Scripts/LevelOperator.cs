@@ -22,6 +22,11 @@ public class LevelOperator : MonoBehaviour
                 canEndLevel1 = true;
                 if (level1ProgressBarCanvas) level1ProgressBarCanvas.SetActive(false);
             }
+            else
+            {
+                canEndLevel1 = false;
+                if (level1ProgressBarCanvas) level1ProgressBarCanvas.SetActive(true);
+            }
             UpdateProgressBar();
         }
     }
@@ -41,6 +46,11 @@ public class LevelOperator : MonoBehaviour
                 _level2DependencyScore = 0;
                 canEndLevel2 = true;
                 if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(false);
+            }
+            else
+            {
+                canEndLevel2 = false;
+                if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(true);
             }
             UpdateProgressBar();
         }
