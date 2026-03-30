@@ -7,8 +7,8 @@ public class Main_Menu : MonoBehaviour
     {
         Application.Quit();
     }
-    public void StartGame()
+    public void StartGame() //New Game
     {
-        SceneManager.LoadScene("Scenes/Test_Gym");
+        Utils.AsynchronousSceneLoad("Scene_TutorialGym");
     }   
 }

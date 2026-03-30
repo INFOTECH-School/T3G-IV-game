@@ -144,11 +144,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3989928427754465054}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38b39345e56afe04f90b6e0494a0bfc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::AliceController
-  waypoints: []
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   currentTargetIndex: 0
   isLooped: 0
