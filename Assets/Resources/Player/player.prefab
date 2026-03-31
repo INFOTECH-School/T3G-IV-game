@@ -237,6 +237,8 @@ MonoBehaviour:
   stoppingSpeed: 8
   _throwingPoint: {fileID: 3621689810019117177}
   _lineRenderer: {fileID: 4657702855204142606}
+  _throwHitIndicator: {fileID: 0}
+  _throwTargetTag: ThrowTarget
   _groundLayer:
     serializedVersion: 2
     m_Bits: 8

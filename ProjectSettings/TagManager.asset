@@ -10,6 +10,7 @@ TagManager:
   - Prop
   - Throwable
   - LoadingScreen
+  - ThrowTarget
   layers:
   - Default
   - TransparentFX
