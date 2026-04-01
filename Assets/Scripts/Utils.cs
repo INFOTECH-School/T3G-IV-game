@@ -8,8 +8,26 @@ public static class Utils
     {
         var loading = Object.Instantiate(Resources.Load<GameObject>("UI/LoadingScreen"));
         Object.DontDestroyOnLoad(loading);
-        GameManager.Instance.SetState(GameManager.GameState.Cutscene);
-        GameManager.Instance.StartCoroutine(LoadSceneAfterDelay(sceneName, loading));
+
+        // Use GameManager if it exists, otherwise find a component on the loading screen to run the coroutine.
+        var runner = (MonoBehaviour)GameManager.Instance ?? loading.GetComponent<MonoBehaviour>();
+
+        if (GameManager.Instance)
+        {
+            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+        }
+
+        if (runner)
+        {
+            runner.StartCoroutine(LoadSceneAfterDelay(sceneName, loading));
+        }
+        else
+        {
+            // Fallback if no runner is found (GameManager is null and loading screen has no MonoBehaviours)
+            Debug.LogError("Could not find a MonoBehaviour to run the scene loading coroutine.");
+            if (loading) Object.Destroy(loading);
+            SceneManager.LoadScene(sceneName);
+        }
     }
 
     private static IEnumerator LoadSceneAfterDelay(string sceneName, GameObject loading)
@@ -23,7 +41,7 @@ public static class Utils
         if (asyncLoad != null) asyncLoad.completed += (asyncOperation) =>
         {
             Application.backgroundLoadingPriority = ThreadPriority.Normal;
-            GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+            if (GameManager.Instance) GameManager.Instance.SetState(GameManager.GameState.Gameplay);
             if (loading) Object.Destroy(loading);
         };
 
