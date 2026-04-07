@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float _pushSpeed = 3f;
     [Tooltip("How quickly the player stops when grounded and not moving.")]
     public float stoppingSpeed = 5f;
+    public float _rotationSpeed = 15f;
 
     [Header("Throw Settings")]
     public Transform _throwingPoint;
@@ -116,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleNormalInput()
     {
-        var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         _inputDirection = _rotation * rawInput;
 
         // If there's any movement input, wake up the Rigidbody to ensure OnCollisionStay is called.
@@ -126,7 +127,8 @@ public class PlayerMovement : MonoBehaviour
         // Only rotate toward movement if we aren't aiming
         if (!_isAiming && _inputDirection.magnitude > 0.1f)
         {
-            transform.rotation = Quaternion.LookRotation(_inputDirection);
+            Quaternion targetRotation = Quaternion.LookRotation(_inputDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
         }
     }
 

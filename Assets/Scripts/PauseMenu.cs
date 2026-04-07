@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PauseMenuManager : MonoBehaviour
-
 {
     public GameObject PauseMenu;
     public GameObject settingsMenu;
@@ -13,7 +12,6 @@ public class PauseMenuManager : MonoBehaviour
     private void Start()
     {
         PauseMenu.SetActive(false);
-        
     }
 
     void Update()
@@ -24,10 +22,9 @@ public class PauseMenuManager : MonoBehaviour
             ChangePauseMenuState();
             settingsMenu.SetActive(false);
             ControlsPanel.SetActive(false);
-            
-            
         }
     }
+
     public void ChangePauseMenuState()
     {
         if (PauseMenu)
@@ -51,7 +48,6 @@ public class PauseMenuManager : MonoBehaviour
         }
     }
     
-    
     public void QuitButton()
     {
         GameManager.Instance.SetState(GameManager.GameState.Gameplay);
@@ -65,7 +61,21 @@ public class PauseMenuManager : MonoBehaviour
 
     public void saveButton()
     {
-        //SaveManager.Save()
-        
+        // This will save the game to the currently selected save slot.
+        // You'll need to set the CurrentSaveSlot in the GameManager when the player
+        // selects a slot from your UI.
+        GameManager.Instance.SaveGame(GameManager.Instance.CurrentSaveSlot);
     }
+
+    // public void loadButton(int slotNumber)//main menu
+    // {
+    //     // This can be called from your UI to load a specific save slot.
+    //     GameManager.Instance.LoadGame(slotNumber);
+    // }
+    //
+    // public void SetSaveSlot(int slotNumber)
+    // {
+    //     // Call this from your UI when the player selects a save slot.
+    //     GameManager.Instance.CurrentSaveSlot = slotNumber;
+    // }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Basket : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Basket : MonoBehaviour
     public GameObject holdingPoint2;
 
     public List<GameObject> basketPoints =  new List<GameObject>();
-    private int _basketCounter = 0;
+    [FormerlySerializedAs("_basketCounter")] public int basketCounter = 0;
     public bool level1 = false;
     public bool level2 = false;
     public List<Item> allowedItems = new List<Item>();
@@ -33,6 +34,7 @@ public class Basket : MonoBehaviour
         if (holdingPoint2) holdingPoint2.SetActive(false);
         if (finishResult) finishResult.SetActive(false);
         if (guide) guide.SetActive(false);
+        Debug.Log("Initialized Basket in Start method");
     }
 
     // Called by Player when they press 'E'
@@ -76,10 +78,10 @@ public class Basket : MonoBehaviour
             }
             else if (level2)
             {
-                basketPoints[_basketCounter].SetActive(true);
+                basketPoints[basketCounter].SetActive(true);
                 Destroy(item.gameObject);
-                _basketCounter++;
-                if (_basketCounter == basketPoints.Count)
+                basketCounter++;
+                if (basketCounter == basketPoints.Count)
                 {
                     if (finishResult) finishResult.SetActive(true);
                 }

@@ -8950,6 +8950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: throwItem
 --- !u!4 &201111638
 Transform:
   m_ObjectHideFlags: 0
@@ -9915,6 +9916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d512b1c5861f91449cc2eaa367e65e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::LevelOperator
+  destroyedItemsID: []
   currentLevel: 1
   canEndLevel1: 0
   canEndLevel2: 0
@@ -10843,6 +10845,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: Shelf1
 --- !u!1001 &453500842
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16704,6 +16708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: rock1
 --- !u!1 &484388909
 GameObject:
   m_ObjectHideFlags: 0
@@ -17578,6 +17583,7 @@ MonoBehaviour:
   objectToEnable: {fileID: 0}
   sparklesToEnable: {fileID: 1709549098}
   truck: 1
+  objectFixed: 0
   guideGameObject: {fileID: 1650126196}
 --- !u!135 &534177652
 SphereCollider:
@@ -17614,6 +17620,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 1
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: truckHandleObjective
 --- !u!64 &534744958
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -18204,6 +18212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: rock3
 --- !u!1001 &572544015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25454,6 +25463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: truckWheel
 --- !u!135 &683647275
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -25739,6 +25749,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: truck
 --- !u!54 &703404840
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -31965,6 +31977,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: Shelf5
 --- !u!64 &808691694
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -32192,6 +32206,7 @@ MonoBehaviour:
   - {fileID: 280365519}
   - {fileID: 895830379}
   - {fileID: 1120586593}
+  basketCounter: 0
   level1: 0
   level2: 1
   allowedItems:
@@ -32818,6 +32833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: rock0
 --- !u!1 &912520077
 GameObject:
   m_ObjectHideFlags: 0
@@ -43774,6 +43790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: rock2
 --- !u!64 &1014682029
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -49665,7 +49682,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.91927
+      value: 54.918896
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -49673,7 +49690,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.852861
+      value: -14.8524885
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -55012,6 +55029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: truckHandle
 --- !u!1 &1128155383
 GameObject:
   m_ObjectHideFlags: 0
@@ -56788,6 +56806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: rock4
 --- !u!1 &1252229002
 GameObject:
   m_ObjectHideFlags: 0
@@ -57303,7 +57322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2962427450671185888, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
       propertyPath: m_Interactable
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2962427450671185888, guid: 5866c8314e57e8440b8a31344909a7b7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -74824,6 +74843,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: Shelf4
 --- !u!1001 &1454094183
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -81242,6 +81263,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2508754058359981024, guid: c317e5a5dd066f548b292770aee890e8, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3149490938363670283, guid: c317e5a5dd066f548b292770aee890e8, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -81286,7 +81311,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2508754058359981024, guid: c317e5a5dd066f548b292770aee890e8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -82112,6 +82138,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: Shelf2
 --- !u!1 &1638576341
 GameObject:
   m_ObjectHideFlags: 0
@@ -93935,6 +93963,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 1
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: car1
 --- !u!54 &1763393223
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -96088,7 +96118,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.91927
+      value: 54.918896
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -96096,7 +96126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.852861
+      value: -14.8524885
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -101806,6 +101836,7 @@ MonoBehaviour:
   objectToEnable: {fileID: 0}
   sparklesToEnable: {fileID: 1709549098}
   truck: 1
+  objectFixed: 0
   guideGameObject: {fileID: 206494669}
 --- !u!135 &2045848674
 SphereCollider:
@@ -101842,6 +101873,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 1
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: truckWheelObjective
 --- !u!1001 &2053618774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -108891,6 +108924,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: 
 --- !u!1 &859235135818323261
 GameObject:
   m_ObjectHideFlags: 0
@@ -110465,6 +110500,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 0}
+  isCompleted: 0
+  id: 
 --- !u!1 &2979191355097304987
 GameObject:
   m_ObjectHideFlags: 0
@@ -111414,6 +111451,7 @@ MonoBehaviour:
   holdingPoint1: {fileID: 859235135818323261}
   holdingPoint2: {fileID: 7146454008756166847}
   basketPoints: []
+  basketCounter: 0
   level1: 1
   level2: 0
   allowedItems:
@@ -114488,6 +114526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: plank1
 --- !u!33 &8396322695640584926
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -114922,6 +114961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: plank2
 --- !u!95 &9221568900353911575
 Animator:
   serializedVersion: 7

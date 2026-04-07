@@ -2103,6 +2103,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::LevelObjective
   truckObjective: 0
   finishResult: {fileID: 2023342977}
+  isCompleted: 0
+  id: 
 --- !u!95 &357047573
 Animator:
   serializedVersion: 7
@@ -3837,6 +3839,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 3149490938363670283, guid: c317e5a5dd066f548b292770aee890e8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8751470369829622904, guid: c317e5a5dd066f548b292770aee890e8, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -4403,7 +4409,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14971
+      value: -68.14949
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4411,7 +4417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.729852
+      value: -13.730069
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4663,7 +4669,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14971
+      value: -68.14949
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4671,7 +4677,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.729852
+      value: -13.730069
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6905,6 +6911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: 
 --- !u!65 &1147985946
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8159,6 +8166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2021f860d77320d44ab89191b39882bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Scripts::Item
+  id: 
 --- !u!54 &1408881135
 Rigidbody:
   m_ObjectHideFlags: 0

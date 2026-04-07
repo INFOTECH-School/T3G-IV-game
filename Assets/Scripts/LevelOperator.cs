@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelOperator : MonoBehaviour
 {
+    public List<string> destroyedItemsID = new List<string>();
+    private List<string> _playedCutscenes = new List<string>();
+    private List<ObjectiveData> _objectives = new List<ObjectiveData>();
     public int currentLevel = 1;
     public bool canEndLevel1 = false;
 
@@ -15,7 +19,11 @@ public class LevelOperator : MonoBehaviour
         get { return _level1DependencyScore; }
         set
         {
-            _level1DependencyScore = value;
+            if (GameManager.Instance.CurrentGameState != GameManager.GameState.Cutscene)
+            {
+                _level1DependencyScore = value;
+            }
+
             if (_level1DependencyScore <= 0)
             {
                 _level1DependencyScore = 0;
@@ -186,5 +194,21 @@ public class LevelOperator : MonoBehaviour
         {
             truckTriggerCollider.enabled = false;
         }
+    }
+
+    public void AddPlayedCutscene(string cutsceneName)
+    {
+        _playedCutscenes.Add(cutsceneName);
+    }
+
+    public List<string> GetPlayedCutscenes()
+    {
+        return _playedCutscenes;
+    }
+
+    public List<ObjectiveData> GetObjectivesData()
+    {
+        _objectives = Utils.GetLevelObjectivesData();
+        return _objectives;
     }
 }

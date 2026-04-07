@@ -104,6 +104,25 @@ public class TimelineTrigger : MonoBehaviour
                 outlineToHide.layer = layer;
             }
         }
+
+        if (GameManager.Instance.LevelOperator)
+        {
+            GameManager.Instance.LevelOperator.AddPlayedCutscene(gameObject.name);
+            if (ending)
+            {
+                switch (GameManager.Instance.LevelOperator.currentLevel)
+                {
+                    case 1:
+                        GameManager.Instance.LevelOperator.canEndLevel1 = true;
+                        GameManager.Instance.LevelOperator.level1DependencyScore = 0;
+                        break;
+                    case 2:
+                        GameManager.Instance.LevelOperator.canEndLevel2 = true;
+                        GameManager.Instance.LevelOperator.level2DependencyScore = 0;
+                        break;
+                }
+            }
+        }
         director.stopped -= OnCutsceneFinished;
     }
 
@@ -119,9 +138,10 @@ public class TimelineTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && triggerer == Triggerer.Player)
         {
+            Debug.Log(_played + " played");
             if (playOnce && _played)
             {
-                if (_feedback) _feedback.ShowErrorFeedback();
+                if (_feedback && interactKey == KeyCode.Alpha0) _feedback.ShowErrorFeedback(); 
                 return;
             }
             if (!director) return;
@@ -131,7 +151,10 @@ public class TimelineTrigger : MonoBehaviour
             }
             else
             {
-                PlayCutscene(SceneManager.GetActiveScene().name);
+                if (!_played)
+                {
+                    PlayCutscene(SceneManager.GetActiveScene().name);
+                }
             }
         }
         
@@ -159,5 +182,16 @@ public class TimelineTrigger : MonoBehaviour
                 _canPlay = false;
             }
         }
+    }
+
+    public void GhostPlay()
+    {
+        Debug.Log("Performed Ghost Play");
+        _played = true;
+        director.Play();
+        director.time = director.duration;
+        director.Evaluate();
+        director.Stop();
+        this.enabled = false;
     }
 }

@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class LevelObjective : MonoBehaviour
 {
     public bool truckObjective;
     public GameObject finishResult;
-    private bool _isCompleted = false;
+    [FormerlySerializedAs("_isCompleted")] public bool isCompleted = false;
+    public string id;
 
     private void Start()
     {
@@ -14,9 +16,9 @@ public class LevelObjective : MonoBehaviour
 
     public void CompleteObjective()
     {
-        if (_isCompleted) return;
+        if (isCompleted) return;
 
-        _isCompleted = true;
+        isCompleted = true;
         if (truckObjective && GameManager.Instance.LevelOperator)
         {
             GameManager.Instance.LevelOperator.ProgressTruck();
@@ -31,9 +33,9 @@ public class LevelObjective : MonoBehaviour
 
     public void RegressObjective()
     {
-        if (!_isCompleted) return;
+        if (!isCompleted) return;
 
-        _isCompleted = false;
+        isCompleted = false;
         if (truckObjective && GameManager.Instance.LevelOperator)
         {
             GameManager.Instance.LevelOperator.RegressTruck();
