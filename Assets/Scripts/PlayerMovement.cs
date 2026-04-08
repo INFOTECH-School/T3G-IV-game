@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Throw Settings")]
     public Transform _throwingPoint;
     public LineRenderer _lineRenderer;
+    public GameObject _throwHitIndicator;
+    [Tooltip("The indicator will only appear if the aim hits an object with this tag. Leave empty to show on any surface.")]
+    public string _throwTargetTag;
     public LayerMask _groundLayer;
     public int _lineSegments = 30;
     public float _timeBetweenDots = 0.1f; // Restored this variable
@@ -66,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (GameManager.Instance) GameManager.Instance.RegisterPlayerMovement(this);
+
+        if (_throwHitIndicator) _throwHitIndicator.SetActive(false);
     }
 
     private void Update()
@@ -261,9 +266,23 @@ public class PlayerMovement : MonoBehaviour
 
             _calculatedVelocity = CalculateVelocity(_throwingPoint.position, hit.point, _timeToTarget);
             DrawTrajectory(_calculatedVelocity);
+
+            // Handle the hit indicator visibility
+            if (_throwHitIndicator != null)
+            {
+                // Show indicator only if the tag matches, or if no tag is specified.
+                bool showIndicator = string.IsNullOrEmpty(_throwTargetTag) || hit.collider.CompareTag(_throwTargetTag);
+                _throwHitIndicator.SetActive(showIndicator);
+
+                if (showIndicator)
+                {
+                    _throwHitIndicator.transform.position = hit.point;
+                }
+            }
         }
         else
         {
+            // If raycast hits nothing, invalidate target and hide visuals
             _hasValidTarget = false;
             HideTrajectory();
         }
@@ -292,7 +311,11 @@ public class PlayerMovement : MonoBehaviour
         _lineRenderer.SetPositions(positions);
     }
 
-    private void HideTrajectory() => _lineRenderer.positionCount = 0;
+    private void HideTrajectory()
+    {
+        _lineRenderer.positionCount = 0;
+        if (_throwHitIndicator) _throwHitIndicator.SetActive(false);
+    }
 
     private void ThrowItem()
     {
