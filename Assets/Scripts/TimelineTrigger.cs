@@ -189,6 +189,7 @@ public class TimelineTrigger : MonoBehaviour
         Debug.Log("Performed Ghost Play");
         _played = true;
         director.Play();
+        director.Evaluate();
         director.time = director.duration;
         director.Evaluate();
         director.Stop();

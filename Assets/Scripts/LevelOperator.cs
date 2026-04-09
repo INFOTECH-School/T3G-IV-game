@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class LevelOperator : MonoBehaviour
 {
@@ -19,10 +20,8 @@ public class LevelOperator : MonoBehaviour
         get { return _level1DependencyScore; }
         set
         {
-            if (GameManager.Instance.CurrentGameState != GameManager.GameState.Cutscene)
-            {
-                _level1DependencyScore = value;
-            }
+            _level1DependencyScore = value;
+            Debug.Log("level 1 set: " + value);
 
             if (_level1DependencyScore <= 0)
             {
@@ -49,6 +48,7 @@ public class LevelOperator : MonoBehaviour
         set
         {
             _level2DependencyScore = value;
+            Debug.Log("level 2 set: " + value);
             if (_level2DependencyScore <= 0)
             {
                 _level2DependencyScore = 0;
@@ -179,10 +179,12 @@ public class LevelOperator : MonoBehaviour
     {
         if (currentLevel == 1 && level1ProgressBar != null)
         {
+            Debug.Log("Updating level 1 progress bar: " + _initialLevel1Score + ", " + _level1DependencyScore);
             level1ProgressBar.value = _initialLevel1Score - _level1DependencyScore;
         }
         else if (currentLevel == 2 && level2ProgressBar != null)
         {
+            Debug.Log("Updating level 2 progress bar: " + _initialLevel2Score + ", " + _level2DependencyScore);
             level2ProgressBar.value = _initialLevel2Score - _level2DependencyScore;
         }
     }

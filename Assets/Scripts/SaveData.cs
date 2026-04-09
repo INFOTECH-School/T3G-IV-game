@@ -18,6 +18,7 @@ public class SaveData
     public List<BasketData> basketsProgress;
     public List<BrokenWheelData> brokenWheelsProgress;
     public List<string> destroyedItems;
+    public List<string> playedIllustrationCutscenes = new List<string>();
 }
 
 [Serializable]

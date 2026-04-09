@@ -29,6 +29,8 @@ public class KinematicObject : MonoBehaviour
     [Header("Pivot Settings (Only for Pivot type)")]
     public Transform pivotAnchor;
     public float maxRotationAngle = 90f;
+    [Tooltip("The starting rotation offset from the object's initial rotation in the editor.")]
+    public float initialRotationAngle = 0f;
 
     [Header("Effects")]
     [SerializeField] private GameObject sparkleEffect;
@@ -52,11 +54,23 @@ public class KinematicObject : MonoBehaviour
     private bool _targetReachedEventFired;
     private LevelObjective _levelObjectiveComponent;
     private bool _isCompleted;
+    private Vector3 _startDirectionToPivot;
 
     void Awake()
     {
         _startPosition = transform.position;
         _startRotation = transform.rotation;
+        
+        if (movementType == MovementType.Pivot && pivotAnchor != null)
+        {
+            // The direction vector from pivot to the object as placed in the editor.
+            Vector3 currentDirection = transform.position - pivotAnchor.position;
+            // We find the direction vector for angle 0 by rotating the current direction vector backwards by initialRotationAngle.
+            _startDirectionToPivot = Quaternion.Euler(0, -initialRotationAngle, 0) * currentDirection;
+            // The current rotation angle is the one set in the inspector.
+            _currentRotationAngle = initialRotationAngle;
+        }
+
         TryGetComponent(out _levelObjectiveComponent);
         ValidateSetup();
         if (fall_guide)
@@ -251,7 +265,7 @@ public class KinematicObject : MonoBehaviour
         if (!pivotAnchor) return;
 
         float rotationDirection = Mathf.Sign(maxRotationAngle);
-        float targetAngle = maxRotationAngle;
+        float targetAngle = initialRotationAngle + maxRotationAngle;
 
         if ((rotationDirection > 0 && _currentRotationAngle >= targetAngle) ||
             (rotationDirection < 0 && _currentRotationAngle <= targetAngle))
@@ -260,19 +274,14 @@ public class KinematicObject : MonoBehaviour
             return;
         }
 
-        float rotationStep = speed * deltaTime * rotationDirection;
-
-        if ((rotationDirection > 0 && _currentRotationAngle + rotationStep > targetAngle) ||
-            (rotationDirection < 0 && _currentRotationAngle + rotationStep < targetAngle))
-        {
-            rotationStep = targetAngle - _currentRotationAngle;
-        }
+        float rotationAmount = speed * deltaTime;
+        float remainingAngle = Mathf.Abs(targetAngle - _currentRotationAngle);
+        float rotationStep = Mathf.Min(rotationAmount, remainingAngle) * rotationDirection;
 
         transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
         _currentRotationAngle += rotationStep;
 
-        if ((rotationDirection > 0 && _currentRotationAngle >= targetAngle) ||
-            (rotationDirection < 0 && _currentRotationAngle <= targetAngle))
+        if (Mathf.Abs(_currentRotationAngle - targetAngle) < 0.01f)
         {
             HandleTargetReached();
         }
@@ -348,22 +357,19 @@ public class KinematicObject : MonoBehaviour
         if (!pivotAnchor) return;
 
         float rotationDirection = Mathf.Sign(maxRotationAngle);
+        float targetAngle = initialRotationAngle;
 
-        if ((rotationDirection > 0 && _currentRotationAngle <= 0) ||
-            (rotationDirection < 0 && _currentRotationAngle >= 0))
+        if ((rotationDirection > 0 && _currentRotationAngle <= targetAngle) ||
+            (rotationDirection < 0 && _currentRotationAngle >= targetAngle))
         {
             return;
         }
 
-        float rotationStep = speed * deltaTime * rotationDirection;
+        float rotationAmount = speed * deltaTime;
+        float remainingAngle = Mathf.Abs(_currentRotationAngle - targetAngle);
+        float rotationStep = Mathf.Min(rotationAmount, remainingAngle) * rotationDirection;
 
-        if ((rotationDirection > 0 && _currentRotationAngle - rotationStep < 0) ||
-            (rotationDirection < 0 && _currentRotationAngle - rotationStep > 0))
-        {
-            rotationStep = _currentRotationAngle;
-        }
-
-        transform.RotateAround(pivotAnchor.position, Vector3.down, rotationStep);
+        transform.RotateAround(pivotAnchor.position, Vector3.up, -rotationStep);
         _currentRotationAngle -= rotationStep;
     }
 
@@ -449,10 +455,11 @@ public class KinematicObject : MonoBehaviour
                 return Vector3.Distance(transform.position, targetTransform.position) < 0.01f;
                 
             case MovementType.Pivot:
+                float targetAngle = initialRotationAngle + maxRotationAngle;
                 if (maxRotationAngle > 0)
-                    return _currentRotationAngle >= maxRotationAngle;
+                    return _currentRotationAngle >= targetAngle;
                 else
-                    return _currentRotationAngle <= maxRotationAngle;
+                    return _currentRotationAngle <= targetAngle;
                 
             default:
                 return false;
@@ -463,7 +470,7 @@ public class KinematicObject : MonoBehaviour
     {
         transform.position = _startPosition;
         transform.rotation = _startRotation;
-        _currentRotationAngle = 0f;
+        _currentRotationAngle = initialRotationAngle;
         _isReturning = false;
         
         if (_isInteracting)
@@ -551,19 +558,22 @@ public class KinematicObject : MonoBehaviour
         if (movementType == MovementType.Pivot && pivotAnchor != null)
         {
             Gizmos.color = Color.yellow;
-            Vector3 from = transform.position - pivotAnchor.position;
             
+            Vector3 fromDirection = (Application.isPlaying && _startDirectionToPivot != Vector3.zero) 
+                ? _startDirectionToPivot 
+                : Quaternion.Euler(0, -initialRotationAngle, 0) * (transform.position - pivotAnchor.position);
+
             int segments = 20;
             float angleStep = maxRotationAngle / segments;
-            
+
             for (int i = 0; i < segments; i++)
             {
-                float angle1 = angleStep * i;
-                float angle2 = angleStep * (i + 1);
-                
-                Vector3 point1 = pivotAnchor.position + Quaternion.Euler(0, angle1, 0) * from;
-                Vector3 point2 = pivotAnchor.position + Quaternion.Euler(0, angle2, 0) * from;
-                
+                float angle1 = initialRotationAngle + angleStep * i;
+                float angle2 = initialRotationAngle + angleStep * (i + 1);
+
+                Vector3 point1 = pivotAnchor.position + Quaternion.Euler(0, angle1, 0) * fromDirection;
+                Vector3 point2 = pivotAnchor.position + Quaternion.Euler(0, angle2, 0) * fromDirection;
+
                 Gizmos.DrawLine(point1, point2);
             }
         }

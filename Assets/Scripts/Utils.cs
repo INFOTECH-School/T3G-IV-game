@@ -48,10 +48,19 @@ public static class Utils //Player pos might not be getting loaded, level progre
         {
             GameManager.Instance.ApplyLoadedData(dataToLoad);
         }
-                
+        InitializeIllustrationCutscenes();
         Application.backgroundLoadingPriority = ThreadPriority.Normal;
         GameManager.Instance.SetState(GameManager.GameState.Gameplay);
         if (loading) Object.Destroy(loading);
+    }
+
+    private static void InitializeIllustrationCutscenes()
+    {
+        IllustrationCutscene[] illustrationCutscenes = Object.FindObjectsByType<IllustrationCutscene>(FindObjectsSortMode.None);
+        foreach (IllustrationCutscene cutscene in illustrationCutscenes)
+        {
+            cutscene.InitializeAfterLoad();
+        }
     }
     
     public static Item GetItemByID(string itemID)
@@ -183,5 +192,37 @@ public static class Utils //Player pos might not be getting loaded, level progre
         }
 
         return brokenWheelsProgress;
+    }
+    
+    public static List<string> GetPlayedIllustrationCutscenes()
+    {
+        IllustrationCutscene[] illustrationCutscenes =
+            Object.FindObjectsByType<IllustrationCutscene>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        List<string> playedIllustrationCutscenes = new List<string>();
+
+        foreach (IllustrationCutscene cutscene in illustrationCutscenes)
+        {
+            if (cutscene.played)
+            {
+                playedIllustrationCutscenes.Add(cutscene.gameObject.name);
+            }
+        }
+        return playedIllustrationCutscenes;
+    }
+
+    public static IllustrationCutscene GetIllustrationCutsceneByName(string illustrationCutsceneName)
+    {
+        if (string.IsNullOrEmpty(illustrationCutsceneName)) return null;
+
+        IllustrationCutscene[] illustrationCutscenes =
+            Object.FindObjectsByType<IllustrationCutscene>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (IllustrationCutscene cutscene in illustrationCutscenes)
+        {
+            if (cutscene.gameObject.name == illustrationCutsceneName)
+            {
+                return cutscene;
+            }
+        }
+        return null;
     }
 }

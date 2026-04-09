@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
     {
         Gameplay,
         Paused,
-        Cutscene
+        Cutscene,
+        Loading
     }
     public GameState CurrentGameState = GameState.Gameplay;
     void Awake()
@@ -51,7 +52,8 @@ public class GameManager : MonoBehaviour
             levelProgress = 0,
             basketsProgress = Utils.GetBasketsProgressData(),
             brokenWheelsProgress = Utils.GetBrokenWheelProgressData(),
-            destroyedItems = LevelOperator.destroyedItemsID
+            destroyedItems = LevelOperator.destroyedItemsID,
+            playedIllustrationCutscenes = Utils.GetPlayedIllustrationCutscenes()
         };
 
         SaveManager.SaveGame(slotNumber, data);
@@ -59,6 +61,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame(int slotNumber)
     {
+        SetState(GameState.Loading);
         SaveData data = SaveManager.LoadGame(slotNumber);
         if (data == null)
         {
@@ -79,15 +82,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (Player)
-        {
-            Player.transform.position = data.playerPosition.ToVector3();
-            Player.GetComponent<PlayerInteraction>().currentState = data.playerState;
-            if (!string.IsNullOrEmpty(data.currentHeldItemId))
-            {
-                Player.Equip(Utils.GetItemByID(data.currentHeldItemId));
-            }
-        }
+        SetState(GameState.Loading);
 
         if (data.destroyedItems.Count > 0)
         {
@@ -171,6 +166,31 @@ public class GameManager : MonoBehaviour
             LevelOperator.truckDependencyScore = data.truckDependencyScore;
         }
 
+        if (data.playedIllustrationCutscenes.Count > 0)
+        {
+            foreach (string illustrationCutsceneData in data.playedIllustrationCutscenes)
+            {
+                IllustrationCutscene illustrationCutscene =
+                    Utils.GetIllustrationCutsceneByName(illustrationCutsceneData);
+                if (illustrationCutscene)
+                {
+                    Debug.Log(illustrationCutscene + "set to true");
+                    illustrationCutscene.played = true;
+                }
+            }
+        }
+        
+        if (Player)
+        {
+            Player.transform.position = data.playerPosition.ToVector3();
+            Player.GetComponent<PlayerInteraction>().currentState = data.playerState;
+            if (!string.IsNullOrEmpty(data.currentHeldItemId))
+            {
+                Player.Equip(Utils.GetItemByID(data.currentHeldItemId));
+            }
+        }
+
+        SetState(GameState.Gameplay);
         Debug.Log("Game state loaded.");
     }
 
@@ -182,9 +202,14 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 1;
                 break;
             case GameState.Paused:
+                if (CurrentGameState == GameState.Loading) return;
                 Time.timeScale = 0;
                 break;
             case GameState.Cutscene:
+                if (CurrentGameState == GameState.Loading) return;
+                Time.timeScale = 1;
+                break;
+            case GameState.Loading:
                 Time.timeScale = 1;
                 break;
         }
