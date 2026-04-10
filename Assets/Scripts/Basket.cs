@@ -44,6 +44,7 @@ public class Basket : MonoBehaviour
         {
             if (level1)
             {
+                Debug.Log(_isHoldingPoint1Free + ", " + _isHoldingPoint2Free + " Receive function");
                 if (_isHoldingPoint1Free)
                 {
                     GameManager.Instance.LevelOperator.ProgressLevel();
@@ -101,5 +102,19 @@ public class Basket : MonoBehaviour
     public bool HasSpace()
     {
         return _isHoldingPoint1Free || _isHoldingPoint2Free;
+    }
+
+    public void ChangeHoldingPointState(int number, bool state)
+    {
+        switch (number)
+        {
+            case 1:
+                _isHoldingPoint1Free = state;
+                break;
+            case 2:
+                _isHoldingPoint2Free = state;
+                break;
+        }
+        Debug.Log(_isHoldingPoint1Free + ", " + _isHoldingPoint2Free);
     }
 }

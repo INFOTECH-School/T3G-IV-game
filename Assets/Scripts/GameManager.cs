@@ -136,12 +136,22 @@ public class GameManager : MonoBehaviour
                 if (basket)
                 {
                     basket.basketCounter = basketData.basketCounter;
-                    if (basket.holdingPoint1) basket.holdingPoint1.SetActive(basketData.holdingPoint1Active);
-                    if (basket.holdingPoint2) basket.holdingPoint2.SetActive(basketData.holdingPoint2Active);
+                    if (basket.holdingPoint1)
+                    {
+                        basket.holdingPoint1.SetActive(basketData.holdingPoint1Active);
+                        basket.ChangeHoldingPointState(1, !basketData.holdingPoint1Active);
+                    }
+
+                    if (basket.holdingPoint2)
+                    {
+                        basket.holdingPoint2.SetActive(basketData.holdingPoint2Active);
+                        basket.ChangeHoldingPointState(2, !basketData.holdingPoint2Active);
+                    }
                 }
             }
         }
-
+       
+        
         if (data.brokenWheelsProgress.Count > 0)
         {
             foreach (var brokenWheelData in data.brokenWheelsProgress)

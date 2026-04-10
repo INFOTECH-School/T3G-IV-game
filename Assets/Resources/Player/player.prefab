@@ -235,9 +235,10 @@ MonoBehaviour:
   _jumpForce: 5
   _pushSpeed: 3
   stoppingSpeed: 8
+  _rotationSpeed: 15
   _throwingPoint: {fileID: 3621689810019117177}
   _lineRenderer: {fileID: 4657702855204142606}
-  _throwHitIndicator: {fileID: 0}
+  _throwHitIndicator: {fileID: 4803435523029083226, guid: e75d7abd195dd5e4d92cae72891cd040, type: 3}
   _throwTargetTag: ThrowTarget
   _groundLayer:
     serializedVersion: 2
@@ -660,7 +661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3cf86a97b77db164e93cc85b1e6444ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.157
+      value: -4.586
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3cf86a97b77db164e93cc85b1e6444ac, type: 3}
       propertyPath: m_LocalPosition.y
