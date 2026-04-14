@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 
 public class timelineSignalHandler : MonoBehaviour
 {
@@ -8,6 +9,12 @@ public class timelineSignalHandler : MonoBehaviour
 
     [Header("Kinematic Object Control")]
     public List<KinematicObject> kinematicObjectsToDisable;
+    
+    [Header("ShelfBoomSound")]
+    public AudioClip shelfBoomSound;
+    
+    [Header("CameraShake")]
+    public CinemachineImpulseSource impulseSource;
 
     /// <summary>
     // This function parents the Player to the specified 'playerParent' transform.
@@ -67,5 +74,20 @@ public class timelineSignalHandler : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void PlayShelfBoomSound()
+    {
+        if (shelfBoomSound)
+        {
+            AudioSource.PlayClipAtPoint(shelfBoomSound, Camera.current.transform.position);
+        }
+    }
+
+    // This is the function the Signal will call
+    public void TriggerShake(float intensity)
+    {
+        // You can use the intensity passed from the signal!
+        impulseSource.GenerateImpulseWithVelocity(Vector3.down * intensity);
     }
 }

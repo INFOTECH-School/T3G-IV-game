@@ -87222,6 +87222,7 @@ MonoBehaviour:
   - {fileID: 1631202546}
   - {fileID: 1448089008}
   - {fileID: 807645458}
+  shelfBoomSound: {fileID: 0}
 --- !u!1 &1596022200
 GameObject:
   m_ObjectHideFlags: 0
