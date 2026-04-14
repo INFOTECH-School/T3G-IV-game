@@ -8889,11 +8889,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Scripts::IllustrationCutscene
   illustrations:
-  - {fileID: 21300000, guid: 2d909f6431cbdd34093073bee6f2e069, type: 3}
-  - {fileID: 21300000, guid: bb8992dcb3258d94a9b7704446084c42, type: 3}
-  - {fileID: 21300000, guid: ceeeddf301bfa0a448ad4e0c7b3c9a03, type: 3}
-  - {fileID: 21300000, guid: dc18af74e7ff8c445926879616552818, type: 3}
-  - {fileID: 21300000, guid: ff2e2beef65e2ba41a6d9d691dbb5104, type: 3}
+  - {fileID: 21300000, guid: 712c161cc7c975a449c8f2cc8d564288, type: 3}
+  - {fileID: 21300000, guid: a14936ae6bc091e4088049cdb0e0a982, type: 3}
+  - {fileID: 21300000, guid: 67aad5ad82339be4dba6015c68136f1e, type: 3}
+  - {fileID: 21300000, guid: 52174c1fe64f6ec4f91869c47ce61e5a, type: 3}
+  - {fileID: 21300000, guid: ad4f261430aeea04483bef491d1ad2b0, type: 3}
   showTime: 15
   illustrationImage: {fileID: 706516300}
   fadeCanvasGroup: {fileID: 1913970476}
@@ -15224,6 +15224,97 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3541629673168548286, guid: 1a950965136e37f459138d8d06741094, type: 3}
+--- !u!1 &363576416
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 363576418}
+  - component: {fileID: 363576417}
+  m_Layer: 0
+  m_Name: bearer domino
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &363576417
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363576416}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 21300000, guid: 1f31c2a1363129049a337827e8be3e18, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 10.24, y: 10.24}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!4 &363576418
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363576416}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.6532815, y: 0.27059805, z: -0.27059805, w: 0.6532815}
+  m_LocalPosition: {x: 1, y: 0.01, z: -7}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 45, z: 0}
 --- !u!1 &364763311 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3989928427754465054, guid: 0c7b5dcedab9d3b499f23b9914c13bf8, type: 3}
@@ -15936,8 +16027,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 6717191399936114921}
-  maxRotationAngle: -80
-  initialRotationAngle: 150
+  maxRotationAngle: 90
+  initialRotationAngle: 0
   sparkleEffect: {fileID: 1541225495}
   fall_guide: {fileID: 1363305023}
   kinematicObstacleLayer:
@@ -54999,7 +55090,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.91882
+      value: 54.9193
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -55007,7 +55098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.852409
+      value: -14.852892
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -87656,8 +87747,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 2148574644753021891}
-  maxRotationAngle: 60
-  initialRotationAngle: 30
+  maxRotationAngle: 90
+  initialRotationAngle: 0
   sparkleEffect: {fileID: 19307188}
   fall_guide: {fileID: 507080417}
   kinematicObstacleLayer:
@@ -101694,7 +101785,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.91882
+      value: 54.9193
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -101702,7 +101793,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.852409
+      value: -14.852892
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -121146,3 +121237,4 @@ SceneRoots:
   - {fileID: 6832554358526197858}
   - {fileID: 58646843}
   - {fileID: 1649035813}
+  - {fileID: 363576418}
