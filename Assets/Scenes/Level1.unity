@@ -75381,7 +75381,7 @@ Transform:
   m_GameObject: {fileID: 1501647980}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.2588191, w: 0.9659258}
-  m_LocalPosition: {x: -1, y: 0.10500014, z: -7.89}
+  m_LocalPosition: {x: 3, y: 0.5, z: -5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -81439,6 +81439,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 6dfc41ac73152b04c9ccb80dfe885d77, type: 2}
     - {fileID: 11400000, guid: b6ac00c578948b847bedabf2068811ea, type: 2}
     - {fileID: 11400000, guid: f8f275f1dfb3e8148a7c151ce99a8cb9, type: 2}
+    - {fileID: 11400000, guid: 1a219127fdf4c704cb0f8ec0518334fa, type: 2}
     m_Events:
     - m_PersistentCalls:
         m_Calls:
@@ -81473,6 +81474,20 @@ MonoBehaviour:
         - m_Target: {fileID: 1594358149}
           m_TargetAssemblyTypeName: timelineSignalHandler, Scripts
           m_MethodName: DisableKinematicObjectInteractions
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1594358149}
+          m_TargetAssemblyTypeName: timelineSignalHandler, Scripts
+          m_MethodName: DropingShelveSound
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -111480,6 +111495,8 @@ PlayableDirector:
   - key: {fileID: 6157740324519313113, guid: 9ed89a0059c27114ab9140c8679162c3, type: 2}
     value: {fileID: 470600105}
   - key: {fileID: -8978115126215554618, guid: 9ed89a0059c27114ab9140c8679162c3, type: 2}
+    value: {fileID: 1594358148}
+  - key: {fileID: 2690003653002114155, guid: 9ed89a0059c27114ab9140c8679162c3, type: 2}
     value: {fileID: 1594358148}
   m_ExposedReferences:
     m_References: []
