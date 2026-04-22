@@ -15,6 +15,11 @@ public class timelineSignalHandler : MonoBehaviour
     
     [Header("CameraShake")]
     public CinemachineImpulseSource impulseSource;
+    
+    [Header("AudioSettings")]
+    public AudioSource mainAudioSource;
+
+    public List<AudioClip> timelineMusics;
 
     /// <summary>
     // This function parents the Player to the specified 'playerParent' transform.
@@ -89,5 +94,10 @@ public class timelineSignalHandler : MonoBehaviour
     {
         // You can use the intensity passed from the signal!
         impulseSource.GenerateImpulseWithVelocity(Vector3.down * intensity);
+    }
+
+    public void PlayTimelineMusic(int id)
+    {
+        mainAudioSource.clip = timelineMusics[id];
     }
 }
