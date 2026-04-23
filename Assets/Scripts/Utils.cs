@@ -33,7 +33,7 @@ public static class Utils //Player pos might not be getting loaded, level progre
             yield return null; 
         }
 
-        yield return new WaitForSeconds(1.5f);
+        //yield return new WaitForSeconds(1.5f);
 
         asyncLoad.allowSceneActivation = true;
 
@@ -51,6 +51,7 @@ public static class Utils //Player pos might not be getting loaded, level progre
         InitializeIllustrationCutscenes();
         Application.backgroundLoadingPriority = ThreadPriority.Normal;
         GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+        yield return new WaitForSeconds(1.5f);
         if (loading) Object.Destroy(loading);
     }
 
