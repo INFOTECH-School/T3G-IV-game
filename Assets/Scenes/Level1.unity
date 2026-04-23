@@ -16084,13 +16084,13 @@ MonoBehaviour:
   movementType: 1
   targetTransform: {fileID: 2280865165140915628}
   speed: 10
-  inverted: 0
+  inverted: 1
   grabPosition: {fileID: 1303563625}
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 6717191399936114921}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 80
+  maxAngle: 150
   sparkleEffect: {fileID: 1541225495}
   fall_guide: {fileID: 1363305023}
   kinematicObstacleLayer:
@@ -31212,8 +31212,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 271463366}
   pivotAnchor: {fileID: 0}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 0
+  maxAngle: 90
   sparkleEffect: {fileID: 1709549098}
   fall_guide: {fileID: 0}
   kinematicObstacleLayer:
@@ -37503,8 +37503,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 0}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 0
+  maxAngle: 90
   sparkleEffect: {fileID: 1625147749}
   fall_guide: {fileID: 1174544271}
   kinematicObstacleLayer:
@@ -80966,8 +80966,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 0}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 0
+  maxAngle: 90
   sparkleEffect: {fileID: 96261051}
   fall_guide: {fileID: 536900085}
   kinematicObstacleLayer:
@@ -88345,8 +88345,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 2148574644753021891}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 30
+  maxAngle: 90
   sparkleEffect: {fileID: 19307188}
   fall_guide: {fileID: 507080417}
   kinematicObstacleLayer:
@@ -100265,8 +100265,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 223155625}
   pivotAnchor: {fileID: 0}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 0
+  maxAngle: 90
   sparkleEffect: {fileID: 2012647673}
   fall_guide: {fileID: 0}
   kinematicObstacleLayer:

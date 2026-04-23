@@ -30,8 +30,6 @@ public class KinematicObject : MonoBehaviour
     public Transform pivotAnchor;
     public float minAngle = 0f;
     public float maxAngle = 90f;
-    [Tooltip("The starting rotation offset from the object's initial rotation in the editor.")]
-    public float initialRotationAngle = 0f;
 
     [Header("Effects")]
     [SerializeField] private GameObject sparkleEffect;
@@ -48,29 +46,31 @@ public class KinematicObject : MonoBehaviour
     // Internal state
     private Vector3 _startPosition;
     private Quaternion _startRotation;
-    private float _currentRotationAngle;
     private bool _isInteracting;
     private Transform _playerTransform;
     private bool _isReturning;
     private bool _targetReachedEventFired;
     private LevelObjective _levelObjectiveComponent;
     private bool _isCompleted;
-    private Vector3 _startDirectionToPivot;
+
+    private float GetContinuousLocalY()
+    {
+        float currentLocalY = transform.localEulerAngles.y;
+        float midAngle = (minAngle + maxAngle) / 2f;
+        return midAngle + Mathf.DeltaAngle(midAngle, currentLocalY);
+    }
 
     void Awake()
     {
+        if (minAngle > maxAngle)
+        {
+            float temp = minAngle;
+            minAngle = maxAngle;
+            maxAngle = temp;
+        }
+
         _startPosition = transform.position;
         _startRotation = transform.rotation;
-        
-        if (movementType == MovementType.Pivot && pivotAnchor != null)
-        {
-            // The direction vector from pivot to the object as placed in the editor.
-            Vector3 currentDirection = transform.position - pivotAnchor.position;
-            // We find the direction vector for angle 0 by rotating the current direction vector backwards by initialRotationAngle.
-            _startDirectionToPivot = Quaternion.Euler(0, -initialRotationAngle, 0) * currentDirection;
-            // The current rotation angle is the one set in the inspector.
-            _currentRotationAngle = initialRotationAngle;
-        }
 
         TryGetComponent(out _levelObjectiveComponent);
         ValidateSetup();
@@ -100,6 +100,26 @@ public class KinematicObject : MonoBehaviour
         if (sparkleEffect)
         {
             sparkleEffect.SetActive(true);
+        }
+    }
+
+    void Start()
+    {
+        if (movementType == MovementType.Pivot && pivotAnchor != null)
+        {
+            float currentContinuousY = GetContinuousLocalY();
+            Vector3 upAxis = transform.parent != null ? transform.parent.up : Vector3.up;
+
+            if (currentContinuousY < minAngle - 0.05f || currentContinuousY > maxAngle + 0.05f)
+            {
+                float midAngle = (minAngle + maxAngle) / 2f;
+                float angleDiff = midAngle - currentContinuousY;
+                
+                transform.RotateAround(pivotAnchor.position, upAxis, angleDiff);
+                
+                _startPosition = transform.position;
+                _startRotation = transform.rotation;
+            }
         }
     }
 
@@ -265,21 +285,26 @@ public class KinematicObject : MonoBehaviour
     {
         if (!pivotAnchor) return;
 
+        float currentY = GetContinuousLocalY();
         float rotationAmount = speed * deltaTime;
-        float newAngle = _currentRotationAngle + rotationAmount;
+        float newAngle = currentY + rotationAmount;
         
         newAngle = Mathf.Clamp(newAngle, minAngle, maxAngle);
 
-        float rotationStep = newAngle - _currentRotationAngle;
+        float rotationStep = newAngle - currentY;
 
-        transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
-        _currentRotationAngle = newAngle;
+        if (Mathf.Abs(rotationStep) > 0.001f)
+        {
+            Vector3 upAxis = transform.parent != null ? transform.parent.up : Vector3.up;
+            transform.RotateAround(pivotAnchor.position, upAxis, rotationStep);
+        }
 
-        if (Mathf.Abs(_currentRotationAngle - maxAngle) < 0.01f)
+        if (Mathf.Abs(newAngle - maxAngle) < 0.01f)
         {
             HandleTargetReached();
         }
     }
+    
 
     public void ReverseMovement(float deltaTime)
     {
@@ -350,15 +375,19 @@ public class KinematicObject : MonoBehaviour
     {
         if (!pivotAnchor) return;
 
+        float currentY = GetContinuousLocalY();
         float rotationAmount = speed * deltaTime;
-        float newAngle = _currentRotationAngle - rotationAmount;
+        float newAngle = currentY - rotationAmount;
 
         newAngle = Mathf.Clamp(newAngle, minAngle, maxAngle);
 
-        float rotationStep = newAngle - _currentRotationAngle;
+        float rotationStep = newAngle - currentY;
 
-        transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
-        _currentRotationAngle = newAngle;
+        if (Mathf.Abs(rotationStep) > 0.001f)
+        {
+            Vector3 upAxis = transform.parent != null ? transform.parent.up : Vector3.up;
+            transform.RotateAround(pivotAnchor.position, upAxis, rotationStep);
+        }
     }
 
     private void UpdateCar()
@@ -443,7 +472,7 @@ public class KinematicObject : MonoBehaviour
                 return Vector3.Distance(transform.position, targetTransform.position) < 0.01f;
                 
             case MovementType.Pivot:
-                return Mathf.Abs(_currentRotationAngle - maxAngle) < 0.01f;
+                return Mathf.Abs(GetContinuousLocalY() - maxAngle) < 0.01f;
                 
             default:
                 return false;
@@ -454,7 +483,6 @@ public class KinematicObject : MonoBehaviour
     {
         transform.position = _startPosition;
         transform.rotation = _startRotation;
-        _currentRotationAngle = initialRotationAngle;
         _isReturning = false;
         
         if (_isInteracting)
@@ -494,7 +522,8 @@ public class KinematicObject : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(pivotAnchor.position, 0.3f);
-            Gizmos.DrawLine(pivotAnchor.position, pivotAnchor.position + Vector3.up * 1f);
+            Vector3 upAxis = transform.parent != null ? transform.parent.up : Vector3.up;
+            Gizmos.DrawLine(pivotAnchor.position, pivotAnchor.position + upAxis * 1f);
         }
 
         // --- New BoxCast Gizmo ---
@@ -543,9 +572,12 @@ public class KinematicObject : MonoBehaviour
         {
             Gizmos.color = Color.yellow;
             
-            Vector3 fromDirection = (Application.isPlaying && _startDirectionToPivot != Vector3.zero) 
-                ? _startDirectionToPivot 
-                : Quaternion.Euler(0, -initialRotationAngle, 0) * (transform.position - pivotAnchor.position);
+            float midAngle = (minAngle + maxAngle) / 2f;
+            float continuousCurrentY = midAngle + Mathf.DeltaAngle(midAngle, transform.localEulerAngles.y);
+
+            Vector3 currentDirection = transform.position - pivotAnchor.position;
+            Vector3 upAxis = transform.parent != null ? transform.parent.up : Vector3.up;
+            Vector3 fromDirection = Quaternion.AngleAxis(-continuousCurrentY, upAxis) * currentDirection;
 
             int segments = 20;
             float totalAngle = maxAngle - minAngle;
@@ -556,8 +588,8 @@ public class KinematicObject : MonoBehaviour
                 float angle1 = minAngle + angleStep * i;
                 float angle2 = minAngle + angleStep * (i + 1);
 
-                Vector3 point1 = pivotAnchor.position + Quaternion.Euler(0, angle1, 0) * fromDirection;
-                Vector3 point2 = pivotAnchor.position + Quaternion.Euler(0, angle2, 0) * fromDirection;
+                Vector3 point1 = pivotAnchor.position + Quaternion.AngleAxis(angle1, upAxis) * fromDirection;
+                Vector3 point2 = pivotAnchor.position + Quaternion.AngleAxis(angle2, upAxis) * fromDirection;
 
                 Gizmos.DrawLine(point1, point2);
             }
