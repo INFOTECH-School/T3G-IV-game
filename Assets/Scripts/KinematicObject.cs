@@ -28,7 +28,8 @@ public class KinematicObject : MonoBehaviour
     
     [Header("Pivot Settings (Only for Pivot type)")]
     public Transform pivotAnchor;
-    public float maxRotationAngle = 90f;
+    public float minAngle = 0f;
+    public float maxAngle = 90f;
     [Tooltip("The starting rotation offset from the object's initial rotation in the editor.")]
     public float initialRotationAngle = 0f;
 
@@ -264,24 +265,17 @@ public class KinematicObject : MonoBehaviour
     {
         if (!pivotAnchor) return;
 
-        float rotationDirection = Mathf.Sign(maxRotationAngle);
-        float targetAngle = initialRotationAngle + maxRotationAngle;
-
-        if ((rotationDirection > 0 && _currentRotationAngle >= targetAngle) ||
-            (rotationDirection < 0 && _currentRotationAngle <= targetAngle))
-        {
-            HandleTargetReached();
-            return;
-        }
-
         float rotationAmount = speed * deltaTime;
-        float remainingAngle = Mathf.Abs(targetAngle - _currentRotationAngle);
-        float rotationStep = Mathf.Min(rotationAmount, remainingAngle) * rotationDirection;
+        float newAngle = _currentRotationAngle + rotationAmount;
+        
+        newAngle = Mathf.Clamp(newAngle, minAngle, maxAngle);
+
+        float rotationStep = newAngle - _currentRotationAngle;
 
         transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
-        _currentRotationAngle += rotationStep;
+        _currentRotationAngle = newAngle;
 
-        if (Mathf.Abs(_currentRotationAngle - targetAngle) < 0.01f)
+        if (Mathf.Abs(_currentRotationAngle - maxAngle) < 0.01f)
         {
             HandleTargetReached();
         }
@@ -356,21 +350,15 @@ public class KinematicObject : MonoBehaviour
     {
         if (!pivotAnchor) return;
 
-        float rotationDirection = Mathf.Sign(maxRotationAngle);
-        float targetAngle = initialRotationAngle;
-
-        if ((rotationDirection > 0 && _currentRotationAngle <= targetAngle) ||
-            (rotationDirection < 0 && _currentRotationAngle >= targetAngle))
-        {
-            return;
-        }
-
         float rotationAmount = speed * deltaTime;
-        float remainingAngle = Mathf.Abs(_currentRotationAngle - targetAngle);
-        float rotationStep = Mathf.Min(rotationAmount, remainingAngle) * rotationDirection;
+        float newAngle = _currentRotationAngle - rotationAmount;
 
-        transform.RotateAround(pivotAnchor.position, Vector3.up, -rotationStep);
-        _currentRotationAngle -= rotationStep;
+        newAngle = Mathf.Clamp(newAngle, minAngle, maxAngle);
+
+        float rotationStep = newAngle - _currentRotationAngle;
+
+        transform.RotateAround(pivotAnchor.position, Vector3.up, rotationStep);
+        _currentRotationAngle = newAngle;
     }
 
     private void UpdateCar()
@@ -455,11 +443,7 @@ public class KinematicObject : MonoBehaviour
                 return Vector3.Distance(transform.position, targetTransform.position) < 0.01f;
                 
             case MovementType.Pivot:
-                float targetAngle = initialRotationAngle + maxRotationAngle;
-                if (maxRotationAngle > 0)
-                    return _currentRotationAngle >= targetAngle;
-                else
-                    return _currentRotationAngle <= targetAngle;
+                return Mathf.Abs(_currentRotationAngle - maxAngle) < 0.01f;
                 
             default:
                 return false;
@@ -564,12 +548,13 @@ public class KinematicObject : MonoBehaviour
                 : Quaternion.Euler(0, -initialRotationAngle, 0) * (transform.position - pivotAnchor.position);
 
             int segments = 20;
-            float angleStep = maxRotationAngle / segments;
+            float totalAngle = maxAngle - minAngle;
+            float angleStep = totalAngle / segments;
 
             for (int i = 0; i < segments; i++)
             {
-                float angle1 = initialRotationAngle + angleStep * i;
-                float angle2 = initialRotationAngle + angleStep * (i + 1);
+                float angle1 = minAngle + angleStep * i;
+                float angle2 = minAngle + angleStep * (i + 1);
 
                 Vector3 point1 = pivotAnchor.position + Quaternion.Euler(0, angle1, 0) * fromDirection;
                 Vector3 point2 = pivotAnchor.position + Quaternion.Euler(0, angle2, 0) * fromDirection;
