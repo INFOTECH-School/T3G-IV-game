@@ -36,11 +36,12 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("References")]
     private Rigidbody _rigidBody;
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     private PlayerInteraction _interactionScript;
     private AudioSource _audioSource;
 
     // State Variables
+    private string _debugInfo = "";
     private Vector3 _inputDirection;
     private bool _isGrounded;
     private bool _isJumpPressed;
@@ -52,20 +53,23 @@ public class PlayerMovement : MonoBehaviour
     // Animator Hashes
     private int _speedHash;
     private int _groundedHash;
-    private int _runningHash;
+    private int _isHoldingHash;
+    private int _isInteractingHash;
+    private int _interactionSpeedHash;
 
     private void Start()
     {
         _rigidBody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
         _interactionScript = GetComponent<PlayerInteraction>();
         _audioSource = GetComponent<AudioSource>();
 
         if (_animator)
         {
             _speedHash = Animator.StringToHash("Speed");
-            _groundedHash = Animator.StringToHash("isGrounded");
-            _runningHash = Animator.StringToHash("isRunning");
+            _groundedHash = Animator.StringToHash("IsGrounded");
+            _isHoldingHash = Animator.StringToHash("IsHolding");
+            _isInteractingHash = Animator.StringToHash("IsInteracting");
+            _interactionSpeedHash = Animator.StringToHash("InteractionSpeed");
         }
 
         if (GameManager.Instance) GameManager.Instance.RegisterPlayerMovement(this);
@@ -182,6 +186,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (_isGrounded && !_isAiming)
             {
+                if (_animator) _animator.SetTrigger("Jump");
                 _isJumpPressed = true;
                 if (_jumpClip)
                 {
@@ -322,6 +327,7 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance.Player.currentItem == null) return;
 
         GameObject projectile = GameManager.Instance.Player.currentItem.gameObject;
+        if (_animator) _animator.SetTrigger("Throw");
         GameManager.Instance.Player.UnequipForThrow();
 
         if (projectile.TryGetComponent(out Rigidbody rb))
@@ -391,9 +397,20 @@ public class PlayerMovement : MonoBehaviour
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         float speed = horizontalVel.magnitude;
         
-        // _animator.SetFloat(_speedHash, speed < 0.1f ? 0f : speed);
-        // _animator.SetBool(_groundedHash, _isGrounded);
-        // _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
+        bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
+        bool isInteracting = _interactionScript && _interactionScript.currentState == Player.PlayerState.Interacting;
+        
+        _animator.SetFloat("Speed", speed < 0.1f ? 0f : speed);
+        _animator.SetBool("IsGrounded", _isGrounded);
+        
+        bool isHolding = GameManager.Instance.Player && GameManager.Instance.Player.currentItem != null;
+        _animator.SetBool("IsHolding", isHolding);
+        
+        bool interactingState = isPushing || isInteracting;
+        _animator.SetBool("IsInteracting", interactingState);
+        
+        float interactionSpeed = interactingState ? (Input.GetAxisRaw("Vertical") != 0 ? Mathf.Sign(Input.GetAxisRaw("Vertical")) : 0f) : 0f;
+        _animator.SetFloat("InteractionSpeed", interactionSpeed);
     }
 
     private void OnCollisionStay(Collision collision)

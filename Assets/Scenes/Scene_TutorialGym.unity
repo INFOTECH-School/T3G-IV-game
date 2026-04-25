@@ -171,14 +171,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::KinematicObject
   movementType: 0
   targetTransform: {fileID: 2063283566}
-  speed: 2
+  speed: 1
   inverted: 1
   grabPosition: {fileID: 1500805059}
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 0}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 0
+  maxAngle: 90
   sparkleEffect: {fileID: 1140024596}
   fall_guide: {fileID: 0}
   kinematicObstacleLayer:
@@ -2277,8 +2277,8 @@ MonoBehaviour:
   levelObjective: 1
   raycastOrigin: {fileID: 1083897037}
   pivotAnchor: {fileID: 0}
-  maxRotationAngle: 90
-  initialRotationAngle: 0
+  minAngle: 0
+  maxAngle: 90
   sparkleEffect: {fileID: 1367259956}
   fall_guide: {fileID: 0}
   kinematicObstacleLayer:
@@ -4705,7 +4705,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.15024
+      value: -68.148926
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4713,7 +4713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.729319
+      value: -13.730633
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4965,7 +4965,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.15024
+      value: -68.148926
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4973,7 +4973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.729319
+      value: -13.730633
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5076,7 +5076,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -9098,7 +9098,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -11846,6 +11846,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 2afb00028c65c4047abcf1989b069e8f, type: 3}
       propertyPath: m_Name
       value: szafka6x5
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2afb00028c65c4047abcf1989b069e8f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

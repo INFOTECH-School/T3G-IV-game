@@ -16083,13 +16083,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::KinematicObject
   movementType: 1
   targetTransform: {fileID: 2280865165140915628}
-  speed: 10
+  speed: 5
   inverted: 1
   grabPosition: {fileID: 1303563625}
   levelObjective: 1
   raycastOrigin: {fileID: 0}
   pivotAnchor: {fileID: 6717191399936114921}
-  minAngle: 80
+  minAngle: 30
   maxAngle: 150
   sparkleEffect: {fileID: 1541225495}
   fall_guide: {fileID: 1363305023}
@@ -37497,7 +37497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::KinematicObject
   movementType: 0
   targetTransform: {fileID: 344709626594144651}
-  speed: 2
+  speed: 1
   inverted: 0
   grabPosition: {fileID: 620483736}
   levelObjective: 1
@@ -55418,7 +55418,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.91882
+      value: 54.919933
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -55426,7 +55426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.852409
+      value: -14.853526
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -80960,7 +80960,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::KinematicObject
   movementType: 0
   targetTransform: {fileID: 6653890767480304574}
-  speed: 2
+  speed: 1
   inverted: 0
   grabPosition: {fileID: 620821897}
   levelObjective: 1
@@ -88339,7 +88339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::KinematicObject
   movementType: 1
   targetTransform: {fileID: 756297382002860556}
-  speed: 10
+  speed: 5
   inverted: 0
   grabPosition: {fileID: 476593819}
   levelObjective: 1
@@ -102569,7 +102569,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 54.91882
+      value: 54.919933
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -102577,7 +102577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -14.852409
+      value: -14.853526
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
