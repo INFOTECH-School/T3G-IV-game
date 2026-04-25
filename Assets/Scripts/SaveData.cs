@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +19,7 @@ public class SaveData
     public List<BrokenWheelData> brokenWheelsProgress;
     public List<string> destroyedItems;
     public List<string> playedIllustrationCutscenes = new List<string>();
+    public int degradationIndex;
 }
 
 [Serializable]

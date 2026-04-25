@@ -53,7 +53,8 @@ public class GameManager : MonoBehaviour
             basketsProgress = Utils.GetBasketsProgressData(),
             brokenWheelsProgress = Utils.GetBrokenWheelProgressData(),
             destroyedItems = LevelOperator.destroyedItemsID,
-            playedIllustrationCutscenes = Utils.GetPlayedIllustrationCutscenes()
+            playedIllustrationCutscenes = Utils.GetPlayedIllustrationCutscenes(),
+            degradationIndex = Player.currentDegradationIndex
         };
 
         SaveManager.SaveGame(slotNumber, data);
@@ -197,6 +198,12 @@ public class GameManager : MonoBehaviour
             if (!string.IsNullOrEmpty(data.currentHeldItemId))
             {
                 Player.Equip(Utils.GetItemByID(data.currentHeldItemId));
+            }
+            
+            // Apply degradation state
+            if (data.degradationIndex > 0)
+            {
+                Player.ApplyDegradation(data.degradationIndex);
             }
         }
 

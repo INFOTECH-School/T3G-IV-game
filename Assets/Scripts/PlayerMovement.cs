@@ -430,6 +430,12 @@ public class PlayerMovement : MonoBehaviour
 
     // By removing OnCollisionExit, we prevent cases where leaving one collider while still on another would incorrectly set _isGrounded to false.
 
+    public void SetDegradationState(Transform newThrowingPoint, Animator newAnimator)
+    {
+        if (newThrowingPoint) _throwingPoint = newThrowingPoint;
+        if (newAnimator) _animator = newAnimator;
+    }
+
     private void OnDestroy()
     {
         if (GameManager.Instance) GameManager.Instance.UnregisterPlayerMovement();
