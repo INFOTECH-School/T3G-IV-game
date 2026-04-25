@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     private Quaternion originalRot;
     private Vector3 originalScale;
     
+    [SerializeField] private Animator _animator;
+    
     private void Start()
     {
         if (GameManager.Instance) GameManager.Instance.RegisterPlayer(this);
@@ -71,6 +73,10 @@ public class Player : MonoBehaviour
     public void Equip(Item itemToEquip)
     {
         if (!itemToEquip) return;
+
+        if (_animator) _animator.SetTrigger("Pickup");
+        Debug.Log("Player picked up an item");
+        Debug.Log(_animator.GetCurrentAnimatorStateInfo(0).IsName("Pickup"));
 
         currentItem = itemToEquip;
         if (currentItem.CompareTag("Throwable"))
