@@ -34,6 +34,7 @@ public class KinematicObject : MonoBehaviour
     [Header("Effects")]
     [SerializeField] private GameObject sparkleEffect;
     [SerializeField] private MeshRenderer fall_guide;
+    public AudioSource moveAudioSource;
 
     [Header("Collision Settings (Only for Slide type)")]
     [SerializeField] private LayerMask kinematicObstacleLayer;
@@ -192,6 +193,7 @@ public class KinematicObject : MonoBehaviour
             fall_guide.enabled = false;
         }
         
+        StopSound();
         Debug.Log($"[KinematicObject] Stopped interaction with {gameObject.name}");
     }
     
@@ -278,6 +280,7 @@ public class KinematicObject : MonoBehaviour
         {
             _targetReachedEventFired = true;
             OnTargetReached?.Invoke();
+            StopSound();
         }
     }
     
@@ -302,6 +305,24 @@ public class KinematicObject : MonoBehaviour
         if (Mathf.Abs(newAngle - maxAngle) < 0.01f)
         {
             HandleTargetReached();
+        }
+    }
+
+    public void PlaySound()
+    {
+        if (!moveAudioSource) return;
+        if (!moveAudioSource.isPlaying)
+        {
+            moveAudioSource.Play();
+        }
+    }
+
+    public void StopSound()
+    {
+        if (!moveAudioSource) return;
+        if (moveAudioSource.isPlaying)
+        {
+            moveAudioSource.Stop();
         }
     }
     

@@ -275,3 +275,9 @@ Nazwa Assetu/Pliku: background.png
 Użyte Narzędzie AI: Nano Banana 2
 Miejsce/Zastosowanie: Główne tło menu głównego gry.
 Przykładowy Prompt: move bear bit to the right side and remove distant characters from the middle, also make this scene bit darker (created from illustration 3)
+
+
+To attribute:
+finalpush bg music - 443086__tyops__mini-emotional-ambient - Mini Emotional Ambient by tyops -- https://freesound.org/s/443086/ -- License: Attribution 4.0
+shelve boom sound - 814882__audiopapkin__sound-design-elements-impact-sfx-ps-088 - cc0
+shelve move sound - heavydrag - Heavy stone door opens 2 by PostProdDog -- https://freesound.org/s/578491/ -- License: Creative Commons 0

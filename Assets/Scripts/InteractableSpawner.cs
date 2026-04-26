@@ -43,12 +43,15 @@ public class InteractableSpawner : MonoBehaviour
         if (other.gameObject.CompareTag(targetTag))
         {
             // Disable the throwable object to prevent re-triggering.
-            other.gameObject.SetActive(false);
+            //other.gameObject.SetActive(false);
             
-            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+            //GameManager.Instance.SetState(GameManager.GameState.Cutscene);
             if (cutscene != null)
             {
-                cutscene.Play();
+                if (cutscene.state != PlayState.Playing)
+                {
+                    cutscene.Play();
+                }
             }
         }
     }
@@ -81,7 +84,7 @@ public class InteractableSpawner : MonoBehaviour
     {
         if (director == cutscene)
         {
-            GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+            //GameManager.Instance.SetState(GameManager.GameState.Gameplay);
             SpawnRewards();
 
             if (objectToUnparent != null)
@@ -95,4 +98,6 @@ public class InteractableSpawner : MonoBehaviour
             Destroy(this);
         }
     }
+    //TO DO:
+    //Add main music differentiation based on level and tutorial  
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEditor;
+using UnityEngine.Playables;
 
 public class timelineSignalHandler : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class timelineSignalHandler : MonoBehaviour
     [Header("AudioSettings")] public AudioSource mainAudioSource;
 
     public List<AudioClip> timelineMusics;
+
+    public PlayableDirector cardboardDirector;
 
     /// <summary>
     // This function parents the Player to the specified 'playerParent' transform.
@@ -77,7 +80,7 @@ public class timelineSignalHandler : MonoBehaviour
         }
     }
 
-    public void DropingShelveSound()
+    public void DroppingShelveSound()
     {
 
         if (shelfBoomSound)
@@ -96,5 +99,15 @@ public class timelineSignalHandler : MonoBehaviour
     public void PlayTimelineMusic(int id)
     {
         mainAudioSource.clip = timelineMusics[id];
+    }
+
+    public void DisableDirector(string directorName)
+    {
+        switch (directorName)
+        {
+            case "cardboard1":
+                cardboardDirector.enabled = false;
+                break;
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class GameManager : MonoBehaviour
     public AliceController AliceController {private set; get;}
     public LevelOperator LevelOperator { private set; get;}
     public int CurrentSaveSlot { get; set; }
+    public AudioSource mainAudioSource;
+    private bool _isMainAudioSourcePaused = false;
 
     public enum GameState
     {
@@ -217,18 +220,46 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Gameplay:
                 Time.timeScale = 1;
+                if (SceneManager.GetActiveScene().name != "MainMenu"){
+                    if (!mainAudioSource.isPlaying)
+                    {
+                        if (_isMainAudioSourcePaused)
+                        {
+                            mainAudioSource.UnPause();
+                        }
+                        else
+                        {
+                            mainAudioSource.Play();
+                        }
+                    }
+                }
                 break;
             case GameState.Paused:
                 if (CurrentGameState == GameState.Loading) return;
+                if (mainAudioSource.isPlaying)
+                {
+                    _isMainAudioSourcePaused = true;
+                    mainAudioSource.Pause();
+                }
                 Time.timeScale = 0;
                 break;
             case GameState.Cutscene:
                 if (CurrentGameState == GameState.Loading) return;
+                if (mainAudioSource.isPlaying)
+                {
+                    _isMainAudioSourcePaused = true;
+                    mainAudioSource.Pause();
+                }
                 Time.timeScale = 1;
                 break;
             case GameState.Loading:
+                if (mainAudioSource.isPlaying)
+                {
+                    mainAudioSource.Stop();
+                }
                 Time.timeScale = 1;
                 break;
+                
         }
         CurrentGameState = state;
     }

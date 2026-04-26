@@ -355,6 +355,10 @@ public class PlayerMovement : MonoBehaviour
         KinematicObject kinematicObj = _interactionScript.CurrentKinematicTarget;
         float verticalInput = Input.GetAxisRaw("Vertical");
 
+        if (verticalInput != 0)
+        {
+            kinematicObj.PlaySound();
+        }
         if (verticalInput > 0.01f) // Pushing
         {
             kinematicObj.AdvanceMovement(Time.fixedDeltaTime);
@@ -362,6 +366,10 @@ public class PlayerMovement : MonoBehaviour
         else if (verticalInput < -0.01f) // Pulling
         {
             kinematicObj.ReverseMovement(Time.fixedDeltaTime);
+        }
+        else
+        {
+            kinematicObj.StopSound();
         }
     }
 
