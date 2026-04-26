@@ -34,7 +34,6 @@ public class Basket : MonoBehaviour
         if (holdingPoint2) holdingPoint2.SetActive(false);
         if (finishResult) finishResult.SetActive(false);
         if (guide) guide.SetActive(false);
-        Debug.Log("Initialized Basket in Start method");
     }
 
     // Called by Player when they press 'E'
@@ -44,7 +43,6 @@ public class Basket : MonoBehaviour
         {
             if (level1)
             {
-                Debug.Log(_isHoldingPoint1Free + ", " + _isHoldingPoint2Free + " Receive function");
                 if (_isHoldingPoint1Free)
                 {
                     GameManager.Instance.LevelOperator.ProgressLevel();

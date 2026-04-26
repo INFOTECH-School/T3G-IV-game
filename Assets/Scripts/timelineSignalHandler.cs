@@ -1,23 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.Cinemachine;
+using UnityEditor;
 
 public class timelineSignalHandler : MonoBehaviour
 {
-    [Header("Player Parenting")]
-    public Transform playerParent;
+    [Header("Player Parenting")] public Transform playerParent;
 
-    [Header("Kinematic Object Control")]
-    public List<KinematicObject> kinematicObjectsToDisable;
-    
-    [Header("ShelfBoomSound")]
-    public AudioClip shelfBoomSound;
-    
-    [Header("CameraShake")]
-    public CinemachineImpulseSource impulseSource;
-    
-    [Header("AudioSettings")]
-    public AudioSource mainAudioSource;
+    [Header("Kinematic Object Control")] public List<KinematicObject> kinematicObjectsToDisable;
+
+    [Header("ShelfBoomSound")] public AudioClip shelfBoomSound;
+
+    [Header("CameraShake")] public CinemachineImpulseSource impulseSource;
+
+    [Header("AudioSettings")] public AudioSource mainAudioSource;
 
     public List<AudioClip> timelineMusics;
 
@@ -81,8 +77,9 @@ public class timelineSignalHandler : MonoBehaviour
         }
     }
 
-    public void PlayShelfBoomSound()
+    public void DropingShelveSound()
     {
+
         if (shelfBoomSound)
         {
             AudioSource.PlayClipAtPoint(shelfBoomSound, Camera.current.transform.position);
