@@ -10,6 +10,7 @@ public class TimelineTrigger : MonoBehaviour
     public bool playOnce = true;
     private bool _played;
     private bool _canPlay;
+    public bool shortCutscene = false;
     public bool ending = false;
     public bool level2 = false;
     public KeyCode interactKey = KeyCode.Alpha0;
@@ -63,7 +64,16 @@ public class TimelineTrigger : MonoBehaviour
             if (_feedback) _feedback.ShowErrorFeedback();
             return;
         }
-        GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+
+        if (shortCutscene)
+        {
+            GameManager.Instance.SetState(GameManager.GameState.ShortCutscene);
+        }
+        else
+        {
+            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+        }
+
         foreach (var objectToHide in hideObjects)
         {
             if (objectToHide.activeSelf)

@@ -4805,7 +4805,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14949
+      value: -68.148926
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4813,7 +4813,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.730069
+      value: -13.730633
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5065,7 +5065,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14949
+      value: -68.148926
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5073,7 +5073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.730069
+      value: -13.730633
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5110,6 +5110,10 @@ PrefabInstance:
     - target: {fileID: 3898613134475518490, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 1535
+      objectReference: {fileID: 0}
+    - target: {fileID: 5151138017986050568, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8845414260591106610, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: cutoutSize
@@ -7546,6 +7550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 550557210}
   playOnce: 1
+  shortCutscene: 0
   ending: 0
   level2: 0
   interactKey: 48

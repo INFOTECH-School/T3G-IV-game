@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour
         Gameplay,
         Paused,
         Cutscene,
-        Loading
+        Loading,
+        ShortCutscene
     }
     public GameState CurrentGameState = GameState.Gameplay;
     void Awake()
@@ -220,7 +221,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Gameplay:
                 Time.timeScale = 1;
-                if (SceneManager.GetActiveScene().name != "MainMenu"){
+                if (SceneManager.GetActiveScene().name != "MainMenu" && SceneManager.GetActiveScene().name != "Scene_TutorialGym"){
                     if (!mainAudioSource.isPlaying)
                     {
                         if (_isMainAudioSourcePaused)
@@ -232,7 +233,15 @@ public class GameManager : MonoBehaviour
                             mainAudioSource.Play();
                         }
                     }
+                } else if (SceneManager.GetActiveScene().name == "Scene_TutorialGym")
+                {
+                    Utils.SetMainAudioMusic(Resources.Load<AudioClip>("SFX/gameBackgroundMusic"));
+                    Debug.Log(SceneManager.GetActiveScene().name + " set audio");
                 }
+                break;
+            case GameState.ShortCutscene:
+                if (CurrentGameState == GameState.Loading) return;
+                Time.timeScale = 0;
                 break;
             case GameState.Paused:
                 if (CurrentGameState == GameState.Loading) return;
