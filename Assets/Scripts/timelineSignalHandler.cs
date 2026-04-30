@@ -110,4 +110,9 @@ public class timelineSignalHandler : MonoBehaviour
                 break;
         }
     }
+
+    public void DegradePlayer()
+    {
+        GameManager.Instance.Player.Degrade();
+    }
 }

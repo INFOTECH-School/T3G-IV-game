@@ -63,6 +63,13 @@ public static class Utils //Player pos might not be getting loaded, level progre
             cutscene.InitializeAfterLoad();
         }
     }
+
+    public static void SetMainAudioMusic(AudioClip audioClip)
+    {
+        if (!audioClip) return;
+        GameManager.Instance.mainAudioSource.clip = audioClip;
+        Debug.Log($"Set Main Audio Music to {audioClip.name}");
+    }
     
     public static Item GetItemByID(string itemID)
     {

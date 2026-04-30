@@ -12,6 +12,7 @@ public class LevelOperator : MonoBehaviour
     private List<ObjectiveData> _objectives = new List<ObjectiveData>();
     public int currentLevel = 1;
     public bool canEndLevel1 = false;
+    public List<AudioClip> levelAudioClips = new List<AudioClip>();
 
     private int _level1DependencyScore = 6;
     private int _initialLevel1Score;
@@ -84,6 +85,7 @@ public class LevelOperator : MonoBehaviour
     private void Start()
     {
         if (GameManager.Instance) GameManager.Instance.RegisterLevelOperator(this);
+        Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
         if (truckTriggerCollider)
         {
             truckTriggerCollider.enabled = false;
@@ -145,6 +147,7 @@ public class LevelOperator : MonoBehaviour
                 Debug.Log("Level score:" + level2DependencyScore);
                 break;
         }
+        Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
     }
 
     public void RegressLevel()
@@ -160,6 +163,7 @@ public class LevelOperator : MonoBehaviour
                 Debug.Log("Level score:" + level2DependencyScore);
                 break;
         }
+        Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
     }
 
     public void ProgressTruck()
