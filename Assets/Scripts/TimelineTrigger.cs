@@ -8,6 +8,7 @@ public class TimelineTrigger : MonoBehaviour
 {
     public PlayableDirector director;
     public bool playOnce = true;
+    public bool isCarBlockingCutscene = false; // Add this line
     private bool _played;
     private bool _canPlay;
     public bool ending = false;
@@ -105,6 +106,11 @@ public class TimelineTrigger : MonoBehaviour
             }
         }
         director.stopped -= OnCutsceneFinished;
+
+        if (isCarBlockingCutscene && TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnCarBlocked();
+        }
     }
 
     private void Update()

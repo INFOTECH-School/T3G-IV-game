@@ -17,9 +17,9 @@ public class PlayerMovement : MonoBehaviour
     public LineRenderer _lineRenderer;
     public LayerMask _groundLayer;
     public int _lineSegments = 30;
-    public float _timeBetweenDots = 0.1f; // Restored this variable
+    public float _timeBetweenDots = 0.1f;
     [Tooltip("Controls the power of the throw. A higher value means a weaker, higher-arcing throw.")]
-    public float _timeToTarget = 1.5f; // Increased from 1f to 1.5f to reduce power
+    public float _timeToTarget = 1.5f;
     public bool throwingEnabled = true;
 
     [Header("Audio Settings")]
@@ -43,7 +43,10 @@ public class PlayerMovement : MonoBehaviour
     private bool _isAiming;
     private bool _hasValidTarget;
     private Vector3 _calculatedVelocity;
-    private readonly Quaternion _rotation = Quaternion.Euler(0, 45, 0); // Isometric offset
+    private readonly Quaternion _rotation = Quaternion.Euler(0, 45, 0);
+    private bool _isInValidThrowZone;
+    public bool IsInValidThrowZone { get => _isInValidThrowZone; }
+
 
     // Animator Hashes
     private int _speedHash;
@@ -69,14 +72,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // 1. Safety Check
         if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
         {
             _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
             return;
         }
 
-        // 2. Handle State Logic
         bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
         bool isInteracting = _interactionScript && _interactionScript.currentState == Player.PlayerState.Interacting;
 
@@ -86,6 +87,17 @@ public class PlayerMovement : MonoBehaviour
             HandleAimingInput();
             HandleJumpInput();
             HandleFootstepSounds();
+        }
+        else if (isPushing)
+        {
+            // This is where we check for the actual push action.
+            if (Input.GetKey(KeyCode.W))
+            {
+                if (TutorialManager.Instance != null)
+                {
+                    TutorialManager.Instance.OnPushing();
+                }
+            }
         }
 
         UpdateAnimator();
@@ -119,11 +131,8 @@ public class PlayerMovement : MonoBehaviour
         var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         _inputDirection = _rotation * rawInput;
 
-        // If there's any movement input, wake up the Rigidbody to ensure OnCollisionStay is called.
-        // This prevents a bug where a sleeping Rigidbody fails the ground check.
         if (rawInput.magnitude > 0.1f) _rigidBody.WakeUp();
         
-        // Only rotate toward movement if we aren't aiming
         if (!_isAiming && _inputDirection.magnitude > 0.1f)
         {
             transform.rotation = Quaternion.LookRotation(_inputDirection);
@@ -134,7 +143,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!throwingEnabled || GameManager.Instance.Player == null) return;
 
-        // Start Aiming (Only if grounded, not moving fast, and holding a throwable item)
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         if (Input.GetMouseButtonDown(1) && _isGrounded && horizontalVel.magnitude < 0.5f &&
             GameManager.Instance.Player.currentItem)
@@ -145,7 +153,6 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                // Item is not throwable — show error feedback on the held item
                 var feedback = GameManager.Instance.Player.currentItem.GetComponentInChildren<InteractionFeedback>();
                 if (feedback) feedback.ShowErrorFeedback();
             }
@@ -180,6 +187,10 @@ public class PlayerMovement : MonoBehaviour
                 {
                     _audioSource.PlayOneShot(_jumpClip);
                 }
+                if (TutorialManager.Instance != null)
+                {
+                    TutorialManager.Instance.OnJump();
+                }
             }
         }
     }
@@ -189,7 +200,6 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
             return;
 
-        // Reset grounded state at the start of each physics step
         _isGrounded = false;
 
         bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
@@ -213,28 +223,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyNormalPhysics()
     {
-        // 1. Braking/Friction
         if (_isGrounded && _inputDirection.magnitude < 0.1f)
         {
-            // Snappy stop when no input
             var targetVel = new Vector3(0, _rigidBody.linearVelocity.y, 0);
             _rigidBody.linearVelocity = Vector3.Lerp(_rigidBody.linearVelocity, targetVel, stoppingSpeed * Time.fixedDeltaTime);
         }
         else
         {
-            // Standard air/move friction
             Vector3 horizontalVelocity = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
             _rigidBody.AddForce(-horizontalVelocity * _drag);
         }
 
-        // 2. Movement (Disabled while aiming)
         if (!_isAiming)
         {
             float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
             _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
         }
 
-        // 3. Jump
         if (_isJumpPressed)
         {
             _rigidBody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
@@ -244,6 +249,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #region Throwing Logic
+    public void SetInValidThrowZone(bool isInZone)
+    {
+        _isInValidThrowZone = isInZone;
+    }
+
     private void Aim()
     {
         if (Camera.main == null || !Camera.main.CompareTag("MainCamera")) return;
@@ -252,7 +262,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _hasValidTarget = true;
 
-            // Rotate player to face target
             Vector3 lookDirection = hit.point - transform.position;
             lookDirection.y = 0;
             if (lookDirection != Vector3.zero) transform.rotation = Quaternion.LookRotation(lookDirection);
@@ -324,11 +333,11 @@ public class PlayerMovement : MonoBehaviour
         KinematicObject kinematicObj = _interactionScript.CurrentKinematicTarget;
         float verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (verticalInput > 0.01f) // Pushing
+        if (verticalInput > 0.01f)
         {
             kinematicObj.AdvanceMovement(Time.fixedDeltaTime);
         }
-        else if (verticalInput < -0.01f) // Pulling
+        else if (verticalInput < -0.01f)
         {
             kinematicObj.ReverseMovement(Time.fixedDeltaTime);
         }
@@ -338,7 +347,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!_interactionScript || !transform.parent) return;
 
-        // Snap to grab points
         if (_interactionScript.currentState == Player.PlayerState.Pushing)
         {
             var pushable = transform.parent.GetComponent<PushableObject>();
@@ -365,19 +373,12 @@ public class PlayerMovement : MonoBehaviour
         if (!_animator) return;
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         float speed = horizontalVel.magnitude;
-        
-        // _animator.SetFloat(_speedHash, speed < 0.1f ? 0f : speed);
-        // _animator.SetBool(_groundedHash, _isGrounded);
-        // _animator.SetBool(_runningHash, Input.GetKey(KeyCode.LeftShift));
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        // This check is now more reliable because we reset _isGrounded in FixedUpdate.
-        // We only need to check if we are currently touching a valid ground surface.
         foreach (var contact in collision.contacts)
         {
-            // A normal.y > 0.7f means the slope is less than ~45 degrees.
             if (contact.normal.y > 0.7f)
             {
                 _isGrounded = true;
@@ -385,8 +386,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
-    // By removing OnCollisionExit, we prevent cases where leaving one collider while still on another would incorrectly set _isGrounded to false.
 
     private void OnDestroy()
     {
