@@ -77,28 +77,42 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case TutorialStep.Grab:
-                // Handled by OnItemGrabbed()
+                if (GameManager.Instance != null && GameManager.Instance.Player != null && GameManager.Instance.Player.currentItem != null)
+                {
+                    AdvanceTutorial();
+                }
                 break;
             case TutorialStep.Aim:
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButton(1))
                 {
                     AdvanceTutorial();
                 }
                 break;
             case TutorialStep.Throw:
-                if (Input.GetMouseButtonUp(1))
+                // Handled by OnThrow()
+                break;
+            case TutorialStep.Jump:
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
                     AdvanceTutorial();
                 }
-                break;
-            case TutorialStep.Jump:
-                // Handled by OnJump()
+                // Also handled by OnJump() via PlayerMovement
                 break;
             case TutorialStep.Interact:
                 // Handled by OnInteractPressed()
                 break;
             case TutorialStep.Push:
-                // Handled by OnPushing()
+                if (GameManager.Instance != null && GameManager.Instance.Player != null)
+                {
+                    var interaction = GameManager.Instance.Player.GetComponent<PlayerInteraction>();
+                    if (interaction != null && (interaction.currentState == Player.PlayerState.Pushing || interaction.currentState == Player.PlayerState.Interacting))
+                    {
+                        if (Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.01f || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+                        {
+                            AdvanceTutorial();
+                        }
+                    }
+                }
                 break;
             case TutorialStep.BlockCar:
                 // Handled by OnCarBlocked()
@@ -139,6 +153,14 @@ public class TutorialManager : MonoBehaviour
     public void OnItemGrabbed()
     {
         if (currentStep == TutorialStep.Grab)
+        {
+            AdvanceTutorial();
+        }
+    }
+    
+    public void OnThrow()
+    {
+        if (currentStep == TutorialStep.Throw)
         {
             AdvanceTutorial();
         }

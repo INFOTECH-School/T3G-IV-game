@@ -90,14 +90,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (isPushing)
         {
-            // This is where we check for the actual push action.
-            if (Input.GetKey(KeyCode.W))
-            {
-                if (TutorialManager.Instance != null)
-                {
-                    TutorialManager.Instance.OnPushing();
-                }
-            }
+            // Pushing action happens natively here, but the tutorial hook is handled inside TutorialManager's Update loop to guarantee state precision.
         }
 
         UpdateAnimator();
@@ -311,6 +304,11 @@ public class PlayerMovement : MonoBehaviour
         if (projectile.TryGetComponent(out Rigidbody rb))
         {
             rb.linearVelocity = _calculatedVelocity;
+        }
+
+        if (_isInValidThrowZone && TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnThrow();
         }
     }
     #endregion

@@ -86,6 +86,11 @@ public class TimelineTrigger : MonoBehaviour
         _played = true;
         director.Play();
         Debug.Log("Played" + _played + gameObject.name);
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnCarBlocked();
+        }
     }
 
     private void OnCutsceneFinished(PlayableDirector obj)
@@ -106,11 +111,6 @@ public class TimelineTrigger : MonoBehaviour
             }
         }
         director.stopped -= OnCutsceneFinished;
-
-        if (isCarBlockingCutscene && TutorialManager.Instance != null)
-        {
-            TutorialManager.Instance.OnCarBlocked();
-        }
     }
 
     private void Update()
