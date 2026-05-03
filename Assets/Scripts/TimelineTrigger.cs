@@ -8,6 +8,7 @@ public class TimelineTrigger : MonoBehaviour
 {
     public PlayableDirector director;
     public bool playOnce = true;
+    public bool isCarBlockingCutscene = false; // Add this line
     private bool _played;
     private bool _canPlay;
     public bool shortCutscene = false;
@@ -97,6 +98,11 @@ public class TimelineTrigger : MonoBehaviour
         _played = true;
         director.Play();
         Debug.Log("Played" + _played + gameObject.name);
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnCarBlocked();
+        }
     }
 
     private void OnCutsceneFinished(PlayableDirector obj)

@@ -117,6 +117,11 @@ public class Player : MonoBehaviour
         currentItem.transform.localPosition = Vector3.zero;
         currentItem.transform.localRotation = Quaternion.identity;
         currentItem.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnItemGrabbed();
+        }
     }
 
     public void Unequip()
@@ -175,6 +180,11 @@ public class Player : MonoBehaviour
         currentItem.transform.localScale = originalScale;
         nearbyBasket.ReceiveItem(currentItem);
         currentItem = null;
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnObjectPlaced();
+        }
     }
 
     private void FixWheel()

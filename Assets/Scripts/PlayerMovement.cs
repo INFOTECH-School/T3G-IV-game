@@ -21,9 +21,9 @@ public class PlayerMovement : MonoBehaviour
     public string _throwTargetTag;
     public LayerMask _groundLayer;
     public int _lineSegments = 30;
-    public float _timeBetweenDots = 0.1f; // Restored this variable
+    public float _timeBetweenDots = 0.1f;
     [Tooltip("Controls the power of the throw. A higher value means a weaker, higher-arcing throw.")]
-    public float _timeToTarget = 1.5f; // Increased from 1f to 1.5f to reduce power
+    public float _timeToTarget = 1.5f;
     public bool throwingEnabled = true;
 
     [Header("Audio Settings")]
@@ -52,6 +52,9 @@ public class PlayerMovement : MonoBehaviour
     private readonly Quaternion _rotation = Quaternion.Euler(0, 45, 0); // Isometric offset
     private bool _wasAirborne;
     private bool _isJumping;
+    private bool _isInValidThrowZone;
+    public bool IsInValidThrowZone { get => _isInValidThrowZone; }
+
 
     // Animator Hashes
     private int _speedHash;
@@ -96,7 +99,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // 2. Handle State Logic
         bool isPushing = _interactionScript && _interactionScript.currentState == Player.PlayerState.Pushing;
         bool isInteracting = _interactionScript && _interactionScript.currentState == Player.PlayerState.Interacting;
 
@@ -106,6 +108,10 @@ public class PlayerMovement : MonoBehaviour
             HandleAimingInput();
             HandleJumpInput();
             HandleFootstepSounds();
+        }
+        else if (isPushing)
+        {
+            // Pushing action happens natively here, but the tutorial hook is handled inside TutorialManager's Update loop to guarantee state precision.
         }
 
         UpdateAnimator();
@@ -139,11 +145,8 @@ public class PlayerMovement : MonoBehaviour
         var rawInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         _inputDirection = _rotation * rawInput;
 
-        // If there's any movement input, wake up the Rigidbody to ensure OnCollisionStay is called.
-        // This prevents a bug where a sleeping Rigidbody fails the ground check.
         if (rawInput.magnitude > 0.1f) _rigidBody.WakeUp();
         
-        // Only rotate toward movement if we aren't aiming
         if (!_isAiming && _inputDirection.magnitude > 0.1f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(_inputDirection);
@@ -155,7 +158,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!throwingEnabled || GameManager.Instance.Player == null) return;
 
-        // Start Aiming (Only if grounded, not moving fast, and holding a throwable item)
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         if (Input.GetMouseButtonDown(1) && _isGrounded && horizontalVel.magnitude < 0.5f &&
             GameManager.Instance.Player.currentItem)
@@ -166,7 +168,6 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                // Item is not throwable — show error feedback on the held item
                 var feedback = GameManager.Instance.Player.currentItem.GetComponentInChildren<InteractionFeedback>();
                 if (feedback) feedback.ShowErrorFeedback();
             }
@@ -201,6 +202,10 @@ public class PlayerMovement : MonoBehaviour
                 if (_jumpClip)
                 {
                     _audioSource.PlayOneShot(_jumpClip);
+                }
+                if (TutorialManager.Instance != null)
+                {
+                    TutorialManager.Instance.OnJump();
                 }
             }
         }
@@ -238,28 +243,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyNormalPhysics()
     {
-        // 1. Braking/Friction
         if (_isGrounded && _inputDirection.magnitude < 0.1f)
         {
-            // Snappy stop when no input
             var targetVel = new Vector3(0, _rigidBody.linearVelocity.y, 0);
             _rigidBody.linearVelocity = Vector3.Lerp(_rigidBody.linearVelocity, targetVel, stoppingSpeed * Time.fixedDeltaTime);
         }
         else
         {
-            // Standard air/move friction
             Vector3 horizontalVelocity = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
             _rigidBody.AddForce(-horizontalVelocity * _drag);
         }
 
-        // 2. Movement (Disabled while aiming)
         if (!_isAiming)
         {
             float speedMode = Input.GetKey(KeyCode.LeftShift) ? _runningMultiplier : 1f;
             _rigidBody.AddForce(_inputDirection * (_acceleration * speedMode));
         }
 
-        // 3. Jump
         if (_isJumpPressed)
         {
             _isJumping = true;
@@ -270,6 +270,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #region Throwing Logic
+    public void SetInValidThrowZone(bool isInZone)
+    {
+        _isInValidThrowZone = isInZone;
+    }
+
     private void Aim()
     {
         if (Camera.main == null || !Camera.main.CompareTag("MainCamera")) return;
@@ -278,7 +283,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _hasValidTarget = true;
 
-            // Rotate player to face target
             Vector3 lookDirection = hit.point - transform.position;
             lookDirection.y = 0;
             if (lookDirection != Vector3.zero) transform.rotation = Quaternion.LookRotation(lookDirection);
@@ -348,6 +352,11 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = _calculatedVelocity;
         }
+
+        if (_isInValidThrowZone && TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnThrow();
+        }
     }
     #endregion
 
@@ -391,7 +400,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!_interactionScript || !transform.parent) return;
 
-        // Snap to grab points
         if (_interactionScript.currentState == Player.PlayerState.Pushing)
         {
             var pushable = transform.parent.GetComponent<PushableObject>();
