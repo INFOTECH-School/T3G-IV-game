@@ -68,10 +68,12 @@ public class TimelineTrigger : MonoBehaviour
         if (shortCutscene)
         {
             GameManager.Instance.SetState(GameManager.GameState.ShortCutscene);
+            director.timeUpdateMode = DirectorUpdateMode.UnscaledGameTime;
         }
         else
         {
             GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+            director.timeUpdateMode = DirectorUpdateMode.GameTime;
         }
 
         foreach (var objectToHide in hideObjects)
@@ -196,6 +198,7 @@ public class TimelineTrigger : MonoBehaviour
 
     public void GhostPlay()
     {
+        Utils.IsCutsceneGhostModeActive = true;
         Debug.Log("Performed Ghost Play");
         _played = true;
         director.Play();
@@ -204,5 +207,20 @@ public class TimelineTrigger : MonoBehaviour
         director.Evaluate();
         director.Stop();
         this.enabled = false;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartCoroutine(ResetGhostModeCoroutine());
+        }
+        else
+        {
+            Utils.IsCutsceneGhostModeActive = false; // Fallback
+        }
+        Debug.Log("End Ghost Play");
+    }
+
+    private System.Collections.IEnumerator ResetGhostModeCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+        Utils.IsCutsceneGhostModeActive = false;
     }
 }

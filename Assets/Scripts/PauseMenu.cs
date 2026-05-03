@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenuManager : MonoBehaviour
 {
@@ -8,6 +9,12 @@ public class PauseMenuManager : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject ControlsPanel;
     public GameObject basePanel;
+    
+    [Header("Save Button UI")]
+    public Button saveBtn;
+    public Image saveBtnImage;
+    public Sprite defaultSaveSprite;
+    public Sprite savedSprite;
     
     private void Start()
     {
@@ -44,6 +51,14 @@ public class PauseMenuManager : MonoBehaviour
                 ControlsPanel.SetActive(false);
                 PauseMenu.SetActive(true);
                 GameManager.Instance.SetState(GameManager.GameState.Paused);
+                
+                if (saveBtnImage && defaultSaveSprite)
+                {
+                    saveBtn.interactable = true;
+                    saveBtnImage.overrideSprite = null;
+                }
+
+                saveBtn.interactable = SceneManager.GetActiveScene().name != "Scene_TutorialGym";
             }
         }
     }
@@ -65,6 +80,14 @@ public class PauseMenuManager : MonoBehaviour
         // You'll need to set the CurrentSaveSlot in the GameManager when the player
         // selects a slot from your UI.
         GameManager.Instance.SaveGame(GameManager.Instance.CurrentSaveSlot);
+        Debug.Log($"img: {saveBtnImage.name}, sprite: {savedSprite.name}");
+        if (saveBtnImage && savedSprite)
+        {
+            // saveBtnImage.sprite = savedSprite;
+            saveBtn.interactable = false;
+            saveBtnImage.overrideSprite = savedSprite;
+            Debug.Log($"Current sprite: {saveBtnImage.sprite.name}");
+        }
     }
 
     // public void loadButton(int slotNumber)//main menu

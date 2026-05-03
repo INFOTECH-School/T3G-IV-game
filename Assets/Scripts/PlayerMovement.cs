@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Audio Settings")]
     public AudioClip[] _footstepClips;
     public AudioClip _jumpClip;
+    public AudioClip _landClip;
     public float _walkStepRate = 0.5f;
     public float _runStepRate = 0.3f;
     private float _footstepTimer;
@@ -49,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
     private bool _hasValidTarget;
     private Vector3 _calculatedVelocity;
     private readonly Quaternion _rotation = Quaternion.Euler(0, 45, 0); // Isometric offset
+    private bool _wasAirborne;
+    private bool _isJumping;
 
     // Animator Hashes
     private int _speedHash;
@@ -80,9 +83,16 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // 1. Safety Check
-        if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
+        if (GameManager.Instance && GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
         {
             _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
+            return;
+        }
+
+        if (GameManager.Instance && GameManager.Instance.Player && GameManager.Instance.Player.IsPickingUp)
+        {
+            _rigidBody.linearVelocity = new Vector3(0, _rigidBody.linearVelocity.y, 0);
+            UpdateAnimator(); // Ensure animations update
             return;
         }
 
@@ -201,6 +211,9 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.CurrentGameState != GameManager.GameState.Gameplay)
             return;
 
+        if (GameManager.Instance != null && GameManager.Instance.Player != null && GameManager.Instance.Player.IsPickingUp)
+            return;
+
         // Reset grounded state at the start of each physics step
         _isGrounded = false;
 
@@ -249,6 +262,7 @@ public class PlayerMovement : MonoBehaviour
         // 3. Jump
         if (_isJumpPressed)
         {
+            _isJumping = true;
             _rigidBody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             _isJumpPressed = false;
             _isGrounded = false;
@@ -359,7 +373,7 @@ public class PlayerMovement : MonoBehaviour
         {
             kinematicObj.PlaySound();
         }
-        if (verticalInput > 0.01f) // Pushing
+        if (verticalInput > 0.01f) //  Pushing
         {
             kinematicObj.AdvanceMovement(Time.fixedDeltaTime);
         }
@@ -402,6 +416,7 @@ public class PlayerMovement : MonoBehaviour
     private void UpdateAnimator()
     {
         if (!_animator) return;
+        
         Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
         float speed = horizontalVel.magnitude;
         
@@ -419,15 +434,31 @@ public class PlayerMovement : MonoBehaviour
         
         float interactionSpeed = interactingState ? (Input.GetAxisRaw("Vertical") != 0 ? Mathf.Sign(Input.GetAxisRaw("Vertical")) : 0f) : 0f;
         _animator.SetFloat("InteractionSpeed", interactionSpeed);
+
+        if (!_isGrounded && _isJumping)
+        {
+            _wasAirborne = true;
+            _isJumping = false;
+        }
+
+        if (_isGrounded)
+        {
+            if (_wasAirborne)
+            {
+                if (_landClip)
+                {
+                    _audioSource.PlayOneShot(_landClip);
+                }
+                _footstepTimer = _walkStepRate; 
+                _wasAirborne = false;
+            }
+        }
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        // This check is now more reliable because we reset _isGrounded in FixedUpdate.
-        // We only need to check if we are currently touching a valid ground surface.
         foreach (var contact in collision.contacts)
         {
-            // A normal.y > 0.7f means the slope is less than ~45 degrees.
             if (contact.normal.y > 0.7f)
             {
                 _isGrounded = true;
@@ -435,8 +466,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
-    // By removing OnCollisionExit, we prevent cases where leaving one collider while still on another would incorrectly set _isGrounded to false.
 
     public void SetDegradationState(Transform newThrowingPoint, Animator newAnimator)
     {

@@ -145,7 +145,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 6db95522df8634f448ceb0731fa9dda1, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -3161,6 +3161,10 @@ MonoBehaviour:
   settingsMenu: {fileID: 7994276653934869441}
   ControlsPanel: {fileID: 158419876898906617}
   basePanel: {fileID: 9214320382870586830}
+  saveBtn: {fileID: 2962427450671185888}
+  saveBtnImage: {fileID: 3111091290408569661}
+  defaultSaveSprite: {fileID: 21300000, guid: 4c5c5291c9ffe224697652c14e08ded3, type: 3}
+  savedSprite: {fileID: 21300000, guid: 90c07f235741d4442b22f7e33d42be28, type: 3}
 --- !u!1 &3877822450038664943
 GameObject:
   m_ObjectHideFlags: 0
@@ -4555,7 +4559,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 63b65e943ded2d44c96c5a60dfa77148, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -6180,7 +6184,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 190.5, y: 82.5}
+  m_SizeDelta: {x: 302, y: 82.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2995884380767063783
 CanvasRenderer:
@@ -6212,7 +6216,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 4c5c5291c9ffe224697652c14e08ded3, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -6344,7 +6348,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 0bbeeed98714bb44b8fc22f12eba0081, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

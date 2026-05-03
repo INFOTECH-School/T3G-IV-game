@@ -113,6 +113,9 @@ public class timelineSignalHandler : MonoBehaviour
 
     public void DegradePlayer()
     {
-        GameManager.Instance.Player.Degrade();
+        if (!Utils.IsCutsceneGhostModeActive)
+        {
+            GameManager.Instance.Player.Degrade();
+        }
     }
 }

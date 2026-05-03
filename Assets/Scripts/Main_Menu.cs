@@ -7,6 +7,7 @@ using UnityEngine.Serialization;
 public class Main_Menu : MonoBehaviour
 {
     public List<Button> saveSlots = new List<Button>();
+    public List<Button> deleteButtons = new List<Button>();
     [FormerlySerializedAs("LoadButton")] public Button loadGameButton;
     public Button newGameButton;
     public void Quit()
@@ -15,8 +16,22 @@ public class Main_Menu : MonoBehaviour
     }
     public void StartGame() //New Game
     {
-        SetSaveSlot(SaveManager.GetAllSaveSlots().Count);
+        int nextSlot = 0;
+        var saves = SaveManager.GetAllSaveSlots();
+        if (saves.Count > 0)
+        {
+            var usedSlots = new HashSet<int>();
+            foreach (var s in saves) usedSlots.Add(s.SlotNumber);
+            while (usedSlots.Contains(nextSlot)) nextSlot++;
+        }
+        SetSaveSlot(nextSlot);
         Utils.AsynchronousSceneLoad("Scene_TutorialGym");
+    }
+
+    public void deleteButton(int slotNumber)
+    {
+        SaveManager.DeleteSave(slotNumber);
+        UpdateSaveInfo();
     }
     
     public void loadButton(int slotNumber)//main menu
@@ -33,31 +48,39 @@ public class Main_Menu : MonoBehaviour
 
     public void UpdateSaveInfo()
     {
-        if (SaveManager.GetAllSaveSlots().Count > 0)
-        {
-            loadGameButton.interactable = true;
-            newGameButton.interactable = true;
-            foreach (var saveSlot in saveSlots)
-            {
-                saveSlot.interactable = false;
-            }
+        var saves = SaveManager.GetAllSaveSlots();
+        int saveCount = saves.Count;
 
-            foreach (var saveSlot in SaveManager.GetAllSaveSlots())
-            {
-                if (saveSlots[saveSlot.SlotNumber])
-                {
-                    saveSlots[saveSlot.SlotNumber].interactable = true;
-                }
-            }
-        } else if (SaveManager.GetAllSaveSlots().Count >= saveSlots.Count)
+        if (saveCount > 0)
         {
             loadGameButton.interactable = true;
-            newGameButton.interactable = false;
+            newGameButton.interactable = saveCount < saveSlots.Count || saveSlots.Count == 0;
         }
         else
         {
             loadGameButton.interactable = false;
             newGameButton.interactable = true;
+        }
+
+        foreach (var saveSlot in saveSlots)
+        {
+            if (saveSlot != null) saveSlot.interactable = false;
+        }
+        foreach (var deleteBtn in deleteButtons)
+        {
+            if (deleteBtn != null) deleteBtn.interactable = false;
+        }
+
+        foreach (var save in saves)
+        {
+            if (save.SlotNumber < saveSlots.Count && saveSlots[save.SlotNumber] != null)
+            {
+                saveSlots[save.SlotNumber].interactable = true;
+            }
+            if (save.SlotNumber < deleteButtons.Count && deleteButtons[save.SlotNumber] != null)
+            {
+                deleteButtons[save.SlotNumber].interactable = true;
+            }
         }
     }
 

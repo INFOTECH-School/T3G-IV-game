@@ -126,12 +126,17 @@ public class LevelOperator : MonoBehaviour
             if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(true);
             
             UpdateProgressBar(); // Update the new progress bar to its initial state
+
+            if (levelAudioClips.Count >= currentLevel)
+            {
+                Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
+            }
         }
         else if (number == 2)
         {
             if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(false);
         }
-        confettiParticles.Play();
+        //confettiParticles.Play();
     }
 
     public void ProgressLevel()

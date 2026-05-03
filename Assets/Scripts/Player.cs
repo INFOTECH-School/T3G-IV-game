@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
 
     [Header("State")]
     public Item currentItem;
+    public bool IsPickingUp { get; private set; }
     
     // Track nearby objects
     private Item nearbyItem;
@@ -23,6 +24,9 @@ public class Player : MonoBehaviour
     private Vector3 originalPos;
     private Quaternion originalRot;
     private Vector3 originalScale;
+    
+    [Header("Sounds")]
+    public AudioClip pickupClip;
     
     [Header("Degradation System")]
     public List<PlayerDegradationState> degradationStates;
@@ -79,9 +83,17 @@ public class Player : MonoBehaviour
     {
         if (!itemToEquip) return;
 
-        if (_animator) _animator.SetTrigger("Pickup");
+        if (_animator)
+        {
+            _animator.SetTrigger("Pickup");
+            StartCoroutine(PickupRoutine());
+        }
         Debug.Log("Player picked up an item");
         Debug.Log(_animator.GetCurrentAnimatorStateInfo(0).IsName("Pickup"));
+        if (pickupClip)
+        {
+            AudioSource.PlayClipAtPoint(pickupClip, transform.position);
+        }
 
         currentItem = itemToEquip;
         if (currentItem.CompareTag("Throwable"))
@@ -118,6 +130,23 @@ public class Player : MonoBehaviour
 
         ResetItemPhysics();
         currentItem = null;
+    }
+
+    private System.Collections.IEnumerator PickupRoutine()
+    {
+        IsPickingUp = true;
+        yield return null;
+        yield return null;
+        
+        if (_animator)
+        {
+            while (_animator.GetCurrentAnimatorStateInfo(0).IsName("Pickup") || 
+                  (_animator.IsInTransition(0) && _animator.GetNextAnimatorStateInfo(0).IsName("Pickup")))
+            {
+                yield return null;
+            }
+        }
+        IsPickingUp = false;
     }
     
     public void UnequipForThrow()
@@ -208,6 +237,12 @@ public class Player : MonoBehaviour
 
     public void Degrade()
     {
+        if (Utils.IsCutsceneGhostModeActive)
+        {
+            Debug.Log("Skipping Degrade() during GhostPlay mode.");
+            return;
+        }
+
         if (degradationStates == null || degradationStates.Count == 0)
         {
             Debug.LogWarning("No degradation states set up in the Player script!");

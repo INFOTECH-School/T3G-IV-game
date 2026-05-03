@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public static class Utils //Player pos might not be getting loaded, level progres bar doesn't have progress after load
 {
+    public static bool IsCutsceneGhostModeActive = false;
     public static void AsynchronousSceneLoad(string sceneName, SaveData dataToLoad = null)
     {
         var loading = Object.Instantiate(Resources.Load<GameObject>("UI/LoadingScreen"));
@@ -67,7 +68,18 @@ public static class Utils //Player pos might not be getting loaded, level progre
     public static void SetMainAudioMusic(AudioClip audioClip)
     {
         if (!audioClip) return;
+
+        if (GameManager.Instance.mainAudioSource.clip == audioClip)
+        {
+            if (!GameManager.Instance.mainAudioSource.isPlaying)
+            {
+                GameManager.Instance.mainAudioSource.Play();
+            }
+            return;
+        }
+
         GameManager.Instance.mainAudioSource.clip = audioClip;
+        GameManager.Instance.mainAudioSource.Play();
         Debug.Log($"Set Main Audio Music to {audioClip.name}");
     }
     
