@@ -11,7 +11,7 @@ public class CameraProxyTarget : MonoBehaviour
         {
             // Copy position exactly
             transform.position = GameManager.Instance.Player.gameObject.transform.position;
-            
+            //GameManager.Instance.transform.position = Camera.current.transform.position;
             // Notice we do NOT copy transform.rotation! 
             // The proxy stays upright, so the camera stays upright.
         }

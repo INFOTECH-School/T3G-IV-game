@@ -8,8 +8,10 @@ public class TimelineTrigger : MonoBehaviour
 {
     public PlayableDirector director;
     public bool playOnce = true;
+    public bool isCarBlockingCutscene = false; // Add this line
     private bool _played;
     private bool _canPlay;
+    public bool shortCutscene = false;
     public bool ending = false;
     public bool level2 = false;
     public KeyCode interactKey = KeyCode.Alpha0;
@@ -63,7 +65,18 @@ public class TimelineTrigger : MonoBehaviour
             if (_feedback) _feedback.ShowErrorFeedback();
             return;
         }
-        GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+
+        if (shortCutscene)
+        {
+            GameManager.Instance.SetState(GameManager.GameState.ShortCutscene);
+            director.timeUpdateMode = DirectorUpdateMode.UnscaledGameTime;
+        }
+        else
+        {
+            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+            director.timeUpdateMode = DirectorUpdateMode.GameTime;
+        }
+
         foreach (var objectToHide in hideObjects)
         {
             if (objectToHide.activeSelf)
@@ -85,6 +98,11 @@ public class TimelineTrigger : MonoBehaviour
         _played = true;
         director.Play();
         Debug.Log("Played" + _played + gameObject.name);
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnCarBlocked();
+        }
     }
 
     private void OnCutsceneFinished(PlayableDirector obj)
@@ -104,6 +122,25 @@ public class TimelineTrigger : MonoBehaviour
                 outlineToHide.layer = layer;
             }
         }
+
+        if (GameManager.Instance.LevelOperator)
+        {
+            GameManager.Instance.LevelOperator.AddPlayedCutscene(gameObject.name);
+            if (ending)
+            {
+                switch (GameManager.Instance.LevelOperator.currentLevel)
+                {
+                    case 1:
+                        GameManager.Instance.LevelOperator.canEndLevel1 = true;
+                        GameManager.Instance.LevelOperator.level1DependencyScore = 0;
+                        break;
+                    case 2:
+                        GameManager.Instance.LevelOperator.canEndLevel2 = true;
+                        GameManager.Instance.LevelOperator.level2DependencyScore = 0;
+                        break;
+                }
+            }
+        }
         director.stopped -= OnCutsceneFinished;
     }
 
@@ -119,9 +156,10 @@ public class TimelineTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && triggerer == Triggerer.Player)
         {
+            Debug.Log(_played + " played");
             if (playOnce && _played)
             {
-                if (_feedback) _feedback.ShowErrorFeedback();
+                if (_feedback && interactKey == KeyCode.Alpha0) _feedback.ShowErrorFeedback(); 
                 return;
             }
             if (!director) return;
@@ -131,7 +169,10 @@ public class TimelineTrigger : MonoBehaviour
             }
             else
             {
-                PlayCutscene(SceneManager.GetActiveScene().name);
+                if (!_played)
+                {
+                    PlayCutscene(SceneManager.GetActiveScene().name);
+                }
             }
         }
         
@@ -159,5 +200,33 @@ public class TimelineTrigger : MonoBehaviour
                 _canPlay = false;
             }
         }
+    }
+
+    public void GhostPlay()
+    {
+        Utils.IsCutsceneGhostModeActive = true;
+        Debug.Log("Performed Ghost Play");
+        _played = true;
+        director.Play();
+        director.Evaluate();
+        director.time = director.duration;
+        director.Evaluate();
+        director.Stop();
+        this.enabled = false;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartCoroutine(ResetGhostModeCoroutine());
+        }
+        else
+        {
+            Utils.IsCutsceneGhostModeActive = false; // Fallback
+        }
+        Debug.Log("End Ghost Play");
+    }
+
+    private System.Collections.IEnumerator ResetGhostModeCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+        Utils.IsCutsceneGhostModeActive = false;
     }
 }

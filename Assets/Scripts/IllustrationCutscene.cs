@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,12 +28,31 @@ public class IllustrationCutscene : MonoBehaviour
     
     private int _currentIndex;
     private Coroutine _cutsceneCoroutine;
+    public bool played;
 
-    void Start()
+    public void InitializeAfterLoad()
     {
         // To start the cutscene automatically, call Illustrate().
         // To trigger it manually, call Illustrate() from another script.
-        Illustrate();
+        if (!played)
+        {
+            Illustrate();
+        }
+    }
+
+    public void OnEnable()
+    {
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Cutscene)
+        {
+            illustrationImage.transform.parent.gameObject.SetActive(false);
+        }
+        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Loading)
+        {
+            if (!played)
+            {
+                Illustrate();
+            }
+        }
     }
 
     /// <summary>
@@ -40,9 +60,11 @@ public class IllustrationCutscene : MonoBehaviour
     /// </summary>
     public void Illustrate()
     {
+        Debug.Log("Started Illustrating: " + played + " " + GameManager.Instance.CurrentGameState.ToString());
+        illustrationImage.transform.parent.gameObject.SetActive(true);
         if (_cutsceneCoroutine != null) return;
-
-        if (illustrations.Count > 0 && illustrationImage != null && fadeCanvasGroup != null)
+        played = true;
+        if (illustrations.Count > 0 && illustrationImage && fadeCanvasGroup)
         {
             gameObject.SetActive(true);
             illustrationImage.enabled = true;

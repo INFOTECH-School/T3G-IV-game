@@ -1,12 +1,18 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class LevelOperator : MonoBehaviour
 {
+    public List<string> destroyedItemsID = new List<string>();
+    private List<string> _playedCutscenes = new List<string>();
+    private List<ObjectiveData> _objectives = new List<ObjectiveData>();
     public int currentLevel = 1;
     public bool canEndLevel1 = false;
+    public List<AudioClip> levelAudioClips = new List<AudioClip>();
 
     private int _level1DependencyScore = 6;
     private int _initialLevel1Score;
@@ -16,6 +22,8 @@ public class LevelOperator : MonoBehaviour
         set
         {
             _level1DependencyScore = value;
+            Debug.Log("level 1 set: " + value);
+
             if (_level1DependencyScore <= 0)
             {
                 _level1DependencyScore = 0;
@@ -41,6 +49,7 @@ public class LevelOperator : MonoBehaviour
         set
         {
             _level2DependencyScore = value;
+            Debug.Log("level 2 set: " + value);
             if (_level2DependencyScore <= 0)
             {
                 _level2DependencyScore = 0;
@@ -76,6 +85,7 @@ public class LevelOperator : MonoBehaviour
     private void Start()
     {
         if (GameManager.Instance) GameManager.Instance.RegisterLevelOperator(this);
+        Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
         if (truckTriggerCollider)
         {
             truckTriggerCollider.enabled = false;
@@ -116,12 +126,17 @@ public class LevelOperator : MonoBehaviour
             if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(true);
             
             UpdateProgressBar(); // Update the new progress bar to its initial state
+
+            if (levelAudioClips.Count >= currentLevel)
+            {
+                Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
+            }
         }
         else if (number == 2)
         {
             if (level2ProgressBarCanvas) level2ProgressBarCanvas.SetActive(false);
         }
-        confettiParticles.Play();
+        //confettiParticles.Play();
     }
 
     public void ProgressLevel()
@@ -137,6 +152,7 @@ public class LevelOperator : MonoBehaviour
                 Debug.Log("Level score:" + level2DependencyScore);
                 break;
         }
+        Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
     }
 
     public void RegressLevel()
@@ -152,6 +168,7 @@ public class LevelOperator : MonoBehaviour
                 Debug.Log("Level score:" + level2DependencyScore);
                 break;
         }
+        Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
     }
 
     public void ProgressTruck()
@@ -171,10 +188,12 @@ public class LevelOperator : MonoBehaviour
     {
         if (currentLevel == 1 && level1ProgressBar != null)
         {
+            Debug.Log("Updating level 1 progress bar: " + _initialLevel1Score + ", " + _level1DependencyScore);
             level1ProgressBar.value = _initialLevel1Score - _level1DependencyScore;
         }
         else if (currentLevel == 2 && level2ProgressBar != null)
         {
+            Debug.Log("Updating level 2 progress bar: " + _initialLevel2Score + ", " + _level2DependencyScore);
             level2ProgressBar.value = _initialLevel2Score - _level2DependencyScore;
         }
     }
@@ -186,5 +205,21 @@ public class LevelOperator : MonoBehaviour
         {
             truckTriggerCollider.enabled = false;
         }
+    }
+
+    public void AddPlayedCutscene(string cutsceneName)
+    {
+        _playedCutscenes.Add(cutsceneName);
+    }
+
+    public List<string> GetPlayedCutscenes()
+    {
+        return _playedCutscenes;
+    }
+
+    public List<ObjectiveData> GetObjectivesData()
+    {
+        _objectives = Utils.GetLevelObjectivesData();
+        return _objectives;
     }
 }

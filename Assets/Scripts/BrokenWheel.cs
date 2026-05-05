@@ -9,6 +9,7 @@ public class BrokenWheel : MonoBehaviour
     public GameObject objectToEnable;
     public GameObject sparklesToEnable;
     public bool truck;
+    public bool objectFixed = false;
 
     [Header("Guide Settings")]
     public GameObject guideGameObject;
@@ -31,6 +32,7 @@ public class BrokenWheel : MonoBehaviour
 
     public void Fix()
     {
+        objectFixed = true;
         brokenWheelObject.SetActive(false);
         fixedWheelObject.SetActive(true);
         if (_levelObjective)

@@ -1,13 +1,24 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Cinemachine;
+using UnityEditor;
+using UnityEngine.Playables;
 
 public class timelineSignalHandler : MonoBehaviour
 {
-    [Header("Player Parenting")]
-    public Transform playerParent;
+    [Header("Player Parenting")] public Transform playerParent;
 
-    [Header("Kinematic Object Control")]
-    public List<KinematicObject> kinematicObjectsToDisable;
+    [Header("Kinematic Object Control")] public List<KinematicObject> kinematicObjectsToDisable;
+
+    [Header("ShelfBoomSound")] public AudioClip shelfBoomSound;
+
+    [Header("CameraShake")] public CinemachineImpulseSource impulseSource;
+
+    [Header("AudioSettings")] public AudioSource mainAudioSource;
+
+    public List<AudioClip> timelineMusics;
+
+    public PlayableDirector cardboardDirector;
 
     /// <summary>
     // This function parents the Player to the specified 'playerParent' transform.
@@ -66,6 +77,45 @@ public class timelineSignalHandler : MonoBehaviour
                     Debug.LogWarning("Found a null entry in the kinematicObjectsToDisable list.", this);
                 }
             }
+        }
+    }
+
+    public void DroppingShelveSound()
+    {
+
+        if (shelfBoomSound)
+        {
+            AudioSource.PlayClipAtPoint(shelfBoomSound, Camera.current.transform.position);
+        }
+    }
+
+    // This is the function the Signal will call
+    public void TriggerShake(float intensity)
+    {
+        // You can use the intensity passed from the signal!
+        impulseSource.GenerateImpulseWithVelocity(Vector3.down * intensity);
+    }
+
+    public void PlayTimelineMusic(int id)
+    {
+        mainAudioSource.clip = timelineMusics[id];
+    }
+
+    public void DisableDirector(string directorName)
+    {
+        switch (directorName)
+        {
+            case "cardboard1":
+                cardboardDirector.enabled = false;
+                break;
+        }
+    }
+
+    public void DegradePlayer()
+    {
+        if (!Utils.IsCutsceneGhostModeActive)
+        {
+            GameManager.Instance.Player.Degrade();
         }
     }
 }

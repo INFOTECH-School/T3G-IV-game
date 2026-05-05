@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Basket : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Basket : MonoBehaviour
     public GameObject holdingPoint2;
 
     public List<GameObject> basketPoints =  new List<GameObject>();
-    private int _basketCounter = 0;
+    [FormerlySerializedAs("_basketCounter")] public int basketCounter = 0;
     public bool level1 = false;
     public bool level2 = false;
     public List<Item> allowedItems = new List<Item>();
@@ -76,10 +77,10 @@ public class Basket : MonoBehaviour
             }
             else if (level2)
             {
-                basketPoints[_basketCounter].SetActive(true);
+                basketPoints[basketCounter].SetActive(true);
                 Destroy(item.gameObject);
-                _basketCounter++;
-                if (_basketCounter == basketPoints.Count)
+                basketCounter++;
+                if (basketCounter == basketPoints.Count)
                 {
                     if (finishResult) finishResult.SetActive(true);
                 }
@@ -99,5 +100,19 @@ public class Basket : MonoBehaviour
     public bool HasSpace()
     {
         return _isHoldingPoint1Free || _isHoldingPoint2Free;
+    }
+
+    public void ChangeHoldingPointState(int number, bool state)
+    {
+        switch (number)
+        {
+            case 1:
+                _isHoldingPoint1Free = state;
+                break;
+            case 2:
+                _isHoldingPoint2Free = state;
+                break;
+        }
+        Debug.Log(_isHoldingPoint1Free + ", " + _isHoldingPoint2Free);
     }
 }

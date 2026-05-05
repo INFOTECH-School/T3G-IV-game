@@ -1,16 +1,12 @@
+using System;
 using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public string id;
 
-    // Update is called once per frame
-    void Update()
+    private void OnDestroy()
     {
-        
+        if (GameManager.Instance.LevelOperator) GameManager.Instance.LevelOperator.destroyedItemsID.Add(id);
     }
 }

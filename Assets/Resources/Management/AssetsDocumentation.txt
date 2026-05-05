@@ -23,7 +23,7 @@ Rola w grze/Milestone: Używany jako dźwięk chodzenia.
 2. Pozostałe dźwięki (SFX)
 2.1.
 Nazwa Assetu/Pliku: sfx_jump_01.wav
-Strona internetowa (Źródło): https://freesound.org
+Strona internetowa (Źródło): jump_asphalt_01 footstep by m7med807 -- https://freesound.org/s/792765/ -- License: Attribution 4.0
 Data pobrania: 27-02-2026
 Funkcja: Dźwięk skoku
 Rola w grze/Milestone: Używany jako dźwięk skoku.
@@ -275,3 +275,22 @@ Nazwa Assetu/Pliku: background.png
 Użyte Narzędzie AI: Nano Banana 2
 Miejsce/Zastosowanie: Główne tło menu głównego gry.
 Przykładowy Prompt: move bear bit to the right side and remove distant characters from the middle, also make this scene bit darker (created from illustration 3)
+
+
+To attribute:
+finalpush bg music - 443086__tyops__mini-emotional-ambient - Mini Emotional Ambient by tyops -- https://freesound.org/s/443086/ -- License: Attribution 4.0
+shelve boom sound - 814882__audiopapkin__sound-design-elements-impact-sfx-ps-088 - cc0
+shelve move sound - heavydrag - Heavy stone door opens 2 by PostProdDog -- https://freesound.org/s/578491/ -- License: Creative Commons 0
+game bg music:
+- fireworks (as weapons) - Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0
+- piano emotional - https://pixabay.com/pl/music/fortepian-solo-piano-emotional-509975/
+pickup sound - pickup.wav - cc0 https://freesound.org/people/Sadiquecat/sounds/824189/
+cardboard hit - cardboardhit.wav - cc0 https://freesound.org/people/BenDrain/sounds/487999/
+footstep - footstep.wav - cc0 https://freesound.org/people/MikeFozzy98/sounds/670108/
+footstep1 - footstep1.wav - cc0 https://freesound.org/people/ZNukem/sounds/697182/
+clothrip - cloth_rip.mp3 - cc0 https://freesound.org/people/Johnny2810/sounds/507756/
+bg music parking:
+- engine stutter - cc0 https://freesound.org/people/craigsmith/sounds/487159/
+- weapon shoot sounds - cc0 https://freesound.org/people/Julien_Matthey/sounds/751279/
+- cold ambience - cc0 https://freesound.org/people/ChristmasKrumble666/sounds/685182/
+- fireworks (as weapons) - Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0

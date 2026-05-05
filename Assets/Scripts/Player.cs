@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -12,6 +13,7 @@ public class Player : MonoBehaviour
 
     [Header("State")]
     public Item currentItem;
+    public bool IsPickingUp { get; private set; }
     
     // Track nearby objects
     private Item nearbyItem;
@@ -22,6 +24,15 @@ public class Player : MonoBehaviour
     private Vector3 originalPos;
     private Quaternion originalRot;
     private Vector3 originalScale;
+    
+    [Header("Sounds")]
+    public AudioClip pickupClip;
+    
+    [Header("Degradation System")]
+    public List<PlayerDegradationState> degradationStates;
+    public int currentDegradationIndex { get; private set; } = 0;
+    
+    [SerializeField] private Animator _animator;
     
     private void Start()
     {
@@ -72,6 +83,18 @@ public class Player : MonoBehaviour
     {
         if (!itemToEquip) return;
 
+        if (_animator)
+        {
+            _animator.SetTrigger("Pickup");
+            StartCoroutine(PickupRoutine());
+        }
+        Debug.Log("Player picked up an item");
+        Debug.Log(_animator.GetCurrentAnimatorStateInfo(0).IsName("Pickup"));
+        if (pickupClip)
+        {
+            AudioSource.PlayClipAtPoint(pickupClip, transform.position);
+        }
+
         currentItem = itemToEquip;
         if (currentItem.CompareTag("Throwable"))
         {
@@ -94,6 +117,11 @@ public class Player : MonoBehaviour
         currentItem.transform.localPosition = Vector3.zero;
         currentItem.transform.localRotation = Quaternion.identity;
         currentItem.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnItemGrabbed();
+        }
     }
 
     public void Unequip()
@@ -107,6 +135,23 @@ public class Player : MonoBehaviour
 
         ResetItemPhysics();
         currentItem = null;
+    }
+
+    private System.Collections.IEnumerator PickupRoutine()
+    {
+        IsPickingUp = true;
+        yield return null;
+        yield return null;
+        
+        if (_animator)
+        {
+            while (_animator.GetCurrentAnimatorStateInfo(0).IsName("Pickup") || 
+                  (_animator.IsInTransition(0) && _animator.GetNextAnimatorStateInfo(0).IsName("Pickup")))
+            {
+                yield return null;
+            }
+        }
+        IsPickingUp = false;
     }
     
     public void UnequipForThrow()
@@ -135,6 +180,11 @@ public class Player : MonoBehaviour
         currentItem.transform.localScale = originalScale;
         nearbyBasket.ReceiveItem(currentItem);
         currentItem = null;
+
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnObjectPlaced();
+        }
     }
 
     private void FixWheel()
@@ -194,4 +244,101 @@ public class Player : MonoBehaviour
         var wheelScript = other.GetComponent<BrokenWheel>();
         if (wheelScript && wheelScript == nearbyWheel) nearbyWheel = null;
     }
+
+    public void Degrade()
+    {
+        if (Utils.IsCutsceneGhostModeActive)
+        {
+            Debug.Log("Skipping Degrade() during GhostPlay mode.");
+            return;
+        }
+
+        if (degradationStates == null || degradationStates.Count == 0)
+        {
+            Debug.LogWarning("No degradation states set up in the Player script!");
+            return;
+        }
+        
+        if (currentDegradationIndex + 1 < degradationStates.Count)
+        {
+            // Turn off current state object
+            if (degradationStates[currentDegradationIndex].stateObject)
+                degradationStates[currentDegradationIndex].stateObject.SetActive(false);
+            
+            // Advance index
+            currentDegradationIndex++;
+            var newState = degradationStates[currentDegradationIndex];
+            
+            // Turn on new state object
+            if (newState.stateObject)
+                newState.stateObject.SetActive(true);
+            
+            // Reassign Player references
+            if (newState.holdPoint) holdPoint = newState.holdPoint;
+            if (newState.animator) _animator = newState.animator;
+            
+            // Reassign PlayerMovement references
+            var movement = GetComponent<PlayerMovement>();
+            if (movement)
+            {
+                movement.SetDegradationState(newState.throwingPoint, newState.animator);
+            }
+            
+            // If the player is currently holding an item, instantly teleport it to the new hold point
+            if (currentItem != null && holdPoint != null)
+            {
+                currentItem.transform.SetParent(holdPoint);
+                currentItem.transform.localPosition = Vector3.zero;
+                currentItem.transform.localRotation = Quaternion.identity;
+            }
+            
+            Debug.Log($"Player degraded to state {currentDegradationIndex}.");
+        }
+        else
+        {
+            Debug.Log("Player is at maximum degradation state.");
+        }
+    }
+
+    /// <summary>
+    /// Applies a specific degradation index, used by the save/load system.
+    /// Deactivates all states, then activates the target one and reassigns references.
+    /// </summary>
+    public void ApplyDegradation(int targetIndex)
+    {
+        if (degradationStates == null || degradationStates.Count == 0) return;
+        if (targetIndex < 0 || targetIndex >= degradationStates.Count) return;
+
+        // Deactivate all state objects first
+        for (int i = 0; i < degradationStates.Count; i++)
+        {
+            if (degradationStates[i].stateObject)
+                degradationStates[i].stateObject.SetActive(false);
+        }
+
+        // Set the index and activate the correct state
+        currentDegradationIndex = targetIndex;
+        var state = degradationStates[currentDegradationIndex];
+
+        if (state.stateObject) state.stateObject.SetActive(true);
+        if (state.holdPoint) holdPoint = state.holdPoint;
+        if (state.animator) _animator = state.animator;
+
+        var movement = GetComponent<PlayerMovement>();
+        if (movement)
+        {
+            movement.SetDegradationState(state.throwingPoint, state.animator);
+        }
+
+        Debug.Log($"Degradation loaded: applied state {currentDegradationIndex}.");
+    }
+}
+
+[System.Serializable]
+public struct PlayerDegradationState
+{
+    public GameObject stateObject;
+    public Transform holdPoint;
+    public Transform throwingPoint;
+    public Animator animator;
 }
