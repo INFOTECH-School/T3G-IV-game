@@ -318,3 +318,5 @@ public class GameManager : MonoBehaviour
         LevelOperator = null;
     }
 }
+
+//TO DO: ensure all outlines are disabled during timelines. Adjust game sounds (land lower) all game higher, balance it out.
