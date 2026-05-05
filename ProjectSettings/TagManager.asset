@@ -5,19 +5,24 @@ TagManager:
   serializedVersion: 3
   tags:
   - Alice
+  - Holdable
+  - Activable
+  - Prop
+  - Throwable
+  - LoadingScreen
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Obstacles
+  - Items
+  - Outlined
+  - Hidden
+  - NonEquipOutline
+  - Loading3D
   - 
   - 
   - 

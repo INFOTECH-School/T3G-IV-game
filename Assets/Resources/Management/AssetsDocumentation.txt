@@ -1,0 +1,277 @@
+﻿1. Dźwięki chodzenia (Footsteps)
+1.1.
+Nazwa Assetu/Pliku: sfx_footstep_walk_01.wav
+Strona internetowa (Źródło): https://freesound.org
+Data pobrania: 27-02-2026
+Funkcja: Dźwięk chodzenia 1
+Rola w grze/Milestone: Używany jako dźwięk chodzenia.
+
+1.2.
+Nazwa Assetu/Pliku: sfx_footstep_walk_02.wav
+Strona internetowa (Źródło): https://freesound.org
+Data pobrania: 27-02-2026
+Funkcja: Dźwięk chodzenia 2
+Rola w grze/Milestone: Używany jako dźwięk chodzenia.
+
+1.3.
+Nazwa Assetu/Pliku: sfx_footstep_walk_03.wav
+Strona internetowa (Źródło): https://freesound.org
+Data pobrania: 27-02-2026
+Funkcja: Dźwięk chodzenia 3
+Rola w grze/Milestone: Używany jako dźwięk chodzenia.
+
+2. Pozostałe dźwięki (SFX)
+2.1.
+Nazwa Assetu/Pliku: sfx_jump_01.wav
+Strona internetowa (Źródło): https://freesound.org
+Data pobrania: 27-02-2026
+Funkcja: Dźwięk skoku
+Rola w grze/Milestone: Używany jako dźwięk skoku.
+
+3. Tekstury: Asphalt
+3.0.
+Nazwa Assetu/Pliku: Asphalt016_4K_Color.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura materiału asfaltu
+Rola w grze/Milestone: Używany jako tekstura materiału asfaltu.
+
+3.1.
+Nazwa Assetu/Pliku: Asphalt_4K_NormalGL.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura mapy normalnych asfaltu
+Rola w grze/Milestone: Używany jako tekstura mapy normalnych asfaltu.
+
+3.2.
+Nazwa Assetu/Pliku: Asphalt_4K_Roughness.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura chropowatości asfaltu
+Rola w grze/Milestone: Używany jako tekstura chropowatości asfaltu.
+
+4. Tekstury: Concrete Floor
+4.0.
+Nazwa Assetu/Pliku: concrete_floor_painted_diff_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura koloru malowanej betonowej podłogi
+Rola w grze/Milestone: Używany jako tekstura koloru malowanej betonowej podłogi.
+
+4.1.
+Nazwa Assetu/Pliku: concrete_floor_painter_nor_gl_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura mapy normalnych malowanej betonowej podłogi
+Rola w grze/Milestone: Używany jako tekstura mapy normalnych malowanej betonowej podłogi.
+
+4.2.
+Nazwa Assetu/Pliku: concrete_floor_painted_rough_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura chropowatości malowanej betonowej podłogi
+Rola w grze/Milestone: Używany jako tekstura chropowatości malowanej betonowej podłogi.
+
+4.3.
+Nazwa Assetu/Pliku: concrete_floor_painter_ao_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura okluzji otoczenia (AO) malowanej betonowej podłogi
+Rola w grze/Milestone: Używany jako tekstura okluzji otoczenia malowanej betonowej podłogi.
+
+5. Tekstury: Fence
+5.0.
+Nazwa Assetu/Pliku: 4K-fence_3_ambientocclusion.png
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura okluzji otoczenia (AO) ogrodzenia
+Rola w grze/Milestone: Używany jako tekstura okluzji otoczenia ogrodzenia.
+
+5.1.
+Nazwa Assetu/Pliku: 4K-fence_3_basecolor.png
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura koloru ogrodzenia
+Rola w grze/Milestone: Używany jako tekstura koloru ogrodzenia.
+
+5.2.
+Nazwa Assetu/Pliku: 4K-fence_3_metallic.png
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura metaliczności ogrodzenia
+Rola w grze/Milestone: Używany jako tekstura metaliczności ogrodzenia.
+
+5.3.
+Nazwa Assetu/Pliku: 4K-fence_3_opacity.png
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura przezroczystości ogrodzenia
+Rola w grze/Milestone: Używany jako tekstura przezroczystości ogrodzenia.
+
+5.4.
+Nazwa Assetu/Pliku: 4K-fence_3_normal.png
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura mapy normalnych ogrodzenia
+Rola w grze/Milestone: Używany jako tekstura mapy normalnych ogrodzenia.
+
+5.5.
+Nazwa Assetu/Pliku: 4K-fence_3_roughness.png
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura chropowatości ogrodzenia
+Rola w grze/Milestone: Używany jako tekstura chropowatości ogrodzenia.
+
+6. Tekstury: Floor Tiles
+6.0.
+Nazwa Assetu/Pliku: floor_tiles_06_diff_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura koloru płytek podłogowych
+Rola w grze/Milestone: Używany jako tekstura koloru płytek podłogowych.
+
+6.1.
+Nazwa Assetu/Pliku: floor_tiles_06_ao_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura okluzji otoczenia (AO) płytek podłogowych
+Rola w grze/Milestone: Używany jako tekstura okluzji otoczenia płytek podłogowych.
+
+6.2.
+Nazwa Assetu/Pliku: floor_tiles_06_nor_gl_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura mapy normalnych płytek podłogowych
+Rola w grze/Milestone: Używany jako tekstura mapy normalnych płytek podłogowych.
+
+6.3.
+Nazwa Assetu/Pliku: floor_tiles_06_rough_4k.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura chropowatości płytek podłogowych
+Rola w grze/Milestone: Używany jako tekstura chropowatości płytek podłogowych.
+
+7. Tekstury: Painted Plaster 014
+7.0.
+Nazwa Assetu/Pliku: PaintedPlaster014_4K_AmbientOcclusion.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura okluzji otoczenia (AO) malowanego tynku 014
+Rola w grze/Milestone: Używany jako tekstura okluzji otoczenia malowanego tynku.
+
+7.1.
+Nazwa Assetu/Pliku: PaintedPlaster014_4K_Color.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura koloru malowanego tynku 014
+Rola w grze/Milestone: Używany jako tekstura koloru malowanego tynku.
+
+7.2.
+Nazwa Assetu/Pliku: PaintedPlaster014_4K_NormalGL.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura mapy normalnych malowanego tynku 014
+Rola w grze/Milestone: Używany jako tekstura mapy normalnych malowanego tynku.
+
+7.3.
+Nazwa Assetu/Pliku: PaintedPlaster014_4K_Roughness.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura chropowatości malowanego tynku 014
+Rola w grze/Milestone: Używany jako tekstura chropowatości malowanego tynku.
+
+8. Tekstury: Painted Plaster 015
+8.0.
+Nazwa Assetu/Pliku: PaintedPlaster015_4K_AmbientOcclusion.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura okluzji otoczenia (AO) malowanego tynku 015
+Rola w grze/Milestone: Używany jako tekstura okluzji otoczenia malowanego tynku.
+
+8.1.
+Nazwa Assetu/Pliku: PaintedPlaster015_4K_Color.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura koloru malowanego tynku 015
+Rola w grze/Milestone: Używany jako tekstura koloru malowanego tynku.
+
+8.2.
+Nazwa Assetu/Pliku: PaintedPlaster015_4K_NormalGL.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura mapy normalnych malowanego tynku 015
+Rola w grze/Milestone: Używany jako tekstura mapy normalnych malowanego tynku.
+
+8.3.
+Nazwa Assetu/Pliku: PaintedPlaster015_4K_Roughness.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura chropowatości malowanego tynku 015
+Rola w grze/Milestone: Używany jako tekstura chropowatości malowanego tynku.
+
+9. Tekstury: Painted Plaster 016
+9.0.
+Nazwa Assetu/Pliku: PaintedPlaster016_4K_AmbientOcclusion.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura okluzji otoczenia (AO) malowanego tynku 016
+Rola w grze/Milestone: Używany jako tekstura okluzji otoczenia malowanego tynku.
+
+9.1.
+Nazwa Assetu/Pliku: PaintedPlaster016_4K_Color.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura koloru malowanego tynku 016
+Rola w grze/Milestone: Używany jako tekstura koloru malowanego tynku.
+
+9.2.
+Nazwa Assetu/Pliku: PaintedPlaster016_4K_NormalGL.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura mapy normalnych malowanego tynku 016
+Rola w grze/Milestone: Używany jako tekstura mapy normalnych malowanego tynku.
+
+9.3.
+Nazwa Assetu/Pliku: PaintedPlaster016_4K_Roughness.jpg
+Strona internetowa (Źródło): https://cc0-textures.com
+Data pobrania: 03-03-2026
+Funkcja: Tekstura chropowatości malowanego tynku 016
+Rola w grze/Milestone: Używany jako tekstura chropowatości malowanego tynku.
+
+10. Ilustracje Intro (Intro Illustrations)
+10.1.
+Nazwa Assetu/Pliku: illustration 1.1.png
+Użyte Narzędzie AI: Nano Banana 2
+Miejsce/Zastosowanie: Scena wprowadzająca – dziewczynka bawiąca się misiem w sklepie.
+Przykładowy Prompt: In 16:9 Aspect 2D vector-style digital illustration, comic book aesthetic, thick black outlines on main subjects, simple flat shading, low detail. A young girl sitting on a dirty grey tiled floor in a store, playing peacefully. She is holding a brown teddy bear. The teddy bear has thick black outlines, large blank pale yellow eyes, a black nose hole, and a small pink rectangular patch with stitches on its chest. Background features symmetrical wooden shelves with simple dark silhouetted bottles and objects. Warm, soft lighting. Muted earthy color palette (browns, greys, blacks) with subtle grunge textures on the background.
+
+10.2.
+Nazwa Assetu/Pliku: illustration2.png
+Użyte Narzędzie AI: Nano Banana 2
+Miejsce/Zastosowanie: Scena wprowadzająca – panika rodziców i upuszczenie misia.
+Przykładowy Prompt: In 16:9 Aspect 2D vector-style digital illustration, comic book aesthetic, thick black outlines on main subjects, simple flat shading, low detail. A tense, dynamic scene in a store. Panicked parents frantically grabbing a young girl to run away. The specific brown teddy bear (thick black outlines, large blank pale yellow eyes, pink stitched patch) is dropped and lies abandoned on the dirty grey tiled floor. Background features wooden shelves with simple dark silhouetted objects. Jagged, sharp red and blue siren lights illuminating the scene, echoing a starburst shape. Muted earthy color palette with subtle grunge textures.
+
+10.3.
+Nazwa Assetu/Pliku: illustration3.png
+Użyte Narzędzie AI: Nano Banana 2
+Miejsce/Zastosowanie: Scena wprowadzająca – perspektywa misia na uciekającą rodzinę.
+Przykładowy Prompt: In 16:9 Aspect 2D vector-style digital illustration, comic book aesthetic, thick black outlines on main subjects, simple flat shading, low detail. Point-of-view shot from a wooden shelf. In the extreme foreground, the back of the specific brown teddy bear (thick outlines, brown fur). In the distant background, looking down a grey hallway, small silhouettes of parents running away carrying a young girl. The girl reaches her small hand back towards the camera. Muted earthy color palette (browns, greys, blacks) with subtle grunge textures, melancholic atmosphere.
+
+10.4.
+Nazwa Assetu/Pliku: illustration4.1.png
+Użyte Narzędzie AI: Nano Banana 2
+Miejsce/Zastosowanie: Scena wprowadzająca – samotny miś i wybuch w tle.
+Przykładowy Prompt: In 16:9 Aspect 2D vector-style digital illustration, comic book aesthetic, thick black outlines on main subjects, simple flat shading, low detail. The specific brown teddy bear (thick black outlines, large blank pale yellow eyes, black nose hole, pink stitched patch) lying alone on a wooden shelf. In the background, a grey wall with a massive, jagged black starburst explosion shape overriding everything. Symmetrical wooden shelves with simple dark silhouetted bottles. Muted earthy color palette with subtle grunge textures.
+
+10.5.
+Nazwa Assetu/Pliku: illustration5.png
+Użyte Narzędzie AI: Nano Banana 2
+Miejsce/Zastosowanie: Scena wprowadzająca – symboliczna scena zniszczenia i gruzów.
+Przykładowy Prompt: In 16:9 Aspect 2D vector-style digital illustration, comic book aesthetic, thick black outlines on main subjects, simple flat shading, low detail. Abstract, symbolic scene of destruction. A deep grey and black background void. Jagged black explosion shapes and large falling broken wooden planks and debris with thick outlines. A single, faint radiating cyan blue light source shining through swirling dust. Muted earthy color palette (dark browns, dark greys, blacks) with subtle grunge textures, moody and dark atmosphere.
+
+11. Tło Menu (Menu Background)
+11.1.
+Nazwa Assetu/Pliku: background.png
+Użyte Narzędzie AI: Nano Banana 2
+Miejsce/Zastosowanie: Główne tło menu głównego gry.
+Przykładowy Prompt: move bear bit to the right side and remove distant characters from the middle, also make this scene bit darker (created from illustration 3)

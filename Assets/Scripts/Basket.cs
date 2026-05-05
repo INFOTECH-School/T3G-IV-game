@@ -1,0 +1,103 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Basket : MonoBehaviour
+{
+    [Header("Visual References")]
+    // Drag the object you want to appear in the first slot (disable it in Editor first)
+    public GameObject holdingPoint1; 
+    
+    // Drag the object you want to appear in the second slot (disable it in Editor first)
+    public GameObject holdingPoint2;
+
+    public List<GameObject> basketPoints =  new List<GameObject>();
+    private int _basketCounter = 0;
+    public bool level1 = false;
+    public bool level2 = false;
+    public List<Item> allowedItems = new List<Item>();
+    
+    // The object/effect that appears when both are full
+    public GameObject finishResult; 
+    
+    // The guide that appears when player is close and holds right item
+    public GameObject guide;
+
+    // Internal tracking
+    private bool _isHoldingPoint1Free = true;
+    private bool _isHoldingPoint2Free = true;
+
+    private void Start()
+    {
+        // Safety check: Ensure points are hidden when game starts
+        if (holdingPoint1) holdingPoint1.SetActive(false);
+        if (holdingPoint2) holdingPoint2.SetActive(false);
+        if (finishResult) finishResult.SetActive(false);
+        if (guide) guide.SetActive(false);
+    }
+
+    // Called by Player when they press 'E'
+    public void ReceiveItem(Item item)
+    {
+        if (allowedItems.Contains(item))
+        {
+            if (level1)
+            {
+                if (_isHoldingPoint1Free)
+                {
+                    GameManager.Instance.LevelOperator.ProgressLevel();
+                    // 1. Activate the visual representation in the basket
+                    if (holdingPoint1) holdingPoint1.SetActive(true);
+
+                    // 2. Mark slot as taken
+                    _isHoldingPoint1Free = false;
+
+                    // 3. DESTROY the item the player was holding
+                    Destroy(item.gameObject);
+                }
+                else if (_isHoldingPoint2Free)
+                {
+                    GameManager.Instance.LevelOperator.ProgressLevel();
+                    // 1. Activate the second visual representation
+                    if (holdingPoint2) holdingPoint2.SetActive(true);
+
+                    // 2. Mark slot as taken
+                    _isHoldingPoint2Free = false;
+
+                    // 3. DESTROY the item the player was holding
+                    Destroy(item.gameObject);
+
+                    // 4. Trigger the result (Basket is now full)
+                    Debug.Log("Basket Full! Sequence Complete.");
+                    if (finishResult) finishResult.SetActive(true);
+                }
+
+                Debug.Log(GameManager.Instance.LevelOperator.level1DependencyScore + "Level score");
+                Debug.Log(GameManager.Instance.LevelOperator.canEndLevel1);
+            }
+            else if (level2)
+            {
+                basketPoints[_basketCounter].SetActive(true);
+                Destroy(item.gameObject);
+                _basketCounter++;
+                if (_basketCounter == basketPoints.Count)
+                {
+                    if (finishResult) finishResult.SetActive(true);
+                }
+
+                GameManager.Instance.LevelOperator.ProgressLevel();
+            }
+            else
+            {
+                if( holdingPoint1 ) holdingPoint1.SetActive(true); 
+                if (finishResult) finishResult.SetActive(true); 
+                Destroy(item.gameObject);
+            }
+        }
+    }
+
+    // Helper for the Player script to know if it should show the "Press E" text
+    public bool HasSpace()
+    {
+        return _isHoldingPoint1Free || _isHoldingPoint2Free;
+    }
+}

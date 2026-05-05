@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5151138017986050568}
   - component: {fileID: 2654617273708854250}
   - component: {fileID: 6733455334595098991}
+  - component: {fileID: 8845414260591106610}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -34,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 30, y: -131.734, z: 0}
+  m_LocalEulerAnglesHint: {x: 30, y: 45, z: 0.001}
 --- !u!20 &3898613134475518490
 Camera:
   m_ObjectHideFlags: 0
@@ -68,13 +69,13 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
-  orthographic: 1
+  field of view: 30
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1535
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -155,8 +156,8 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 1
-  BlendUpdateMethod: 1
+  UpdateMethod: 0
+  BlendUpdateMethod: 0
   LensModeOverride:
     Enabled: 1
     DefaultMode: 1
@@ -170,3 +171,22 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!114 &8845414260591106610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946175953486305067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77f3809851b540e47b9820f84fe442e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Scripts::WallCutoutController
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  cutoutSize: 0.15
+  falloffSize: 0.5
+  castRadius: 0.1
+  castBackwardsDistance: 0

@@ -1,0 +1,71 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class timelineSignalHandler : MonoBehaviour
+{
+    [Header("Player Parenting")]
+    public Transform playerParent;
+
+    [Header("Kinematic Object Control")]
+    public List<KinematicObject> kinematicObjectsToDisable;
+
+    /// <summary>
+    // This function parents the Player to the specified 'playerParent' transform.
+    // It's designed to be called from a Timeline signal.
+    // The 'worldPositionStays' parameter is set to 'true' to ensure the player
+    // maintains its current world position, rotation, and scale upon parenting,
+    // preventing any sudden jumps or stretching. The player will then follow the parent's movements.
+    /// </summary>
+    public void ParentPlayer()
+    {
+        if (playerParent != null && GameManager.Instance != null && GameManager.Instance.Player != null)
+        {
+            GameManager.Instance.Player.transform.SetParent(playerParent, true);
+        }
+        else
+        {
+            Debug.LogWarning("PlayerParent, GameManager, or Player not found. Cannot parent player.", this);
+        }
+    }
+
+    /// <summary>
+    // This function unparents the Player, returning it to the root of the scene.
+    // It's designed to be called from a Timeline signal.
+    // The 'worldPositionStays' parameter is set to 'true' to ensure the player
+    // maintains its current world transform when it is unparented.
+    /// </summary>
+    public void UnparentPlayer()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.Player != null)
+        {
+            GameManager.Instance.Player.transform.SetParent(null, true);
+        }
+        else
+        {
+            Debug.LogWarning("GameManager or Player not found. Cannot unparent player.", this);
+        }
+    }
+
+    /// <summary>
+    // This function iterates through the 'kinematicObjectsToDisable' list
+    // and calls the DisableInteraction() method on each one.
+    // It's designed to be called from a Timeline signal.
+    /// </summary>
+    public void DisableKinematicObjectInteractions()
+    {
+        if (kinematicObjectsToDisable != null)
+        {
+            foreach (var kinematicObject in kinematicObjectsToDisable)
+            {
+                if (kinematicObject != null)
+                {
+                    kinematicObject.DisableInteraction();
+                }
+                else
+                {
+                    Debug.LogWarning("Found a null entry in the kinematicObjectsToDisable list.", this);
+                }
+            }
+        }
+    }
+}

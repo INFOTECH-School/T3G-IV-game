@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public Player Player { private set; get; }
     public PlayerMovement PlayerMovement { private set; get; }
     public AliceController AliceController {private set; get;}
+    public LevelOperator LevelOperator { private set; get;}
 
     public enum GameState
     {
@@ -16,8 +17,13 @@ public class GameManager : MonoBehaviour
     public GameState CurrentGameState = GameState.Gameplay;
     void Awake()
     {
+        if (Instance)
+        {
+            //Add information transition from old to new instance.
+            Destroy(Instance.gameObject);
+        }
+        Instance = this;
         DontDestroyOnLoad(gameObject);
-        if (!Instance) Instance = this;
     }
 
     public void SetState(GameState state)
@@ -69,5 +75,15 @@ public class GameManager : MonoBehaviour
     {
         AliceController = null;
     }
-    
+
+    public void RegisterLevelOperator(LevelOperator levelOperator)
+    {
+        if (!levelOperator) return;
+        LevelOperator = levelOperator;
+    }
+
+    public void UnregisterLevelOperator()
+    {
+        LevelOperator = null;
+    }
 }
