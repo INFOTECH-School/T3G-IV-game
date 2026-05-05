@@ -191,6 +191,7 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log(illustrationCutscene + "set to true");
                     illustrationCutscene.played = true;
+                    illustrationCutscene.GhostPlay();
                 }
             }
         }

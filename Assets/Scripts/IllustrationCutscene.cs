@@ -12,6 +12,7 @@ public class IllustrationCutscene : MonoBehaviour
     public GameObject objectToActivate;
 
     public GameObject infoText;
+    public GameObject IllustrationCanvas;
     
     private Coroutine _cutsceneCoroutine;
     public bool played;
@@ -49,6 +50,7 @@ public class IllustrationCutscene : MonoBehaviour
         
         if (director)
         {
+            IllustrationCanvas.SetActive(true);
             gameObject.SetActive(true);
             _cutsceneCoroutine = StartCoroutine(PlayCutscene());
         }
@@ -115,6 +117,12 @@ public class IllustrationCutscene : MonoBehaviour
             infoText.SetActive(false);
         }
 
+        IllustrationCanvas.SetActive(false);    
+        gameObject.SetActive(false);
+    }
+
+    public void GhostPlay(){
+        IllustrationCanvas.SetActive(false);
         gameObject.SetActive(false);
     }
 }
