@@ -7640,6 +7640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 775465111}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 1
   ending: 0
   level2: 0
@@ -31597,6 +31598,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 1186235265}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 0
   ending: 0
   level2: 0
@@ -50730,7 +50732,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.8069572
+      value: -6.8075666
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -50738,7 +50740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.742922
+      value: -16.742313
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -76170,6 +76172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 1638576343}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 1
   ending: 0
   level2: 0
@@ -96218,6 +96221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 1811784916}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 0
   ending: 1
   level2: 1
@@ -102502,6 +102506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 1932460721}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 0
   ending: 0
   level2: 1
@@ -102875,7 +102880,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.8069572
+      value: -6.8075666
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -102883,7 +102888,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.742922
+      value: -16.742313
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -115579,6 +115584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 4306864617311051256}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 0
   ending: 1
   level2: 0
@@ -116792,6 +116798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 5062098250274454188}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 0
   ending: 0
   level2: 0
@@ -120783,6 +120790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::TimelineTrigger
   director: {fileID: 2540900883636147450}
   playOnce: 1
+  isCarBlockingCutscene: 0
   shortCutscene: 0
   ending: 0
   level2: 0
@@ -121728,7 +121736,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &8111868019936207597
 MeshFilter:
   m_ObjectHideFlags: 0
