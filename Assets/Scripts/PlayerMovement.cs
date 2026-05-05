@@ -31,11 +31,13 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip[] _footstepClips;
     public AudioClip _jumpClip;
     public AudioClip _landClip;
+    public AudioClip _throwClip;
     public float _walkStepRate = 0.5f;
     public float _runStepRate = 0.3f;
     public float _minWalkPitch = 0.9f;
     public float _maxWalkPitch = 1.1f;
     public float _landClipPitch = 1f;
+    public float _throwClipPitch = 1f;
     private float _footstepTimer;
 
 
@@ -353,6 +355,12 @@ public class PlayerMovement : MonoBehaviour
 
         GameObject projectile = GameManager.Instance.Player.currentItem.gameObject;
         if (_animator) _animator.SetTrigger("Throw");
+        
+        if (_throwClip)
+        {
+            PlaySoundWithPitch(_throwClip, _throwClipPitch);
+        }
+
         GameManager.Instance.Player.UnequipForThrow();
 
         if (projectile.TryGetComponent(out Rigidbody rb))
