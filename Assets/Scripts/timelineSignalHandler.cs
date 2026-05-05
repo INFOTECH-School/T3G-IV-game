@@ -93,7 +93,7 @@ public class timelineSignalHandler : MonoBehaviour
     public void TriggerShake(float intensity)
     {
         // You can use the intensity passed from the signal!
-        impulseSource.GenerateImpulseWithVelocity(Vector3.down * intensity);
+        impulseSource.GenerateImpulse();
     }
 
     public void PlayTimelineMusic(int id)

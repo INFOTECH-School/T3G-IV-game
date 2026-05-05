@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody), typeof(Animator), typeof(AudioSource))]
 public class PlayerMovement : MonoBehaviour
@@ -32,6 +33,9 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip _landClip;
     public float _walkStepRate = 0.5f;
     public float _runStepRate = 0.3f;
+    public float _minWalkPitch = 0.9f;
+    public float _maxWalkPitch = 1.1f;
+    public float _landClipPitch = 1f;
     private float _footstepTimer;
 
 
@@ -62,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
     private int _isHoldingHash;
     private int _isInteractingHash;
     private int _interactionSpeedHash;
+
+    private Coroutine _resetPitchCoroutine;
 
     private void Start()
     {
@@ -133,7 +139,8 @@ public class PlayerMovement : MonoBehaviour
                 AudioClip clip = _footstepClips[index];
                 if (clip)
                 {
-                    _audioSource.PlayOneShot(clip);
+                    float randomPitch = Random.Range(_minWalkPitch, _maxWalkPitch);
+                    PlaySoundWithPitch(clip, randomPitch);
                 }
             }
         }
@@ -201,7 +208,7 @@ public class PlayerMovement : MonoBehaviour
                 _isJumpPressed = true;
                 if (_jumpClip)
                 {
-                    _audioSource.PlayOneShot(_jumpClip);
+                    PlaySoundWithPitch(_jumpClip, 1f);
                 }
                 if (TutorialManager.Instance != null)
                 {
@@ -455,7 +462,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (_landClip)
                 {
-                    _audioSource.PlayOneShot(_landClip);
+                    PlaySoundWithPitch(_landClip, _landClipPitch);
                 }
                 _footstepTimer = _walkStepRate; 
                 _wasAirborne = false;
@@ -479,6 +486,27 @@ public class PlayerMovement : MonoBehaviour
     {
         if (newThrowingPoint) _throwingPoint = newThrowingPoint;
         if (newAnimator) _animator = newAnimator;
+    }
+
+    private void PlaySoundWithPitch(AudioClip clip, float pitch)
+    {
+        if (clip == null) return;
+        
+        _audioSource.pitch = pitch;
+        _audioSource.PlayOneShot(clip);
+        
+        if (_resetPitchCoroutine != null)
+        {
+            StopCoroutine(_resetPitchCoroutine);
+        }
+        _resetPitchCoroutine = StartCoroutine(ResetPitchAfterClip(clip.length));
+    }
+
+    private IEnumerator ResetPitchAfterClip(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _audioSource.pitch = 1f;
+        _resetPitchCoroutine = null;
     }
 
     private void OnDestroy()

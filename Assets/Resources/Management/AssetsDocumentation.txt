@@ -294,3 +294,6 @@ bg music parking:
 - weapon shoot sounds - cc0 https://freesound.org/people/Julien_Matthey/sounds/751279/
 - cold ambience - cc0 https://freesound.org/people/ChristmasKrumble666/sounds/685182/
 - fireworks (as weapons) - Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0
+cart wheel - - https://freesound.org/people/Sonicorchestra/sounds/434885/ cc0
+main menu music - main menu music.wav - cc0 https://freesound.org/people/xkeril/sounds/826622/
+fire crackling - firecracling.wav - cc0 https://freesound.org/people/kingsrow/sounds/181562/
