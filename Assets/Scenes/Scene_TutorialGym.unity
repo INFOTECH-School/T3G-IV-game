@@ -223,7 +223,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 86d22a9d2d7a50c438716dd8e4015fec, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1386,11 +1386,6 @@ Animator:
 --- !u!95 &259702967 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 4811234714372027898, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
-  m_PrefabInstance: {fileID: 259702965}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &259702968 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 4259444159653908806, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
   m_PrefabInstance: {fileID: 259702965}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &263896844
@@ -5125,7 +5120,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14857
+      value: -68.14876
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5133,7 +5128,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.730996
+      value: -13.730803
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5272,7 +5267,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -68.14857
+      value: -68.14876
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5280,7 +5275,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.730996
+      value: -13.730803
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6464,7 +6459,7 @@ PlayableDirector:
   - key: {fileID: 4138992211077393471, guid: 98009757ca4273c41a7c645cc569f66b, type: 2}
     value: {fileID: 924985241}
   - key: {fileID: -7657212474347384897, guid: 98009757ca4273c41a7c645cc569f66b, type: 2}
-    value: {fileID: 259702968}
+    value: {fileID: 28112549}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &1002143915
@@ -7467,7 +7462,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10, y: 10, z: 10}
+  m_Size: {x: 40, y: 10, z: 15}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1072496485
 MeshRenderer:

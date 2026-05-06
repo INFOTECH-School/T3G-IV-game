@@ -9795,7 +9795,7 @@ PlayableDirector:
   - key: {fileID: 290311553435981936, guid: a987e365396af164f84473c4c4189c36, type: 2}
     value: {fileID: 1436089539071524825}
   - key: {fileID: 4332691533293564487, guid: a987e365396af164f84473c4c4189c36, type: 2}
-    value: {fileID: 1594358148}
+    value: {fileID: 5475588174264089934}
   - key: {fileID: 7041915654644167256, guid: a987e365396af164f84473c4c4189c36, type: 2}
     value: {fileID: 1594358128}
   - key: {fileID: 4979689669016002054, guid: a987e365396af164f84473c4c4189c36, type: 2}
@@ -52465,7 +52465,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.7455573
+      value: -7.745116
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -52473,7 +52473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.388683
+      value: -16.389124
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -81368,7 +81368,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1501647981
 Transform:
   m_ObjectHideFlags: 0
@@ -89292,13 +89292,13 @@ MonoBehaviour:
         - m_Target: {fileID: 1594358149}
           m_TargetAssemblyTypeName: timelineSignalHandler, Scripts
           m_MethodName: TriggerShake
-          m_Mode: 4
+          m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 1
-            m_StringArgument: 
+            m_StringArgument: shelf
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!114 &1594358149
@@ -89320,7 +89320,8 @@ MonoBehaviour:
   - {fileID: 1448089008}
   - {fileID: 807645458}
   shelfBoomSound: {fileID: 8300000, guid: 176474ec4ed5a2b4aab42ea0c1ac375c, type: 3}
-  impulseSource: {fileID: 1594358150}
+  shelfImpulseSource: {fileID: 1594358150}
+  boomImpulseSource: {fileID: 5475588174264089933}
   mainAudioSource: {fileID: 1594358128}
   timelineMusics: []
   cardboardDirector: {fileID: 518681956}
@@ -89338,7 +89339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
   ImpulseDefinition:
     ImpulseChannel: 1
-    ImpulseShape: 2
+    ImpulseShape: 0
     CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
@@ -89346,11 +89347,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     ImpulseDuration: 1
-    ImpulseType: 0
+    ImpulseType: 3
     DissipationRate: 0.25
-    RawSignal: {fileID: 0}
-    AmplitudeGain: 1
-    FrequencyGain: 1
+    RawSignal: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+    AmplitudeGain: 2
+    FrequencyGain: 0.8
     RepeatMode: 0
     Randomize: 1
     TimeEnvelope:
@@ -89366,9 +89367,9 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      AttackTime: 0
-      SustainTime: 0.2
-      DecayTime: 0.7
+      AttackTime: 0.05
+      SustainTime: 0.1
+      DecayTime: 0.4
       ScaleWithImpact: 1
       HoldForever: 0
     ImpactRadius: 100
@@ -110682,7 +110683,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.7455573
+      value: -7.745116
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -110690,7 +110691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.388683
+      value: -16.389124
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -127525,13 +127526,15 @@ GameObject:
   - component: {fileID: 5331524606953313731}
   - component: {fileID: 5475588174264089932}
   - component: {fileID: 902413454405060980}
+  - component: {fileID: 5475588174264089933}
+  - component: {fileID: 5475588174264089934}
   m_Layer: 5
   m_Name: IllustrationCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &1256790166284337691
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -131287,6 +131290,89 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &5475588174264089933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252358110692236326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 0
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 3
+    DissipationRate: 0.25
+    RawSignal: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+    AmplitudeGain: 10
+    FrequencyGain: 2
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0.01
+      SustainTime: 0.3
+      DecayTime: 4
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &5475588174264089934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252358110692236326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 1086201e0cbaa1148ab934be63195079, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1594358149}
+          m_TargetAssemblyTypeName: timelineSignalHandler, Scripts
+          m_MethodName: TriggerShake
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: boom
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5506773184906356032
 GameObject:
   m_ObjectHideFlags: 0

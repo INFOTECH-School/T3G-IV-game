@@ -39,8 +39,10 @@ public class PlayerMovement : MonoBehaviour
     public float _landClipPitch = 1f;
     public float _throwClipPitch = 1f;
     private float _footstepTimer;
-
-
+    
+    // Auto-calibrated speeds for accurate flat-ground ratio calculation
+    private float _calibratedWalkSpeed = 3f;
+    private float _calibratedRunSpeed = 6f;
     [Header("References")]
     private Rigidbody _rigidBody;
     [SerializeField] private Animator _animator;
@@ -129,10 +131,28 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!_isGrounded || _inputDirection.magnitude < 0.1f) return;
 
-        _footstepTimer -= Time.deltaTime;
+        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+        
+        Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
+        float currentSpeed = horizontalVel.magnitude;
+        
+        // Auto-calibrate normal flat-ground speed. If we are moving roughly flat, learn the speed.
+        if (Mathf.Abs(_rigidBody.linearVelocity.y) < 0.1f && currentSpeed > 0.5f)
+        {
+            if (isRunning)
+                _calibratedRunSpeed = Mathf.Lerp(_calibratedRunSpeed, currentSpeed, Time.deltaTime * 3f);
+            else
+                _calibratedWalkSpeed = Mathf.Lerp(_calibratedWalkSpeed, currentSpeed, Time.deltaTime * 3f);
+        }
+        
+        float expectedSpeed = isRunning ? _calibratedRunSpeed : _calibratedWalkSpeed;
+        
+        // Adapt step rate to actual speed relative to the calibrated flat ground speed.
+        float speedRatio = expectedSpeed > 0.1f ? Mathf.Clamp(currentSpeed / expectedSpeed, 0.3f, 1.5f) : 1f;
+
+        _footstepTimer -= Time.deltaTime * speedRatio;
         if (_footstepTimer <= 0)
         {
-            bool isRunning = Input.GetKey(KeyCode.LeftShift);
             _footstepTimer = isRunning ? _runStepRate : _walkStepRate;
 
             if (_footstepClips != null && _footstepClips.Length > 0)
