@@ -50732,7 +50732,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.8075666
+      value: -6.805858
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.y
@@ -50740,7 +50740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.742313
+      value: -16.744022
       objectReference: {fileID: 0}
     - target: {fileID: 3299008830474508456, guid: 413ad1fa315e47d49b9df1628133c430, type: 3}
       propertyPath: m_LocalRotation.w
@@ -102880,7 +102880,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.8075666
+      value: -6.805858
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -102888,7 +102888,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -16.742313
+      value: -16.744022
       objectReference: {fileID: 0}
     - target: {fileID: 181845716580666192, guid: 01807923ec31a2a43ac636a413ba2a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -116800,7 +116800,7 @@ MonoBehaviour:
   playOnce: 1
   isCarBlockingCutscene: 0
   shortCutscene: 0
-  ending: 0
+  ending: 1
   level2: 0
   interactKey: 48
   triggerer: 0
@@ -116838,6 +116838,12 @@ MonoBehaviour:
   - {fileID: 1937776940}
   - {fileID: 1937776939}
   - {fileID: 423768827}
+  - {fileID: 761870271}
+  - {fileID: 761870271}
+  - {fileID: 761870271}
+  - {fileID: 761870271}
+  - {fileID: 761870271}
+  - {fileID: 761870271}
   - {fileID: 761870271}
 --- !u!1 &2202919290219325135
 GameObject:
