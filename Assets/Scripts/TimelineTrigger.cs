@@ -93,6 +93,13 @@ public class TimelineTrigger : MonoBehaviour
                 outlineToHide.layer = LayerMask.NameToLayer("Hidden");
             }
         }
+        
+        //ArgumentException: An item with the same key has already been added. Key: Plank 1 (UnityEngine.GameObject)
+        //System.Collections.Generic.Dictionary`2[TKey,TValue].TryInsert (TKey key, TValue value, System.Collections.Generic.InsertionBehavior behavior) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+        //System.Collections.Generic.Dictionary`2[TKey,TValue].Add (TKey key, TValue value) (at <1eb9db207454431c84a47bcd81e79c37>:0)
+        //TimelineTrigger.PlayCutscene (System.String sceneName) (at Assets/Scripts/TimelineTrigger.cs:92)
+        //TimelineTrigger.OnTriggerEnter (UnityEngine.Collider other) (at Assets/Scripts/TimelineTrigger.cs:174)
+
 
         director.stopped += OnCutsceneFinished;
         _played = true;
