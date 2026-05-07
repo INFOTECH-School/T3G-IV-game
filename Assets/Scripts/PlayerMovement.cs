@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody), typeof(Animator), typeof(AudioSource))]
 public class PlayerMovement : MonoBehaviour
@@ -30,11 +31,18 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip[] _footstepClips;
     public AudioClip _jumpClip;
     public AudioClip _landClip;
+    public AudioClip _throwClip;
     public float _walkStepRate = 0.5f;
     public float _runStepRate = 0.3f;
+    public float _minWalkPitch = 0.9f;
+    public float _maxWalkPitch = 1.1f;
+    public float _landClipPitch = 1f;
+    public float _throwClipPitch = 1f;
     private float _footstepTimer;
-
-
+    
+    // Auto-calibrated speeds for accurate flat-ground ratio calculation
+    private float _calibratedWalkSpeed = 3f;
+    private float _calibratedRunSpeed = 6f;
     [Header("References")]
     private Rigidbody _rigidBody;
     [SerializeField] private Animator _animator;
@@ -62,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
     private int _isHoldingHash;
     private int _isInteractingHash;
     private int _interactionSpeedHash;
+
+    private Coroutine _resetPitchCoroutine;
 
     private void Start()
     {
@@ -121,10 +131,28 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!_isGrounded || _inputDirection.magnitude < 0.1f) return;
 
-        _footstepTimer -= Time.deltaTime;
+        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+        
+        Vector3 horizontalVel = new Vector3(_rigidBody.linearVelocity.x, 0, _rigidBody.linearVelocity.z);
+        float currentSpeed = horizontalVel.magnitude;
+        
+        // Auto-calibrate normal flat-ground speed. If we are moving roughly flat, learn the speed.
+        if (Mathf.Abs(_rigidBody.linearVelocity.y) < 0.1f && currentSpeed > 0.5f)
+        {
+            if (isRunning)
+                _calibratedRunSpeed = Mathf.Lerp(_calibratedRunSpeed, currentSpeed, Time.deltaTime * 3f);
+            else
+                _calibratedWalkSpeed = Mathf.Lerp(_calibratedWalkSpeed, currentSpeed, Time.deltaTime * 3f);
+        }
+        
+        float expectedSpeed = isRunning ? _calibratedRunSpeed : _calibratedWalkSpeed;
+        
+        // Adapt step rate to actual speed relative to the calibrated flat ground speed.
+        float speedRatio = expectedSpeed > 0.1f ? Mathf.Clamp(currentSpeed / expectedSpeed, 0.3f, 1.5f) : 1f;
+
+        _footstepTimer -= Time.deltaTime * speedRatio;
         if (_footstepTimer <= 0)
         {
-            bool isRunning = Input.GetKey(KeyCode.LeftShift);
             _footstepTimer = isRunning ? _runStepRate : _walkStepRate;
 
             if (_footstepClips != null && _footstepClips.Length > 0)
@@ -133,7 +161,8 @@ public class PlayerMovement : MonoBehaviour
                 AudioClip clip = _footstepClips[index];
                 if (clip)
                 {
-                    _audioSource.PlayOneShot(clip);
+                    float randomPitch = Random.Range(_minWalkPitch, _maxWalkPitch);
+                    PlaySoundWithPitch(clip, randomPitch);
                 }
             }
         }
@@ -201,7 +230,7 @@ public class PlayerMovement : MonoBehaviour
                 _isJumpPressed = true;
                 if (_jumpClip)
                 {
-                    _audioSource.PlayOneShot(_jumpClip);
+                    PlaySoundWithPitch(_jumpClip, 1f);
                 }
                 if (TutorialManager.Instance != null)
                 {
@@ -346,6 +375,12 @@ public class PlayerMovement : MonoBehaviour
 
         GameObject projectile = GameManager.Instance.Player.currentItem.gameObject;
         if (_animator) _animator.SetTrigger("Throw");
+        
+        if (_throwClip)
+        {
+            PlaySoundWithPitch(_throwClip, _throwClipPitch);
+        }
+
         GameManager.Instance.Player.UnequipForThrow();
 
         if (projectile.TryGetComponent(out Rigidbody rb))
@@ -455,7 +490,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (_landClip)
                 {
-                    _audioSource.PlayOneShot(_landClip);
+                    PlaySoundWithPitch(_landClip, _landClipPitch);
                 }
                 _footstepTimer = _walkStepRate; 
                 _wasAirborne = false;
@@ -479,6 +514,27 @@ public class PlayerMovement : MonoBehaviour
     {
         if (newThrowingPoint) _throwingPoint = newThrowingPoint;
         if (newAnimator) _animator = newAnimator;
+    }
+
+    private void PlaySoundWithPitch(AudioClip clip, float pitch)
+    {
+        if (clip == null) return;
+        
+        _audioSource.pitch = pitch;
+        _audioSource.PlayOneShot(clip);
+        
+        if (_resetPitchCoroutine != null)
+        {
+            StopCoroutine(_resetPitchCoroutine);
+        }
+        _resetPitchCoroutine = StartCoroutine(ResetPitchAfterClip(clip.length));
+    }
+
+    private IEnumerator ResetPitchAfterClip(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _audioSource.pitch = 1f;
+        _resetPitchCoroutine = null;
     }
 
     private void OnDestroy()

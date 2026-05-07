@@ -10,7 +10,8 @@ public static class Utils //Player pos might not be getting loaded, level progre
     {
         var loading = Object.Instantiate(Resources.Load<GameObject>("UI/LoadingScreen"));
         Object.DontDestroyOnLoad(loading);
-        GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+        if (dataToLoad == null)
+            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
         GameManager.Instance.StartCoroutine(LoadSceneAfterDelay(sceneName, loading, dataToLoad));
     }
 
