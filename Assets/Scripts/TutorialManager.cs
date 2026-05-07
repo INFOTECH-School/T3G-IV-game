@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager Instance { get; private set; }
 
     public List<GameObject> tutorialStepsObjects;
+    public float fadeDuration = 0.5f;
 
     private enum TutorialStep
     {
@@ -47,7 +49,11 @@ public class TutorialManager : MonoBehaviour
         {
             if (tutorialStepsObjects[i] != null)
             {
-                tutorialStepsObjects[i].SetActive(i == (int)currentStep);
+                bool isActive = (i == (int)currentStep);
+                tutorialStepsObjects[i].SetActive(isActive);
+                CanvasGroup cg = tutorialStepsObjects[i].GetComponent<CanvasGroup>();
+                if (cg == null) cg = tutorialStepsObjects[i].AddComponent<CanvasGroup>();
+                cg.alpha = isActive ? 1f : 0f;
             }
         }
     }
@@ -135,7 +141,7 @@ public class TutorialManager : MonoBehaviour
 
         if ((int)currentStep < tutorialStepsObjects.Count && tutorialStepsObjects[(int)currentStep] != null)
         {
-            tutorialStepsObjects[(int)currentStep].SetActive(false);
+            StartCoroutine(FadeCanvasGroup(tutorialStepsObjects[(int)currentStep], 0f, true));
         }
 
         currentStep++;
@@ -145,8 +151,42 @@ public class TutorialManager : MonoBehaviour
         {
             if ((int)currentStep < tutorialStepsObjects.Count && tutorialStepsObjects[(int)currentStep] != null)
             {
-                tutorialStepsObjects[(int)currentStep].SetActive(true);
+                GameObject nextObj = tutorialStepsObjects[(int)currentStep];
+                CanvasGroup cg = nextObj.GetComponent<CanvasGroup>();
+                if (cg == null) cg = nextObj.AddComponent<CanvasGroup>();
+                
+                if (!nextObj.activeSelf)
+                {
+                    cg.alpha = 0f;
+                }
+                
+                StartCoroutine(FadeCanvasGroup(nextObj, 1f, false));
             }
+        }
+    }
+
+    private IEnumerator FadeCanvasGroup(GameObject obj, float endAlpha, bool disableOnFinish)
+    {
+        if (obj == null) yield break;
+
+        CanvasGroup cg = obj.GetComponent<CanvasGroup>();
+        if (cg == null) cg = obj.AddComponent<CanvasGroup>();
+
+        obj.SetActive(true);
+        float startAlpha = cg.alpha;
+
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            cg.alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        cg.alpha = endAlpha;
+        if (disableOnFinish)
+        {
+            obj.SetActive(false);
         }
     }
 
