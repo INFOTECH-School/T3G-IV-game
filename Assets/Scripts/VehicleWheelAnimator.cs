@@ -6,6 +6,8 @@ using UnityEngine;
 /// </summary>
 public class VehicleWheelAnimator : MonoBehaviour
 {
+    public enum MovementReference { Forward, Up, Right }
+    
     [Header("Wheel Configuration")]
     [Tooltip("The transforms of the wheels that should rotate.")]
     public Transform[] wheels;
@@ -13,8 +15,11 @@ public class VehicleWheelAnimator : MonoBehaviour
     [Tooltip("The radius of the wheels for accurate rotation speed calculation.")]
     public float wheelRadius = 0.35f;
     
-    [Tooltip("The local axis the wheels rotate around.")]
+    [Tooltip("The local axis the wheels rotate around. Z (0,0,1) is now default.")]
     public Vector3 rotationAxis = Vector3.forward;
+
+    [Tooltip("Which local axis of the vehicle determines forward movement?")]
+    public MovementReference movementReference = MovementReference.Forward;
 
     [Header("Audio Modulation")]
     [Tooltip("The AudioSource to modulate. If null, it will try to find one on this object.")]
@@ -36,6 +41,8 @@ public class VehicleWheelAnimator : MonoBehaviour
     [SerializeField] private float currentDirection;
 
     private Vector3 _lastPosition;
+    private Quaternion[] _initialLocalRotations;
+    private float _accumulatedRotation;
     private bool _hasMovementSource;
 
     private void Start()
@@ -71,6 +78,16 @@ public class VehicleWheelAnimator : MonoBehaviour
         if (wheels == null || wheels.Length == 0)
         {
             FindWheelsInChildren();
+        }
+
+        // Store initial rotations for stable Z-only rotation
+        if (wheels != null)
+        {
+            _initialLocalRotations = new Quaternion[wheels.Length];
+            for (int i = 0; i < wheels.Length; i++)
+            {
+                if (wheels[i] != null) _initialLocalRotations[i] = wheels[i].localRotation;
+            }
         }
     }
 
@@ -110,15 +127,18 @@ public class VehicleWheelAnimator : MonoBehaviour
         // Update current speed
         currentSpeed = distanceThisFrame / Time.deltaTime;
         
-        // Update current direction (1 for forward, -1 for backward relative to car's forward)
+        // Update current direction based on chosen reference
         if (distanceThisFrame > 0.001f)
         {
-            float dot = Vector3.Dot(displacement.normalized, transform.forward);
+            Vector3 referenceDir = transform.forward;
+            switch (movementReference)
+            {
+                case MovementReference.Up: referenceDir = transform.up; break;
+                case MovementReference.Right: referenceDir = transform.right; break;
+            }
+
+            float dot = Vector3.Dot(displacement.normalized, referenceDir);
             currentDirection = dot >= 0 ? 1f : -1f;
-        }
-        else
-        {
-            // Keep previous direction when stopped to avoid flickering
         }
     }
 
@@ -127,18 +147,19 @@ public class VehicleWheelAnimator : MonoBehaviour
         if (wheels == null || wheels.Length == 0) return;
 
         float distanceThisFrame = (transform.position - _lastPosition).magnitude;
-        if (distanceThisFrame < 0.0001f) return;
-
-        // Rotation = (Distance / Circumference) * 360 degrees
-        // Circumference = 2 * PI * Radius
-        float rotationDegrees = (distanceThisFrame / (2f * Mathf.PI * wheelRadius)) * 360f;
         
-        foreach (var wheel in wheels)
+        // Update accumulated rotation even if distance is small to maintain consistency
+        // Rotation = (Distance / Circumference) * 360 degrees
+        float rotationStep = (distanceThisFrame / (2f * Mathf.PI * wheelRadius)) * 360f;
+        _accumulatedRotation += rotationStep * currentDirection;
+        
+        for (int i = 0; i < wheels.Length; i++)
         {
-            if (wheel == null) continue;
+            if (wheels[i] == null) continue;
             
-            // Rotate the wheel around its local axis
-            wheel.Rotate(rotationAxis, rotationDegrees * currentDirection, Space.Self);
+            // Apply rotation strictly around the chosen axis relative to initial rotation
+            // This prevents Y/X "drift" or wobble that can happen with incremental .Rotate()
+            wheels[i].localRotation = _initialLocalRotations[i] * Quaternion.AngleAxis(_accumulatedRotation, rotationAxis);
         }
     }
 
