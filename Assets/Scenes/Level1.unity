@@ -83026,6 +83026,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2447185226350992867, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.18
+      objectReference: {fileID: 0}
     - target: {fileID: 2915869664884066904, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
       propertyPath: m_LocalPosition.y
       value: 3
@@ -83035,16 +83039,20 @@ PrefabInstance:
       value: player
       objectReference: {fileID: 0}
     - target: {fileID: 4138980424708036843, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
+      propertyPath: m_Range
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4138980424708036843, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
       propertyPath: m_Intensity
-      value: 0.67
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4138980424708036843, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
       propertyPath: m_SpotAngle
-      value: 109.32857
+      value: 179
       objectReference: {fileID: 0}
     - target: {fileID: 4138980424708036843, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
       propertyPath: m_InnerSpotAngle
-      value: 100
+      value: 59.318176
       objectReference: {fileID: 0}
     - target: {fileID: 4259444159653908806, guid: 6aa59d4a3efdd234c99bc9d1dac25b62, type: 3}
       propertyPath: m_Volume
