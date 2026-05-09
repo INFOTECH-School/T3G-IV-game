@@ -388,6 +388,11 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = _calculatedVelocity;
         }
 
+        if (projectile.TryGetComponent(out ThrowablePhysics tp))
+        {
+            tp.OnThrow();
+        }
+
         if (_isInValidThrowZone && TutorialManager.Instance != null)
         {
             TutorialManager.Instance.OnThrow();
