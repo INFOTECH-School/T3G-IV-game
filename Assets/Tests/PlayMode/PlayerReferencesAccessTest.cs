@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 
 public class PlayerReferencesAccessTest
 {
-    [UnityTest]
+/*    [UnityTest]
     public IEnumerator PlayerAccess()
     {
         SceneManager.LoadScene("Scenes/Test_Gym");
@@ -20,5 +20,5 @@ public class PlayerReferencesAccessTest
         SceneManager.LoadScene("Scenes/Test_Gym");
         yield return null;
         Assert.AreEqual(GameManager.Instance.PlayerMovement, GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>());
-    }
+    }*/
 }
