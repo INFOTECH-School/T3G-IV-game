@@ -10,6 +10,8 @@ public class Main_Menu : MonoBehaviour
     public List<Button> deleteButtons = new List<Button>();
     [FormerlySerializedAs("LoadButton")] public Button loadGameButton;
     public Button newGameButton;
+    public Color completedSaveColor = Color.green;
+    public Color defaultSaveColor = new Color(1f, 0f, 0.4314132f);
     public void Quit()
     {
         Application.Quit();
@@ -68,18 +70,28 @@ public class Main_Menu : MonoBehaviour
         }
         foreach (var deleteBtn in deleteButtons)
         {
-            if (deleteBtn != null) deleteBtn.interactable = false;
+            if (deleteBtn != null)
+            {
+                deleteBtn.interactable = false;
+                deleteBtn.GetComponent<Image>().color = defaultSaveColor;
+            }
         }
 
         foreach (var save in saves)
         {
+            bool isCompleted = SaveManager.IsSlotCompleted(save.SlotNumber);
+
             if (save.SlotNumber < saveSlots.Count && saveSlots[save.SlotNumber] != null)
             {
-                saveSlots[save.SlotNumber].interactable = true;
+                saveSlots[save.SlotNumber].interactable = !isCompleted;
             }
             if (save.SlotNumber < deleteButtons.Count && deleteButtons[save.SlotNumber] != null)
             {
                 deleteButtons[save.SlotNumber].interactable = true;
+                if (isCompleted)
+                {
+                    deleteButtons[save.SlotNumber].GetComponent<Image>().color = completedSaveColor;
+                }
             }
         }
     }
