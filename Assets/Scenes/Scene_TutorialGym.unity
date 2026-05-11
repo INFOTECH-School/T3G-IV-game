@@ -16990,7 +16990,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a215f5e2fab5a394093ee7e9e4b029b8, type: 3}
       propertyPath: m_Name
-      value: Baleron(Zardzewialy)2
+      value: "Mercedes Benz W124 124 2.0D (1988) | Klasyk, kt\xF3ry zarabia | Zadbany
+        egzemplarz - w\u0105ska listwa, gotowy pod zabytek"
       objectReference: {fileID: 0}
     - target: {fileID: 6745302439343835087, guid: a215f5e2fab5a394093ee7e9e4b029b8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
