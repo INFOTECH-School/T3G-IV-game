@@ -80,7 +80,7 @@ public class IllustrationCutscene : MonoBehaviour
         // Wait for the timeline to finish or for skip input
         while (director.state == PlayState.Playing && !skipped)
         {
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
             {
                 skipped = true;
             }
