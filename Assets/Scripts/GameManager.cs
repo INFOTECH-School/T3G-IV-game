@@ -191,6 +191,7 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log(illustrationCutscene + "set to true");
                     illustrationCutscene.played = true;
+                    illustrationCutscene.GhostPlay();
                 }
             }
         }
@@ -317,3 +318,5 @@ public class GameManager : MonoBehaviour
         LevelOperator = null;
     }
 }
+
+//TO DO: ensure all outlines are disabled during timelines. Adjust game sounds (land lower) all game higher, balance it out.

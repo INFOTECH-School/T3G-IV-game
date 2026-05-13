@@ -20,6 +20,7 @@ public class SaveData
     public List<string> destroyedItems;
     public List<string> playedIllustrationCutscenes = new List<string>();
     public int degradationIndex;
+    public bool isCompleted;
 }
 
 [Serializable]

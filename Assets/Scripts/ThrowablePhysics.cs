@@ -20,7 +20,6 @@ public class ThrowablePhysics : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        // Store the initial drag values set in the Inspector (which should be 0)
         initialDrag = rb.linearDamping;
         initialAngularDrag = rb.angularDamping;
     }
