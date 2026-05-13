@@ -713,6 +713,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 711526235410612654, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 711526235410612654, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 711526235410612654, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 779
+      objectReference: {fileID: 0}
+    - target: {fileID: 711526235410612654, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -459
+      objectReference: {fileID: 0}
     - target: {fileID: 1009761748702929760, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -800,6 +816,10 @@ PrefabInstance:
     - target: {fileID: 2116238557156393846, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2124630092984844082, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2649760943365976037, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1181,6 +1201,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -247.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6733424360110342524, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -40
+      objectReference: {fileID: 0}
     - target: {fileID: 6809320459338955660, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_Color.b
       value: 0.43141317
@@ -1286,7 +1310,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 237874052}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3180079334123414449, guid: 05376c4466af00944848cce5f1295286, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1043375552458907482, guid: 05376c4466af00944848cce5f1295286, type: 3}

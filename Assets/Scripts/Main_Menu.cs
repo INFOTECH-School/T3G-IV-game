@@ -12,6 +12,14 @@ public class Main_Menu : MonoBehaviour
     public Button newGameButton;
     public Color completedSaveColor = Color.green;
     public Color defaultSaveColor = new Color(1f, 0f, 0.4314132f);
+    
+    [Header("Other Credits")]
+    public AssetCreditsViewer assetCreditsViewer;
+
+    public void ShowOtherCredits()
+    {
+        if (assetCreditsViewer) assetCreditsViewer.ShowDocumentation();
+    }
     public void Quit()
     {
         Application.Quit();
