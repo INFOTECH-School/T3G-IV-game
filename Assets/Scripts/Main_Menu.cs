@@ -10,10 +10,12 @@ public class Main_Menu : MonoBehaviour
     public List<Button> deleteButtons = new List<Button>();
     [FormerlySerializedAs("LoadButton")] public Button loadGameButton;
     public Button newGameButton;
+
     public void Quit()
     {
         Application.Quit();
     }
+
     public void StartGame() //New Game
     {
         int nextSlot = 0;
