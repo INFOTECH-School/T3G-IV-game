@@ -1014,6 +1014,14 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4951651883988154800, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_SpriteState.m_DisabledSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e3cccbbd522b4ce47a5d60d281950122, type: 3}
+    - target: {fileID: 4951651883988154800, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_SpriteState.m_SelectedSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e147215dc7f1ad9489768267cd72ff31, type: 3}
+    - target: {fileID: 4951651883988154800, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
