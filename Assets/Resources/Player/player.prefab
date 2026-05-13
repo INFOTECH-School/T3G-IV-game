@@ -3147,7 +3147,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   currentItem: {fileID: 0}
-  pickupClip: {fileID: 8300000, guid: 5b0f5307ba081c844a13a1845ca6a7c1, type: 3}
+  pickupClip: {fileID: 8300000, guid: 84eaf8553a81b7d46b5c11e803e32467, type: 3}
   degradationStates:
   - stateObject: {fileID: 6923915879292528991}
     holdPoint: {fileID: 3621689810019117177}
