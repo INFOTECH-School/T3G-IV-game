@@ -20,7 +20,8 @@ Pozostałe dźwięki (SFX)
 
 2.1.
 Nazwa Assetu/Pliku: sfx_jump_02.wav
-Strona internetowa (Źródło): Brak bezpośredniego linku (zasób wewnętrzny/pochodny)
+Strona internetowa (Źródło): https://freesound.org/s/792765/
+Licencja: jump_asphalt_01 footstep by m7med807 -- https://freesound.org/s/792765/ -- License: Attribution 4.0
 Data pobrania: 29-04-2026
 Funkcja: Skok oraz rzut
 Rola w grze/Milestone: Używany przy skakaniu oraz rzucaniu przedmiotami.
@@ -52,7 +53,7 @@ Rola w grze/Milestone: Dźwięk „boom” przy przewracaniu regałów.
 2.5.
 Nazwa Assetu/Pliku: heavydrag.wav
 Strona internetowa (Źródło): https://freesound.org/s/578491/
-Licencja: Creative Commons 0 (PostProdDog)
+Licencja: Creative Commons 0
 Data pobrania: 29-04-2026
 Funkcja: Przesuwanie regału
 Rola w grze/Milestone: Dźwięk interakcji z ciężkimi obiektami.
@@ -65,6 +66,14 @@ Data pobrania: 29-04-2026
 Funkcja: Koła wózka
 Rola w grze/Milestone: Dźwięk poruszającego się wózka sklepowego.
 
+2.7.
+Nazwa Assetu/Pliku: fencehit.wav
+Strona internetowa (Źródło): https://freesound.org/people/Nox_Sound/sounds/561043/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Uderzenie w płot
+Rola w grze/Milestone: Dźwięk kolizji z metalowym ogrodzeniem.
+
 2.8.
 Nazwa Assetu/Pliku: firecrackling.wav
 Strona internetowa (Źródło): https://freesound.org/people/kingsrow/sounds/181562/
@@ -73,7 +82,40 @@ Data pobrania: 29-04-2026
 Funkcja: Trzaski ognia
 Rola w grze/Milestone: Zapętlony dźwięk pożaru/ognia.
 
+2.9.
+Nazwa Assetu/Pliku: wheelTurnAndSqueak.wav
+Strona internetowa (Źródło): https://freesound.org/people/Nox_Sound/sounds/559470/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Koła samochodu
+Rola w grze/Milestone: Dźwięk skręcania i pisków kół pojazdu.
+
+2.10.
+Nazwa Assetu/Pliku: 715789__newlocknew__vehbike_bicycle-wheel-rides-on-fine-gravel.wav
+Strona internetowa (Źródło): https://freesound.org/s/715789/
+Licencja: VEHBike_Bicycle Wheel Rides On Fine gravel by newlocknew -- License: Attribution 4.0
+Data pobrania: 29-04-2026
+Funkcja: Koła na żwirze
+Rola w grze/Milestone: Dźwięk toczenia się opon po drobnej nawierzchni.
+
+2.11.
+Nazwa Assetu/Pliku: click.wav
+Strona internetowa (Źródło):
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Kliknięcie przycisku
+Rola w grze/Milestone: Interakcja z interfejsem użytkownika.
+
+2.12.
+Nazwa Assetu/Pliku: pickup.wav
+Strona internetowa (Źródło): https://freesound.org/people/sound_and_fury/sounds/652661/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Podniesienie przedmiotu
+Rola w grze/Milestone: Dźwięk akcji zebrania obiektu ze świata gry.
+
 3. Tekstury: Asphalt
+
 3.0.
 Nazwa Assetu/Pliku: Asphalt016_4K_Color.jpg
 Strona internetowa (Źródło): https://cc0-textures.com
@@ -96,6 +138,7 @@ Funkcja: Tekstura chropowatości asfaltu
 Rola w grze/Milestone: Używany jako tekstura chropowatości asfaltu.
 
 4. Tekstury: Concrete Floor
+
 4.0.
 Nazwa Assetu/Pliku: concrete_floor_painted_diff_4k.jpg
 Strona internetowa (Źródło): https://cc0-textures.com
@@ -125,6 +168,7 @@ Funkcja: Tekstura okluzji otoczenia (AO) malowanej betonowej podłogi
 Rola w grze/Milestone: Używany jako tekstura okluzji otoczenia malowanej betonowej podłogi.
 
 5. Tekstury: Fence
+
 5.0.
 Nazwa Assetu/Pliku: 4K-fence_3_ambientocclusion.png
 Strona internetowa (Źródło): https://cc0-textures.com
@@ -168,6 +212,7 @@ Funkcja: Tekstura chropowatości ogrodzenia
 Rola w grze/Milestone: Używany jako tekstura chropowatości ogrodzenia.
 
 6. Tekstury: Floor Tiles
+
 6.0.
 Nazwa Assetu/Pliku: floor_tiles_06_diff_4k.jpg
 Strona internetowa (Źródło): https://cc0-textures.com
@@ -197,6 +242,7 @@ Funkcja: Tekstura chropowatości płytek podłogowych
 Rola w grze/Milestone: Używany jako tekstura chropowatości płytek podłogowych.
 
 7. Tekstury: Painted Plaster 014
+
 7.0.
 Nazwa Assetu/Pliku: PaintedPlaster014_4K_AmbientOcclusion.jpg
 Strona internetowa (Źródło): https://cc0-textures.com
@@ -226,6 +272,7 @@ Funkcja: Tekstura chropowatości malowanego tynku 014
 Rola w grze/Milestone: Używany jako tekstura chropowatości malowanego tynku.
 
 8. Tekstury: Painted Plaster 015
+
 8.0.
 Nazwa Assetu/Pliku: PaintedPlaster015_4K_AmbientOcclusion.jpg
 Strona internetowa (Źródło): https://cc0-textures.com
@@ -255,6 +302,7 @@ Funkcja: Tekstura chropowatości malowanego tynku 015
 Rola w grze/Milestone: Używany jako tekstura chropowatości malowanego tynku.
 
 9. Tekstury: Painted Plaster 016
+
 9.0.
 Nazwa Assetu/Pliku: PaintedPlaster016_4K_AmbientOcclusion.jpg
 Strona internetowa (Źródło): https://cc0-textures.com
@@ -284,6 +332,7 @@ Funkcja: Tekstura chropowatości malowanego tynku 016
 Rola w grze/Milestone: Używany jako tekstura chropowatości malowanego tynku.
 
 10. Ilustracje Intro (Intro Illustrations)
+
 10.1.
 Nazwa Assetu/Pliku: illustration 1.1.png
 Użyte Narzędzie AI: Nano Banana 2
@@ -315,6 +364,7 @@ Miejsce/Zastosowanie: Scena wprowadzająca – symboliczna scena zniszczenia i g
 Przykładowy Prompt: In 16:9 Aspect 2D vector-style digital illustration, comic book aesthetic, thick black outlines on main subjects, simple flat shading, low detail. Abstract, symbolic scene of destruction. A deep grey and black background void. Jagged black explosion shapes and large falling broken wooden planks and debris with thick outlines. A single, faint radiating cyan blue light source shining through swirling dust. Muted earthy color palette (dark browns, dark greys, blacks) with subtle grunge textures, moody and dark atmosphere.
 
 11. Tło Menu (Menu Background)
+
 11.1.
 Nazwa Assetu/Pliku: background.png
 Użyte Narzędzie AI: Nano Banana 2
@@ -326,7 +376,7 @@ Muzyka i tło dźwiękowe (Music & Ambience)
 12.1.
 Nazwa Assetu/Pliku: finalpush bg music (Mini Emotional Ambient)
 Strona internetowa (Źródło): https://freesound.org/s/443086/
-Licencja: Attribution 4.0 (tyops)
+Licencja: Mini Emotional Ambient by tyops -- https://freesound.org/s/443086/ -- License: Attribution 4.0
 Data pobrania: 29-04-2026
 Funkcja: Muzyka tła
 Rola w grze/Milestone: Emocjonalny podkład podczas scen fabularnych.
@@ -334,7 +384,7 @@ Rola w grze/Milestone: Emocjonalny podkład podczas scen fabularnych.
 12.2.
 Nazwa Assetu/Pliku: fireworks (Suburban Fireworks)
 Strona internetowa (Źródło): https://freesound.org/s/376435/
-Licencja: Attribution 4.0 (Marth8880)
+Licencja: Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0
 Data pobrania: 29-04-2026
 Funkcja: Dźwięk wybuchów/broni
 Rola w grze/Milestone: Odgłosy walki/wybuchów słyszane w tle.
@@ -345,7 +395,7 @@ Strona internetowa (Źródło): https://pixabay.com/pl/music/fortepian-solo-pian
 Licencja: Pixabay License
 Data pobrania: 29-04-2026
 Funkcja: Muzyka fortepianowa
-Rola w grze/Milestone: Wykorzystywane jako muzyka ambientowa o emocjonalnym charakterze. 
+Rola w grze/Milestone: Wykorzystywane jako muzyka ambientowa o emocjonalnym charakterze.
 
 12.4.
 Nazwa Assetu/Pliku: main menu music.wav
@@ -379,36 +429,46 @@ Data pobrania: 29-04-2026
 Funkcja: Zimny ambient
 Rola w grze/Milestone: Budowanie klimatu grozy/pustki na parkingu.
 
+12.8.
+Nazwa Assetu/Pliku: 510918__theojt__mysterious-ethereal-song.wav
+Strona internetowa (Źródło): https://freesound.org/people/TheoJT/sounds/510918/
+Licencja: Mysterious Ethereal Song by TheoJT -- https://freesound.org/s/510918/ -- License: Attribution 4.0
+Data pobrania: 29-04-2026
+Funkcja: Eteryczna piosenka
+Rola w grze/Milestone: Podkład do pierwszej sceny przerywnikowej (level 1 first cutscene).
+
+12.9.
+Nazwa Assetu/Pliku: 493542__original_sound__tension-building-riser-whoosh-sfx-1.wav
+Strona internetowa (Źródło): https://freesound.org/s/493542/
+Licencja: Tension Building Riser Whoosh SFX 1.wav by original_sound -- https://freesound.org/s/493542/ -- License: Attribution 3.0
+Data pobrania: 29-04-2026
+Funkcja: Budowanie napięcia
+Rola w grze/Milestone: Efekt "riser" użyty na końcu przerywnika poziomu 2.
+
+12.10.
+Nazwa Assetu/Pliku: 816388__looplicator__58-bpm-industrial-ambient-loop-14262-wav.wav
+Strona internetowa (Źródło): https://freesound.org/s/816388/
+Licencja: 58 BPM Industrial Ambient Loop #14262 (WAV) by looplicator -- https://freesound.org/s/816388/ -- License: Attribution 4.0
+Data pobrania: 29-04-2026
+Funkcja: Industrialny ambient
+Rola w grze/Milestone: Podkład tła do końcowego przerywnika poziomu 2.
+
+12.11.
+Nazwa Assetu/Pliku: white noise.wav
+Strona internetowa (Źródło): https://freesound.org/people/Garuda1982/sounds/852917/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Szum tła
+Rola w grze/Milestone: Podstawowy ambient wypełniający przestrzeń dźwiękową.
+
 To attribute:
-finalpush bg music - 443086__tyops__mini-emotional-ambient - Mini Emotional Ambient by tyops -- https://freesound.org/s/443086/ -- License: Attribution 4.0
-shelve boom sound - 814882__audiopapkin__sound-design-elements-impact-sfx-ps-088 - cc0
-shelve move sound - heavydrag - Heavy stone door opens 2 by PostProdDog -- https://freesound.org/s/578491/ -- License: Creative Commons 0
-game bg music:
-- fireworks (as weapons) - Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0
-- piano emotional - https://pixabay.com/pl/music/fortepian-solo-piano-emotional-509975/
-cardboard hit - cardboardhit.wav - cc0 https://freesound.org/people/BenDrain/sounds/487999/
-footstep - footstep.wav - cc0 https://freesound.org/people/MikeFozzy98/sounds/670108/
-footstep1 - footstep1.wav - cc0 https://freesound.org/people/ZNukem/sounds/697182/
-clothrip - cloth_rip.mp3 - cc0 https://freesound.org/people/Johnny2810/sounds/507756/
-bg music parking:
-- engine stutter - cc0 https://freesound.org/people/craigsmith/sounds/487159/
-- weapon shoot sounds - cc0 https://freesound.org/people/Julien_Matthey/sounds/751279/
-- cold ambience - cc0 https://freesound.org/people/ChristmasKrumble666/sounds/685182/
-- fireworks (as weapons) - Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0
-cart wheel - shoppingCart.wav - https://freesound.org/people/Sonicorchestra/sounds/434885/ cc0
-main menu music - main menu music.wav - cc0 https://freesound.org/people/xkeril/sounds/826622/
-fire crackling - firecracling.wav - cc0 https://freesound.org/people/kingsrow/sounds/181562/
 
-Actual usage:
-footstep1: walking and running
-footstep: landing
-sfx_jump_02: jumping, throwing
-clothrip: ripping of bear's arm
-cardboard hit: hitting cardbaord
-shelve boom: shelve fall
-shelve move: shelve move
-cart wheel: cart move
-fire crackling: fire sound
-
-
-car wheels - wheelTurnAndSqueak.wav - https://freesound.org/people/Nox_Sound/sounds/559470/ cc0
+car wheels - wheelTurnAndSqueak.wav - https://freesound.org/people/Nox_Sound/sounds/559470/
+stone filled tire - 715789__newlocknew__vehbike_bicycle-wheel-rides-on-fine-gravel.wav - VEHBike_Bicycle Wheel Rides On Fine gravel.Close Up_EM by newlocknew -- https://freesound.org/s/715789/ -- License: Attribution 4.0
+fence hit - fencehit.wav - https://freesound.org/people/Nox_Sound/sounds/561043/
+button click - click.wav - 
+level 1 first cutscene background - 510918__theojt__mysterious-ethereal-song.wav - https://freesound.org/people/TheoJT/sounds/510918/
+level 2 end cutscene riser - 493542__original_sound__tension-building-riser-whoosh-sfx-1.wav - Tension Building Riser Whoosh SFX 1.wav by original_sound -- https://freesound.org/s/493542/ -- License: Attribution 3.0
+level 2 end cutscene background - 816388__looplicator__58-bpm-industrial-ambient-loop-14262-wav.wav - 58 BPM Industrial Ambient Loop #14262 (WAV) by looplicator -- https://freesound.org/s/816388/ -- License: Attribution 4.0
+white noise - white noise.wav - https://freesound.org/people/Garuda1982/sounds/852917/
+item pickup - pickup.wav - https://freesound.org/people/sound_and_fury/sounds/652661/
