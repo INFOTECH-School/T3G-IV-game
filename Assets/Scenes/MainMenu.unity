@@ -1193,6 +1193,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6833155744327503041, guid: 05376c4466af00944848cce5f1295286, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7412673886562107366, guid: 05376c4466af00944848cce5f1295286, type: 3}
       propertyPath: m_IsActive
       value: 0

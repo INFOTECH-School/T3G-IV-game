@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class GlobalAudio : MonoBehaviour
 {
+    private static GlobalAudio _instance;
+    public static GlobalAudio Instance => _instance;
+    
     private Camera _camera;
 
     private void Start()
@@ -12,7 +15,15 @@ public class GlobalAudio : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     
     void Update()

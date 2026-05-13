@@ -126,4 +126,16 @@ public class timelineSignalHandler : MonoBehaviour
             GameManager.Instance.Player.Degrade();
         }
     }
+
+    public void TriggerSaveGame()
+    {
+        GameManager.Instance.SaveGame(GameManager.Instance.CurrentSaveSlot);
+    }
+
+    public void EndGame()
+    {
+        SaveManager.MarkSaveAsCompleted(GameManager.Instance.CurrentSaveSlot);
+        GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+        Utils.AsynchronousSceneLoad("MainMenu");
+    }
 }
