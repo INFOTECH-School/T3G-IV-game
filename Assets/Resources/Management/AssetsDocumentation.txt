@@ -461,12 +461,19 @@ Data pobrania: 29-04-2026
 Funkcja: Szum tła
 Rola w grze/Milestone: Podstawowy ambient wypełniający przestrzeń dźwiękową.
 
+13.1.
+Nazwa Assetu/Pliku: bearerIcon.png
+Użyte Narzędzie AI: Nano Banana 2
+Miejsce/Zastosowanie: Ikona gry.
+Przykładowy Prompt: generate icon for our game bearer it should present teddy bear head on white background, be consistent with style present in the image, also as it's icon make it in square so 1:1
+
+
 To attribute:
 
 car wheels - wheelTurnAndSqueak.wav - https://freesound.org/people/Nox_Sound/sounds/559470/
 stone filled tire - 715789__newlocknew__vehbike_bicycle-wheel-rides-on-fine-gravel.wav - VEHBike_Bicycle Wheel Rides On Fine gravel.Close Up_EM by newlocknew -- https://freesound.org/s/715789/ -- License: Attribution 4.0
 fence hit - fencehit.wav - https://freesound.org/people/Nox_Sound/sounds/561043/
-button click - click.wav - 
+button click - click.wav - https://pixabay.com/sound-effects/film-special-effects-computer-mouse-click-352734/ Sound Effect by Universfield from Pixabay
 level 1 first cutscene background - 510918__theojt__mysterious-ethereal-song.wav - https://freesound.org/people/TheoJT/sounds/510918/
 level 2 end cutscene riser - 493542__original_sound__tension-building-riser-whoosh-sfx-1.wav - Tension Building Riser Whoosh SFX 1.wav by original_sound -- https://freesound.org/s/493542/ -- License: Attribution 3.0
 level 2 end cutscene background - 816388__looplicator__58-bpm-industrial-ambient-loop-14262-wav.wav - 58 BPM Industrial Ambient Loop #14262 (WAV) by looplicator -- https://freesound.org/s/816388/ -- License: Attribution 4.0
