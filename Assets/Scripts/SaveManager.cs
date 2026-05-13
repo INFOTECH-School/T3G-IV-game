@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -93,6 +93,26 @@ public static class SaveManager
             }
         }
         return saveSlots.OrderBy(s => s.SlotNumber).ToList();
+    }
+
+    public static void MarkSaveAsCompleted(int slotNumber)
+    {
+        SaveData data = LoadGame(slotNumber);
+        if (data == null)
+        {
+            Debug.LogWarning($"Cannot mark slot {slotNumber} as completed — no save data found.");
+            return;
+        }
+
+        data.isCompleted = true;
+        SaveGame(slotNumber, data);
+        Debug.Log($"Save slot {slotNumber} marked as completed.");
+    }
+
+    public static bool IsSlotCompleted(int slotNumber)
+    {
+        SaveData data = LoadGame(slotNumber);
+        return data != null && data.isCompleted;
     }
 }
 

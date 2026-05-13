@@ -12,7 +12,8 @@ public class timelineSignalHandler : MonoBehaviour
 
     [Header("ShelfBoomSound")] public AudioClip shelfBoomSound;
 
-    [Header("CameraShake")] public CinemachineImpulseSource impulseSource;
+    [Header("CameraShake")] public CinemachineImpulseSource shelfImpulseSource;
+    [Header("CameraShake")] public CinemachineImpulseSource boomImpulseSource;
 
     [Header("AudioSettings")] public AudioSource mainAudioSource;
 
@@ -90,10 +91,17 @@ public class timelineSignalHandler : MonoBehaviour
     }
 
     // This is the function the Signal will call
-    public void TriggerShake(float intensity)
+    public void TriggerShake(string type)
     {
-        // You can use the intensity passed from the signal!
-        impulseSource.GenerateImpulseWithVelocity(Vector3.down * intensity);
+        switch (type)
+        {
+            case "shelf":
+                shelfImpulseSource.GenerateImpulse();
+                break;
+            case "boom":
+                boomImpulseSource.GenerateImpulse();
+                break;
+        }
     }
 
     public void PlayTimelineMusic(int id)
@@ -117,5 +125,17 @@ public class timelineSignalHandler : MonoBehaviour
         {
             GameManager.Instance.Player.Degrade();
         }
+    }
+
+    public void TriggerSaveGame()
+    {
+        GameManager.Instance.SaveGame(GameManager.Instance.CurrentSaveSlot);
+    }
+
+    public void EndGame()
+    {
+        SaveManager.MarkSaveAsCompleted(GameManager.Instance.CurrentSaveSlot);
+        GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+        Utils.AsynchronousSceneLoad("MainMenu");
     }
 }

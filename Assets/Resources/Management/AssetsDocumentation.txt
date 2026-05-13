@@ -1,32 +1,77 @@
-﻿1. Dźwięki chodzenia (Footsteps)
+﻿Dźwięki chodzenia (Footsteps)
+
 1.1.
-Nazwa Assetu/Pliku: sfx_footstep_walk_01.wav
-Strona internetowa (Źródło): https://freesound.org
-Data pobrania: 27-02-2026
-Funkcja: Dźwięk chodzenia 1
-Rola w grze/Milestone: Używany jako dźwięk chodzenia.
+Nazwa Assetu/Pliku: footstep1.wav
+Strona internetowa (Źródło): https://freesound.org/people/ZNukem/sounds/697182/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Dźwięk kroków (chodzenie i bieganie)
+Rola w grze/Milestone: Podstawowy dźwięk poruszania się postaci.
 
 1.2.
-Nazwa Assetu/Pliku: sfx_footstep_walk_02.wav
-Strona internetowa (Źródło): https://freesound.org
-Data pobrania: 27-02-2026
-Funkcja: Dźwięk chodzenia 2
-Rola w grze/Milestone: Używany jako dźwięk chodzenia.
+Nazwa Assetu/Pliku: footstep.wav
+Strona internetowa (Źródło): https://freesound.org/people/MikeFozzy98/sounds/670108/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Dźwięk lądowania
+Rola w grze/Milestone: Wyzwalany przy kontakcie z podłożem po skoku.
 
-1.3.
-Nazwa Assetu/Pliku: sfx_footstep_walk_03.wav
-Strona internetowa (Źródło): https://freesound.org
-Data pobrania: 27-02-2026
-Funkcja: Dźwięk chodzenia 3
-Rola w grze/Milestone: Używany jako dźwięk chodzenia.
+Pozostałe dźwięki (SFX)
 
-2. Pozostałe dźwięki (SFX)
 2.1.
-Nazwa Assetu/Pliku: sfx_jump_01.wav
-Strona internetowa (Źródło): jump_asphalt_01 footstep by m7med807 -- https://freesound.org/s/792765/ -- License: Attribution 4.0
-Data pobrania: 27-02-2026
-Funkcja: Dźwięk skoku
-Rola w grze/Milestone: Używany jako dźwięk skoku.
+Nazwa Assetu/Pliku: sfx_jump_02.wav
+Strona internetowa (Źródło): Brak bezpośredniego linku (zasób wewnętrzny/pochodny)
+Data pobrania: 29-04-2026
+Funkcja: Skok oraz rzut
+Rola w grze/Milestone: Używany przy skakaniu oraz rzucaniu przedmiotami.
+
+2.2.
+Nazwa Assetu/Pliku: cardboardhit.wav
+Strona internetowa (Źródło): https://freesound.org/people/BenDrain/sounds/487999/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Uderzenie w karton
+Rola w grze/Milestone: Dźwięk kolizji z przeszkodami kartonowymi.
+
+2.3.
+Nazwa Assetu/Pliku: cloth_rip.mp3
+Strona internetowa (Źródło): https://freesound.org/people/Johnny2810/sounds/507756/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Rozdarcie materiału
+Rola w grze/Milestone: Dźwięk towarzyszący odrywaniu ramienia misia.
+
+2.4.
+Nazwa Assetu/Pliku: 814882__audiopapkin__sound-design-elements-impact-sfx-ps-088.wav
+Strona internetowa (Źródło): https://freesound.org/people/audiopapkin/sounds/814882/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Upadek regału
+Rola w grze/Milestone: Dźwięk „boom” przy przewracaniu regałów.
+
+2.5.
+Nazwa Assetu/Pliku: heavydrag.wav
+Strona internetowa (Źródło): https://freesound.org/s/578491/
+Licencja: Creative Commons 0 (PostProdDog)
+Data pobrania: 29-04-2026
+Funkcja: Przesuwanie regału
+Rola w grze/Milestone: Dźwięk interakcji z ciężkimi obiektami.
+
+2.6.
+Nazwa Assetu/Pliku: shoppingCart.wav
+Strona internetowa (Źródło): https://freesound.org/people/Sonicorchestra/sounds/434885/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Koła wózka
+Rola w grze/Milestone: Dźwięk poruszającego się wózka sklepowego.
+
+2.8.
+Nazwa Assetu/Pliku: firecrackling.wav
+Strona internetowa (Źródło): https://freesound.org/people/kingsrow/sounds/181562/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Trzaski ognia
+Rola w grze/Milestone: Zapętlony dźwięk pożaru/ognia.
 
 3. Tekstury: Asphalt
 3.0.
@@ -276,6 +321,63 @@ Użyte Narzędzie AI: Nano Banana 2
 Miejsce/Zastosowanie: Główne tło menu głównego gry.
 Przykładowy Prompt: move bear bit to the right side and remove distant characters from the middle, also make this scene bit darker (created from illustration 3)
 
+Muzyka i tło dźwiękowe (Music & Ambience)
+
+12.1.
+Nazwa Assetu/Pliku: finalpush bg music (Mini Emotional Ambient)
+Strona internetowa (Źródło): https://freesound.org/s/443086/
+Licencja: Attribution 4.0 (tyops)
+Data pobrania: 29-04-2026
+Funkcja: Muzyka tła
+Rola w grze/Milestone: Emocjonalny podkład podczas scen fabularnych.
+
+12.2.
+Nazwa Assetu/Pliku: fireworks (Suburban Fireworks)
+Strona internetowa (Źródło): https://freesound.org/s/376435/
+Licencja: Attribution 4.0 (Marth8880)
+Data pobrania: 29-04-2026
+Funkcja: Dźwięk wybuchów/broni
+Rola w grze/Milestone: Odgłosy walki/wybuchów słyszane w tle.
+
+12.3.
+Nazwa Assetu/Pliku: piano emotional
+Strona internetowa (Źródło): https://pixabay.com/pl/music/fortepian-solo-piano-emotional-509975/
+Licencja: Pixabay License
+Data pobrania: 29-04-2026
+Funkcja: Muzyka fortepianowa
+Rola w grze/Milestone: Wykorzystywane jako muzyka ambientowa o emocjonalnym charakterze. 
+
+12.4.
+Nazwa Assetu/Pliku: main menu music.wav
+Strona internetowa (Źródło): https://freesound.org/people/xkeril/sounds/826622/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Muzyka menu głównego
+Rola w grze/Milestone: Główny motyw w menu.
+
+12.5.
+Nazwa Assetu/Pliku: engine stutter
+Strona internetowa (Źródło): https://freesound.org/people/craigsmith/sounds/487159/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Odgłos silnika
+Rola w grze/Milestone: Ambient parkingowy.
+
+12.6.
+Nazwa Assetu/Pliku: weapon shoot sounds
+Strona internetowa (Źródło): https://freesound.org/people/Julien_Matthey/sounds/751279/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Dźwięki strzałów
+Rola w grze/Milestone: Element tła dźwiękowego na parkingu.
+
+12.7.
+Nazwa Assetu/Pliku: cold ambience
+Strona internetowa (Źródło): https://freesound.org/people/ChristmasKrumble666/sounds/685182/
+Licencja: Creative Commons 0
+Data pobrania: 29-04-2026
+Funkcja: Zimny ambient
+Rola w grze/Milestone: Budowanie klimatu grozy/pustki na parkingu.
 
 To attribute:
 finalpush bg music - 443086__tyops__mini-emotional-ambient - Mini Emotional Ambient by tyops -- https://freesound.org/s/443086/ -- License: Attribution 4.0
@@ -284,7 +386,6 @@ shelve move sound - heavydrag - Heavy stone door opens 2 by PostProdDog -- https
 game bg music:
 - fireworks (as weapons) - Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0
 - piano emotional - https://pixabay.com/pl/music/fortepian-solo-piano-emotional-509975/
-pickup sound - pickup.wav - cc0 https://freesound.org/people/Sadiquecat/sounds/824189/
 cardboard hit - cardboardhit.wav - cc0 https://freesound.org/people/BenDrain/sounds/487999/
 footstep - footstep.wav - cc0 https://freesound.org/people/MikeFozzy98/sounds/670108/
 footstep1 - footstep1.wav - cc0 https://freesound.org/people/ZNukem/sounds/697182/
@@ -294,3 +395,20 @@ bg music parking:
 - weapon shoot sounds - cc0 https://freesound.org/people/Julien_Matthey/sounds/751279/
 - cold ambience - cc0 https://freesound.org/people/ChristmasKrumble666/sounds/685182/
 - fireworks (as weapons) - Suburban Fireworks (New Year's Eve 2016) - Everett, Washington by Marth8880 -- https://freesound.org/s/376435/ -- License: Attribution 4.0
+cart wheel - shoppingCart.wav - https://freesound.org/people/Sonicorchestra/sounds/434885/ cc0
+main menu music - main menu music.wav - cc0 https://freesound.org/people/xkeril/sounds/826622/
+fire crackling - firecracling.wav - cc0 https://freesound.org/people/kingsrow/sounds/181562/
+
+Actual usage:
+footstep1: walking and running
+footstep: landing
+sfx_jump_02: jumping, throwing
+clothrip: ripping of bear's arm
+cardboard hit: hitting cardbaord
+shelve boom: shelve fall
+shelve move: shelve move
+cart wheel: cart move
+fire crackling: fire sound
+
+
+car wheels - wheelTurnAndSqueak.wav - https://freesound.org/people/Nox_Sound/sounds/559470/ cc0
