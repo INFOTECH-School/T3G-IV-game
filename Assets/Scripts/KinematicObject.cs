@@ -51,8 +51,9 @@ public class KinematicObject : MonoBehaviour
     private Transform _playerTransform;
     private bool _isReturning;
     private bool _targetReachedEventFired;
-    private LevelObjective _levelObjectiveComponent;
+    public LevelObjective levelObjectiveComponent;
     private bool _isCompleted;
+    public bool IsCompleted => _isCompleted;
 
     private float GetContinuousLocalY()
     {
@@ -73,7 +74,10 @@ public class KinematicObject : MonoBehaviour
         _startPosition = transform.position;
         _startRotation = transform.rotation;
 
-        TryGetComponent(out _levelObjectiveComponent);
+        if (levelObjectiveComponent == null)
+        {
+            TryGetComponent(out levelObjectiveComponent);
+        }
         ValidateSetup();
         if (fall_guide)
         {
@@ -430,9 +434,9 @@ public class KinematicObject : MonoBehaviour
                     if (hit.distance < 0.5f)
                     {
                         _isReturning = false;
-                        if (levelObjective && _levelObjectiveComponent != null)
+                        if (levelObjective && levelObjectiveComponent != null)
                         {
-                            _levelObjectiveComponent.CompleteObjective();
+                            levelObjectiveComponent.CompleteObjective();
                             targetTransform.gameObject.SetActive(false);
                             if (sparkleEffect)
                             {
@@ -465,10 +469,10 @@ public class KinematicObject : MonoBehaviour
 
     public void CompleteObjective()
     {
-        // if (_levelObjectiveComponent)
-        // {
-        //     _levelObjectiveComponent.CompleteObjective();
-        // }
+        if (movementType == MovementType.Car && levelObjectiveComponent != null)
+        {
+            levelObjectiveComponent.CompleteObjective();
+        }
 
         sparkleEffect.SetActive(false);
         _isCompleted = true;

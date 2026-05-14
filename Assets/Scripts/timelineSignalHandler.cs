@@ -129,12 +129,23 @@ public class timelineSignalHandler : MonoBehaviour
 
     public void TriggerSaveGame()
     {
-        GameManager.Instance.SaveGame(GameManager.Instance.CurrentSaveSlot);
+        if (!Utils.IsCutsceneGhostModeActive)
+        {
+            GameManager.Instance.SaveGame(GameManager.Instance.CurrentSaveSlot);
+        }
     }
 
     public void EndGame()
     {
-        SaveManager.MarkSaveAsCompleted(GameManager.Instance.CurrentSaveSlot);
+        if (Utils.DisableSaveLoad)
+        {
+            SaveManager.DeleteSave(GameManager.Instance.CurrentSaveSlot);
+        }
+        else
+        {
+            SaveManager.MarkSaveAsCompleted(GameManager.Instance.CurrentSaveSlot);
+        }
+        
         GameManager.Instance.SetState(GameManager.GameState.Gameplay);
         Utils.AsynchronousSceneLoad("MainMenu");
     }

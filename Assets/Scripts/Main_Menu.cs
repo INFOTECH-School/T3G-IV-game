@@ -63,7 +63,7 @@ public class Main_Menu : MonoBehaviour
 
         if (saveCount > 0)
         {
-            loadGameButton.interactable = true;
+            loadGameButton.interactable = !Utils.DisableSaveLoad;
             newGameButton.interactable = saveCount < saveSlots.Count || saveSlots.Count == 0;
         }
         else
@@ -91,7 +91,7 @@ public class Main_Menu : MonoBehaviour
 
             if (save.SlotNumber < saveSlots.Count && saveSlots[save.SlotNumber] != null)
             {
-                saveSlots[save.SlotNumber].interactable = !isCompleted;
+                saveSlots[save.SlotNumber].interactable = !isCompleted && !Utils.DisableSaveLoad;
             }
             if (save.SlotNumber < deleteButtons.Count && deleteButtons[save.SlotNumber] != null)
             {

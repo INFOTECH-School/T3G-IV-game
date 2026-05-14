@@ -130,6 +130,10 @@ public class GameManager : MonoBehaviour
                 objectiveGameObject.transform.position = objective.position.ToVector3();
                 objectiveGameObject.transform.rotation = objective.rotation.ToQuaternion();
                 objectiveScript.isCompleted = objective.isCompleted;
+                if (objectiveScript.isCompleted && objectiveScript.finishResult)
+                {
+                    objectiveScript.finishResult.SetActive(true);
+                }
             }
         }
         
@@ -141,6 +145,22 @@ public class GameManager : MonoBehaviour
                 if (basket)
                 {
                     basket.basketCounter = basketData.basketCounter;
+                    
+                    if (basket.level2)
+                    {
+                        for (int i = 0; i < basket.basketCounter; i++)
+                        {
+                            if (i < basket.basketPoints.Count && basket.basketPoints[i] != null)
+                            {
+                                basket.basketPoints[i].SetActive(true);
+                            }
+                        }
+                        if (basket.basketCounter >= basket.basketPoints.Count && basket.finishResult)
+                        {
+                            basket.finishResult.SetActive(true);
+                        }
+                    }
+
                     if (basket.holdingPoint1)
                     {
                         basket.holdingPoint1.SetActive(basketData.holdingPoint1Active);
@@ -151,6 +171,15 @@ public class GameManager : MonoBehaviour
                     {
                         basket.holdingPoint2.SetActive(basketData.holdingPoint2Active);
                         basket.ChangeHoldingPointState(2, !basketData.holdingPoint2Active);
+                    }
+
+                    if (basket.level1 && basketData.holdingPoint1Active && basketData.holdingPoint2Active && basket.finishResult)
+                    {
+                        basket.finishResult.SetActive(true);
+                    }
+                    if (!basket.level1 && !basket.level2 && basketData.holdingPoint1Active && basket.finishResult)
+                    {
+                        basket.finishResult.SetActive(true);
                     }
                 }
             }
@@ -179,6 +208,10 @@ public class GameManager : MonoBehaviour
             LevelOperator.level1DependencyScore = data.level1DependencyScore;
             LevelOperator.level2DependencyScore = data.level2DependencyScore;
             LevelOperator.truckDependencyScore = data.truckDependencyScore;
+            if (LevelOperator.truckTriggerCollider && LevelOperator.truckDependencyScore == 0)
+            {
+                LevelOperator.truckTriggerCollider.enabled = true;
+            }
         }
 
         if (data.playedIllustrationCutscenes.Count > 0)
@@ -200,15 +233,15 @@ public class GameManager : MonoBehaviour
         {
             Player.transform.position = data.playerPosition.ToVector3();
             Player.GetComponent<PlayerInteraction>().currentState = data.playerState;
-            if (!string.IsNullOrEmpty(data.currentHeldItemId))
-            {
-                Player.Equip(Utils.GetItemByID(data.currentHeldItemId));
-            }
-            
             // Apply degradation state
             if (data.degradationIndex > 0)
             {
                 Player.ApplyDegradation(data.degradationIndex);
+            }
+
+            if (!string.IsNullOrEmpty(data.currentHeldItemId))
+            {
+                Player.Equip(Utils.GetItemByID(data.currentHeldItemId));
             }
         }
 

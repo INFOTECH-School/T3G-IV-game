@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public static class Utils //Player pos might not be getting loaded, level progres bar doesn't have progress after load
 {
     public static bool IsCutsceneGhostModeActive = false;
+    public static bool DisableSaveLoad = true; // Set to false to enable save/load functionality
     public static void AsynchronousSceneLoad(string sceneName, SaveData dataToLoad = null)
     {
         var loading = Object.Instantiate(Resources.Load<GameObject>("UI/LoadingScreen"));
@@ -123,7 +124,7 @@ public static class Utils //Player pos might not be getting loaded, level progre
     {
         if (string.IsNullOrEmpty(objectiveID)) return null;
 
-        LevelObjective[] allObjectives = Object.FindObjectsByType<LevelObjective>(FindObjectsSortMode.None);
+        LevelObjective[] allObjectives = Object.FindObjectsByType<LevelObjective>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (var objective in allObjectives)
         {
             if (objective.id == objectiveID)
@@ -137,7 +138,7 @@ public static class Utils //Player pos might not be getting loaded, level progre
 
     public static List<ObjectiveData> GetLevelObjectivesData()
     {
-        LevelObjective[] allObjectives = Object.FindObjectsByType<LevelObjective>(FindObjectsSortMode.None);
+        LevelObjective[] allObjectives = Object.FindObjectsByType<LevelObjective>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         List<ObjectiveData> objectivesData = new List<ObjectiveData>();
 
         foreach (LevelObjective objective in allObjectives)
@@ -156,7 +157,7 @@ public static class Utils //Player pos might not be getting loaded, level progre
 
     public static List<BasketData> GetBasketsProgressData()
     {
-        Basket[] allBaskets = Object.FindObjectsByType<Basket>(FindObjectsSortMode.None);
+        Basket[] allBaskets = Object.FindObjectsByType<Basket>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         List<BasketData> basketsProgress = new List<BasketData>();
 
         foreach (Basket basket in allBaskets)
@@ -204,7 +205,7 @@ public static class Utils //Player pos might not be getting loaded, level progre
 
     public static List<BrokenWheelData> GetBrokenWheelProgressData()
     {
-        BrokenWheel[] allBrokenWheels = Object.FindObjectsByType<BrokenWheel>(FindObjectsSortMode.None);
+        BrokenWheel[] allBrokenWheels = Object.FindObjectsByType<BrokenWheel>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         List<BrokenWheelData> brokenWheelsProgress = new List<BrokenWheelData>();
 
         foreach (BrokenWheel brokenWheel in allBrokenWheels)

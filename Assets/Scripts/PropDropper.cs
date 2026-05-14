@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class PropDropper : MonoBehaviour
 {
@@ -36,6 +36,22 @@ public class PropDropper : MonoBehaviour
             propObject.SetActive(false);
             fakePropObject.SetActive(true);
         }
+
+        // GhostPlay logic: If the car objective is already completed, finalize state.
+        if (carObject && (carObject.IsCompleted || (carObject.levelObjectiveComponent && carObject.levelObjectiveComponent.isCompleted)))
+        {
+            GhostPlay();
+        }
+    }
+
+    public void GhostPlay()
+    {
+        if (propObject && fakePropObject)
+        {
+            propObject.SetActive(true);
+            fakePropObject.SetActive(false);
+        }
+        enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)

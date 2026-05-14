@@ -5,7 +5,7 @@ public class BrokenWheel : MonoBehaviour
     public GameObject brokenWheelObject;
     public GameObject fixedWheelObject;
     public Item requiredItem; // The specific item needed to fix the wheel
-    private LevelObjective _levelObjective;
+    public LevelObjective levelObjectiveComponent;
     public GameObject objectToEnable;
     public GameObject sparklesToEnable;
     public bool truck;
@@ -16,7 +16,10 @@ public class BrokenWheel : MonoBehaviour
 
     private void Start()
     {
-        _levelObjective = GetComponent<LevelObjective>();
+        if (levelObjectiveComponent == null)
+        {
+            levelObjectiveComponent = GetComponent<LevelObjective>();
+        }
         brokenWheelObject.SetActive(true);
         fixedWheelObject.SetActive(false);
         if (guideGameObject)
@@ -35,9 +38,9 @@ public class BrokenWheel : MonoBehaviour
         objectFixed = true;
         brokenWheelObject.SetActive(false);
         fixedWheelObject.SetActive(true);
-        if (_levelObjective)
+        if (levelObjectiveComponent)
         {
-            _levelObjective.CompleteObjective();
+            levelObjectiveComponent.CompleteObjective();
         }
 
         if (truck && GameManager.Instance.LevelOperator.truckDependencyScore == 0)

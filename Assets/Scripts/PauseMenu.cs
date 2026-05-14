@@ -58,7 +58,7 @@ public class PauseMenuManager : MonoBehaviour
                     saveBtnImage.overrideSprite = null;
                 }
 
-                saveBtn.interactable = SceneManager.GetActiveScene().name != "Scene_TutorialGym";
+                saveBtn.interactable = SceneManager.GetActiveScene().name != "Scene_TutorialGym" && !Utils.DisableSaveLoad;
             }
         }
     }
@@ -76,6 +76,7 @@ public class PauseMenuManager : MonoBehaviour
 
     public void saveButton()
     {
+        if (Utils.DisableSaveLoad) return;
         // This will save the game to the currently selected save slot.
         // You'll need to set the CurrentSaveSlot in the GameManager when the player
         // selects a slot from your UI.
