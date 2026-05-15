@@ -52,7 +52,8 @@ public class LevelGate : MonoBehaviour
         switch (level)
         {
             case 0: //Tutorial
-                SceneManager.LoadScene("Level1");   //Replace it with asynchronous scene loading.
+                //SceneManager.LoadScene("Level1");   //Replace it with asynchronous scene loading.
+                Utils.AsynchronousSceneLoad("Level1");
                 break;
             case 1:
                 if (GameManager.Instance.LevelOperator.canEndLevel1)

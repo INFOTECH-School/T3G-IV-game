@@ -91,6 +91,22 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.Instance) GameManager.Instance.RegisterPlayerMovement(this);
 
         if (_throwHitIndicator) _throwHitIndicator.SetActive(false);
+
+        PreloadAudioClips();
+    }
+
+    private void PreloadAudioClips()
+    {
+        if (_footstepClips != null)
+        {
+            foreach (var clip in _footstepClips)
+            {
+                if (clip) clip.LoadAudioData();
+            }
+        }
+        if (_jumpClip) _jumpClip.LoadAudioData();
+        if (_landClip) _landClip.LoadAudioData();
+        if (_throwClip) _throwClip.LoadAudioData();
     }
 
     private void Update()

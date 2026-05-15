@@ -60,8 +60,8 @@ public class Main_Menu : MonoBehaviour
     {
         var saves = SaveManager.GetAllSaveSlots();
         int saveCount = saves.Count;
-
-        if (saveCount > 0)
+        Debug.Log($"Save count: {saveCount} and DisableSaveLoad: {Utils.DisableSaveLoad}");
+        if (saveCount > 0 && !Utils.DisableSaveLoad)
         {
             loadGameButton.interactable = !Utils.DisableSaveLoad;
             newGameButton.interactable = saveCount < saveSlots.Count || saveSlots.Count == 0;

@@ -17,7 +17,16 @@ public class timelineSignalHandler : MonoBehaviour
 
     [Header("AudioSettings")] public AudioSource mainAudioSource;
 
-    public List<AudioClip> timelineMusics;
+    public List<AudioClip> timelineMusics = new List<AudioClip>();
+
+    private void Start()
+    {
+        // Preload timeline musics to RAM to prevent lag during signal execution
+        foreach (var clip in timelineMusics)
+        {
+            if (clip != null) clip.LoadAudioData();
+        }
+    }
 
     public PlayableDirector cardboardDirector;
 
@@ -106,7 +115,30 @@ public class timelineSignalHandler : MonoBehaviour
 
     public void PlayTimelineMusic(int id)
     {
-        mainAudioSource.clip = timelineMusics[id];
+        if (GameManager.Instance.mainAudioSource.clip != GameManager.Instance.LevelOperator.levelAudioClips[id])
+        {
+            Utils.SetMainAudioMusic(GameManager.Instance.LevelOperator.levelAudioClips[id]);
+        }
+    }
+
+    public void PlayLevelMusic(int levelNumber)
+    {
+        if (GameManager.Instance != null && GameManager.Instance.LevelOperator != null)
+        {
+            var levelOperator = GameManager.Instance.LevelOperator;
+            if (levelNumber > 0 && levelNumber <= levelOperator.levelAudioClips.Count)
+            {
+                Utils.SetMainAudioMusic(levelOperator.levelAudioClips[levelNumber - 1]);
+            }
+            else
+            {
+                Debug.LogWarning($"Level music for level {levelNumber} not found.", this);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("GameManager or LevelOperator not found. Cannot play level music.", this);
+        }
     }
 
     public void DisableDirector(string directorName)

@@ -11,8 +11,7 @@ public static class Utils //Player pos might not be getting loaded, level progre
     {
         var loading = Object.Instantiate(Resources.Load<GameObject>("UI/LoadingScreen"));
         Object.DontDestroyOnLoad(loading);
-        if (dataToLoad == null)
-            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+        GameManager.Instance.SetState(GameManager.GameState.Loading);
         GameManager.Instance.StartCoroutine(LoadSceneAfterDelay(sceneName, loading, dataToLoad));
     }
 
@@ -53,7 +52,17 @@ public static class Utils //Player pos might not be getting loaded, level progre
         }
         InitializeIllustrationCutscenes();
         Application.backgroundLoadingPriority = ThreadPriority.Normal;
-        GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+        
+        // Brute force check: if any active IllustrationCutscene is present, we must be in Cutscene state.
+        if (GameManager.Instance.IsAnyCutsceneActive())
+        {
+            GameManager.Instance.SetState(GameManager.GameState.Cutscene);
+        }
+        else
+        {
+            GameManager.Instance.SetState(GameManager.GameState.Gameplay);
+        }
+        
         yield return new WaitForSeconds(1.5f);
         if (loading) Object.Destroy(loading);
     }
@@ -69,20 +78,14 @@ public static class Utils //Player pos might not be getting loaded, level progre
 
     public static void SetMainAudioMusic(AudioClip audioClip)
     {
-        if (!audioClip) return;
-
-        if (GameManager.Instance.mainAudioSource.clip == audioClip)
+        if (GameManager.Instance != null)
         {
-            if (!GameManager.Instance.mainAudioSource.isPlaying)
-            {
-                GameManager.Instance.mainAudioSource.Play();
-            }
-            return;
+            GameManager.Instance.SetMusic(audioClip);
         }
-
-        GameManager.Instance.mainAudioSource.clip = audioClip;
-        GameManager.Instance.mainAudioSource.Play();
-        Debug.Log($"Set Main Audio Music to {audioClip.name}");
+        else
+        {
+            Debug.LogWarning("GameManager instance not found. Cannot set music.");
+        }
     }
     
     public static Item GetItemByID(string itemID)

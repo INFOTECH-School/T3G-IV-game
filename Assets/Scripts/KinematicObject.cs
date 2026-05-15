@@ -106,6 +106,12 @@ public class KinematicObject : MonoBehaviour
         {
             sparkleEffect.SetActive(true);
         }
+
+        // Pre-load audio data to RAM to prevent stuttering on first interaction
+        if (moveAudioSource != null && moveAudioSource.clip != null)
+        {
+            moveAudioSource.clip.LoadAudioData();
+        }
     }
 
     void Start()

@@ -85,7 +85,6 @@ public class LevelOperator : MonoBehaviour
     private void Start()
     {
         if (GameManager.Instance) GameManager.Instance.RegisterLevelOperator(this);
-        Utils.SetMainAudioMusic(levelAudioClips[currentLevel-1]);
         if (truckTriggerCollider)
         {
             truckTriggerCollider.enabled = false;
@@ -106,6 +105,12 @@ public class LevelOperator : MonoBehaviour
         }
         
         UpdateProgressBar();
+        
+        // Preload level audio clips to RAM
+        foreach (var clip in levelAudioClips)
+        {
+            if (clip != null) clip.LoadAudioData();
+        }
     }
 
     private void OnDisable()

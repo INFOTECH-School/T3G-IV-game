@@ -29,13 +29,20 @@ public class IllustrationCutscene : MonoBehaviour
 
     public void OnEnable()
     {
-        if (GameManager.Instance.CurrentGameState != GameManager.GameState.Loading)
+        if (GameManager.Instance != null)
         {
-            if (!played)
+            GameManager.Instance.RegisterCutscene(this);
+            if (GameManager.Instance.CurrentGameState != GameManager.GameState.Loading && !played)
             {
                 Illustrate();
             }
         }
+        director = GetComponent<PlayableDirector>();
+    }
+
+    void OnDisable()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.UnregisterCutscene(this);
     }
 
     /// <summary>

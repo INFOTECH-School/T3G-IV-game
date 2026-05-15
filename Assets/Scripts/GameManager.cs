@@ -11,7 +11,12 @@ public class GameManager : MonoBehaviour
     public LevelOperator LevelOperator { private set; get;}
     public int CurrentSaveSlot { get; set; }
     public AudioSource mainAudioSource;
-    private bool _isMainAudioSourcePaused = false;
+    private AudioSource secondaryAudioSource;
+    private AudioSource _activeSource;
+    private float _baseMusicVolume = 1.0f;
+    private Coroutine _audioCoroutine;
+    private AudioClip _tutorialBGClip;
+    private List<IllustrationCutscene> _activeCutscenes = new List<IllustrationCutscene>();
 
     public enum GameState
     {
@@ -32,6 +37,46 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         DontDestroyOnLoad(gameObject);
+    }
+    
+    void Start()
+    {
+        if (mainAudioSource)
+        {
+            _baseMusicVolume = mainAudioSource.volume;
+            mainAudioSource.ignoreListenerPause = true;
+            _activeSource = mainAudioSource;
+            
+            // Create secondary source for crossfading
+            secondaryAudioSource = gameObject.AddComponent<AudioSource>();
+            secondaryAudioSource.playOnAwake = false;
+            secondaryAudioSource.loop = true;
+            secondaryAudioSource.ignoreListenerPause = true;
+            secondaryAudioSource.spatialBlend = mainAudioSource.spatialBlend;
+            secondaryAudioSource.outputAudioMixerGroup = mainAudioSource.outputAudioMixerGroup;
+            secondaryAudioSource.volume = 0;
+        }
+        
+        // Preload tutorial music to avoid lag later
+        _tutorialBGClip = Resources.Load<AudioClip>("SFX/Story_Cutscenes/tutorialBG");
+        if (_tutorialBGClip) _tutorialBGClip.LoadAudioData();
+    }
+
+    public void RegisterCutscene(IllustrationCutscene cutscene)
+    {
+        if (!_activeCutscenes.Contains(cutscene)) _activeCutscenes.Add(cutscene);
+    }
+
+    public void UnregisterCutscene(IllustrationCutscene cutscene)
+    {
+        if (_activeCutscenes.Contains(cutscene)) _activeCutscenes.Remove(cutscene);
+    }
+
+    public bool IsAnyCutsceneActive()
+    {
+        // Remove any null references (destroyed objects) and check count
+        _activeCutscenes.RemoveAll(item => item == null || !item.gameObject.activeInHierarchy);
+        return _activeCutscenes.Count > 0;
     }
 
     public void SaveGame(int slotNumber)
@@ -245,7 +290,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        SetState(GameState.Gameplay);
         Debug.Log("Game state loaded.");
     }
 
@@ -255,21 +299,17 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Gameplay:
                 Time.timeScale = 1;
+                AudioListener.pause = false;
+                StartVolumeFade(GetTargetVolume(state), 0.5f);
+                
                 if (SceneManager.GetActiveScene().name != "MainMenu" && SceneManager.GetActiveScene().name != "Scene_TutorialGym"){
-                    if (!mainAudioSource.isPlaying)
+                    if (_activeSource && !_activeSource.isPlaying)
                     {
-                        if (_isMainAudioSourcePaused)
-                        {
-                            mainAudioSource.UnPause();
-                        }
-                        else
-                        {
-                            mainAudioSource.Play();
-                        }
+                        _activeSource.Play();
                     }
                 } else if (SceneManager.GetActiveScene().name == "Scene_TutorialGym")
                 {
-                    Utils.SetMainAudioMusic(Resources.Load<AudioClip>("SFX/gameBackgroundMusic"));
+                    if (_tutorialBGClip) SetMusic(_tutorialBGClip);
                     Debug.Log(SceneManager.GetActiveScene().name + " set audio");
                 }
                 break;
@@ -278,33 +318,124 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 0;
                 break;
             case GameState.Paused:
-                if (CurrentGameState == GameState.Loading) return;
-                if (mainAudioSource.isPlaying)
-                {
-                    _isMainAudioSourcePaused = true;
-                    mainAudioSource.Pause();
-                }
                 Time.timeScale = 0;
+                AudioListener.pause = true;
+                if (_activeSource)
+                {
+                    StartVolumeFade(GetTargetVolume(state), 0.5f);
+                    if (!_activeSource.isPlaying) _activeSource.Play();
+                }
                 break;
             case GameState.Cutscene:
-                if (CurrentGameState == GameState.Loading) return;
-                if (mainAudioSource.isPlaying)
-                {
-                    _isMainAudioSourcePaused = true;
-                    mainAudioSource.Pause();
-                }
                 Time.timeScale = 1;
+                AudioListener.pause = false;
+                if (_activeSource)
+                {
+                    StartVolumeFade(GetTargetVolume(state), 0.5f);
+                    if (!_activeSource.isPlaying) _activeSource.Play();
+                }
                 break;
             case GameState.Loading:
-                if (mainAudioSource.isPlaying)
+                AudioListener.pause = false;
+                if (_activeSource && _activeSource.isPlaying)
                 {
-                    mainAudioSource.Stop();
+                    _activeSource.Stop();
+                }
+                if (secondaryAudioSource && secondaryAudioSource.isPlaying)
+                {
+                    secondaryAudioSource.Stop();
                 }
                 Time.timeScale = 1;
                 break;
                 
         }
         CurrentGameState = state;
+    }
+
+    public void SetMusic(AudioClip clip)
+    {
+        if (!_activeSource || !clip) return;
+        
+        // If same clip is already playing, just ensure we are fading to correct volume
+        if (_activeSource.clip == clip && _activeSource.isPlaying)
+        {
+            StartVolumeFade(GetTargetVolume(CurrentGameState), 0.5f);
+            return;
+        }
+
+        // Trigger asynchronous load of audio data if not ready
+        if (clip.loadState == AudioDataLoadState.Unloaded) clip.LoadAudioData();
+
+        if (_audioCoroutine != null) StopCoroutine(_audioCoroutine);
+        _audioCoroutine = StartCoroutine(CrossfadeCoroutine(clip, 1.0f));
+    }
+
+    private void StartVolumeFade(float targetVolume, float duration)
+    {
+        if (!_activeSource) return;
+        if (_audioCoroutine != null) StopCoroutine(_audioCoroutine);
+        _audioCoroutine = StartCoroutine(FadeVolumeCoroutine(targetVolume, duration));
+    }
+
+    private System.Collections.IEnumerator FadeVolumeCoroutine(float targetVolume, float duration)
+    {
+        float startVolume = _activeSource.volume;
+        float elapsed = 0;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            _activeSource.volume = Mathf.Lerp(startVolume, targetVolume, elapsed / duration);
+            yield return null;
+        }
+        _activeSource.volume = targetVolume;
+        _audioCoroutine = null;
+    }
+
+    private System.Collections.IEnumerator CrossfadeCoroutine(AudioClip newClip, float duration)
+    {
+        AudioSource oldSource = _activeSource;
+        AudioSource newSource = (_activeSource == mainAudioSource) ? secondaryAudioSource : mainAudioSource;
+        
+        newSource.clip = newClip;
+        newSource.volume = 0;
+        newSource.Play();
+        
+        float oldStartVolume = oldSource.volume;
+        float targetVolume = GetTargetVolume(CurrentGameState);
+        float elapsed = 0;
+        
+        _activeSource = newSource; // New source is now the authority
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = elapsed / duration;
+            
+            oldSource.volume = Mathf.Lerp(oldStartVolume, 0, t);
+            newSource.volume = Mathf.Lerp(0, targetVolume, t);
+            
+            yield return null;
+        }
+        
+        oldSource.Stop();
+        oldSource.volume = 0;
+        newSource.volume = targetVolume;
+        _audioCoroutine = null;
+    }
+
+    private float GetTargetVolume(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Gameplay:
+                return 0.15f;
+            case GameState.Paused:
+                return 0.15f * 0.75f;
+            case GameState.Cutscene:
+                return 0.15f * 0.5f;
+            default:
+                return 0.15f;
+        }
     }
     
     public void RegisterPlayer(Player player)
