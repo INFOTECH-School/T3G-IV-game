@@ -50,8 +50,13 @@ public static class Utils //Player pos might not be getting loaded, level progre
         {
             GameManager.Instance.ApplyLoadedData(dataToLoad);
         }
-        InitializeIllustrationCutscenes();
+        
         Application.backgroundLoadingPriority = ThreadPriority.Normal;
+        
+        yield return new WaitForSeconds(1.5f);
+        if (loading) Object.Destroy(loading);
+
+        InitializeIllustrationCutscenes();
         
         // Brute force check: if any active IllustrationCutscene is present, we must be in Cutscene state.
         if (GameManager.Instance.IsAnyCutsceneActive())
@@ -63,9 +68,10 @@ public static class Utils //Player pos might not be getting loaded, level progre
             GameManager.Instance.SetState(GameManager.GameState.Gameplay);
         }
         
-        yield return new WaitForSeconds(1.5f);
-        if (loading) Object.Destroy(loading);
+        OnLoadingComplete?.Invoke();
     }
+
+    public static event System.Action OnLoadingComplete;
 
     private static void InitializeIllustrationCutscenes()
     {

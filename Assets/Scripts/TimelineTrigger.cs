@@ -26,10 +26,42 @@ public class TimelineTrigger : MonoBehaviour
     public List<GameObject> hideOutlines = new List<GameObject>();
     private Dictionary<GameObject, int> _outlineLayers = new Dictionary<GameObject, int>();
     private InteractionFeedback _feedback;
+    public bool playOnLoadComplete = false;
 
     private void Awake()
     {
         _feedback = GetComponentInChildren<InteractionFeedback>();
+        if (playOnLoadComplete)
+        {
+            Utils.OnLoadingComplete += HandleLoadingComplete;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (playOnLoadComplete)
+        {
+            Utils.OnLoadingComplete -= HandleLoadingComplete;
+        }
+    }
+
+    private void Start()
+    {
+        if (playOnLoadComplete)
+        {
+            if (GameManager.Instance == null || GameManager.Instance.CurrentGameState != GameManager.GameState.Loading)
+            {
+                HandleLoadingComplete();
+            }
+        }
+    }
+
+    private void HandleLoadingComplete()
+    {
+        if (!_played)
+        {
+            PlayCutscene(SceneManager.GetActiveScene().name);
+        }
     }
 
     public void Play()
@@ -90,7 +122,7 @@ public class TimelineTrigger : MonoBehaviour
             if (outlineToHide)
             {
                 _outlineLayers.Add(outlineToHide, outlineToHide.layer);
-                outlineToHide.layer = LayerMask.NameToLayer("Hidden");
+                outlineToHide.layer = LayerMask.NameToLayer("Default");
             }
         }
         

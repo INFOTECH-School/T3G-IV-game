@@ -100,7 +100,7 @@ Rola w grze/Milestone: Dźwięk toczenia się opon po drobnej nawierzchni.
 
 2.11.
 Nazwa Assetu/Pliku: click.wav
-Strona internetowa (Źródło):
+Strona internetowa (Źródło): https://pixabay.com/sound-effects/film-special-effects-computer-mouse-click-352734/ by https://pixabay.com/users/universfield-28281460/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=352734 from https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=352734
 Licencja: Creative Commons 0
 Data pobrania: 29-04-2026
 Funkcja: Kliknięcie przycisku

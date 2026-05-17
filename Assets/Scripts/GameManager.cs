@@ -315,7 +315,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.ShortCutscene:
                 if (CurrentGameState == GameState.Loading) return;
-                Time.timeScale = 0;
+                Time.timeScale = 1;
                 break;
             case GameState.Paused:
                 Time.timeScale = 0;
